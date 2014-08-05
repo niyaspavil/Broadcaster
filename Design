@@ -1,0 +1,88 @@
+
+
+--------------------------------------------------------------------------------------------
+1:- UI
+========
+
+1 Input_Reciever():-> usr-msg
+  		      
+		      "recieves input from user"
+
+2 Input_Sender(usr-msg):-> sucees/ error
+
+  		      "send input to engnie"
+
+3 Output_Reciever():-> engn-msg
+  		       
+		       "recieves output from engine"
+
+4 Output_Display(engn-msg):-> success/error 
+
+  		       "Display output"
+
+-------------------------------------------------------------------------------------------
+
+2:- ENGINE
+===========
+
+1 UI_Reciever():->ui-msg
+
+			"Recieves ui Input from UI"
+
+2 Message_Extractor(ui-msg):-> input-type, message, media-info
+  			
+			"Analysis user input and extract contents
+
+			 input-type ( broadcast, add-plugin, add-userinfo, ect) 
+			 message ( actual message to send)
+			 media-info( facebook,twitter, blog, etc) "
+
+3 Accont_info_Reciever(media-info):-> account-info
+
+  		        "Recieves user account information about each media from FILE-PARSER"
+
+4 Path_info_Reciever(account_info):-> path
+  		
+			"Recieves a connection path to each media from PLUGIN"
+
+5 Dispatcher(message, path):-> out-msg
+  		        
+			"Send path and  message to dispatcher and recives its output"
+
+6 Send_UI ( out-msg):-> sucess/ error
+  	    		
+			"send out-msg to UI in a formatted manner"
+
+---------------------------------------------------------------------------------------------
+
+
+3:- DISPATCHER 
+==============
+
+1:- Send_Message(message,path):-sucess/ error
+
+    			"send message to corresponding path and return the output to ENGINE"
+
+
+-------------------------------------------------------------------------------------------------
+
+4:- FILE-PARSER
+================
+
+1:- Retrieve_user_account(media-info):-> account-info
+
+    					 "recieves media-info from ENGINE and retrieve the user-account-info to ENGINE "
+
+
+--------------------------------------------------------------------------------------------------
+
+5:- PLUGIN
+==================
+
+1:- Retrieve_path_info(account-info) :-> path
+
+    				         "recieves user-accont-info from ENGINE and retrieve path, to connect the media to ENGINE "
+
+
+
+ 
