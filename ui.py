@@ -1,6 +1,6 @@
 import argparse
 
-class ui(object):
+class Ui(object):
 
     def __init__(self):
     
@@ -31,10 +31,10 @@ class terminal_ui(ui):
         parser = argparse.ArgumentParser()
 
         parser.add_argument( '-mesg', '--message',type=str,required=True, help='Message to be sended')
-        parser.add_argument( '-chanl', '--channels',type= str, required=True, help='Channel list to send the message')
+        parser.add_argument( '-chanl', '--channels',type= str, required=True, help='Channel list to send the message',)
         args= parser.parse_args()
         self.message =args.message
-        self.channel_list = args.channels
+        self.channels = args.channels
 
     
         
@@ -45,8 +45,8 @@ class terminal_ui(ui):
     def get_message_and_channel(self):
         
         "separate message and channel list from user input"
-
-        return [self.message,self.channel_list]
+        channel_list=self.channels.split()
+        return (self.message,channel_list)
     
     def display_status_and_error(self):
         
