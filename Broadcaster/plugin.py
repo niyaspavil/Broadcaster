@@ -16,3 +16,4 @@ class Plugin(object):
     def force_exit(self):
         """This method should kill the plugin activity"""
         raise NotImplementedError()
+
