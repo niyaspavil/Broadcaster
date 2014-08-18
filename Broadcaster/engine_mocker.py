@@ -10,5 +10,5 @@ class Engine(object):
     def get_attrib(self, option):
         """return attribute from conf.ini"""
         config=ConfigParser.ConfigParser()
-        config.read("conf.ini")
+        config.read("../conf.ini")
         return config.get(self.plugin, option)
