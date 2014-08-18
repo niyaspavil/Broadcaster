@@ -11,10 +11,10 @@ class Tweet(plugin):
 
     def post(self):
         """Method to invoke plugin to post message to site"""
-        consumer_keys=get_consumer_keys()
-        auth = tweepy.OAuthHandler(consumer_keys[0], consumer_keys[1])
-        user_keys=get_user_keys()
-        auth.set_access_token(user_keys[0], user_keys[1])
+        consumer_key,consumer_secret=get_consumer_keys()
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        user_token,user_token_secret=get_user_keys()
+        auth.set_access_token(user_token, user_token_secret)
         api = tweepy.API(auth)
         api.update_status(self.msg)
         return True
@@ -32,9 +32,9 @@ class Tweet(plugin):
 def get_consumer_keys():
     """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
     mocker=engine_mocker.Engine()
-    return mocker.get_attrib('consumer_key')
+    return [mocker.get_attrib('consumer_key'), mocker.get_attrib('consumer_secret')]
 
 def get_user_keys():
     """retrieve keys from engine and return in list as [user_key,user_secret]"""
     mocker=engine_mocker.Engine()
-    return mocker.get_attrib('user_keys')
+    return [mocker.get_attrib('user_token'), mocker.get_attrib('user_token_secret')]
