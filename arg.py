@@ -1,17 +1,15 @@
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-f", "--facebook", action="store_true")
-parser.add_argument("-t", "--twitter", action="store_true")
+argument1 = 'helloo -> twitter,fb,linkdin'
+
+argument2 = "hello -fb,-twitter,-linkdin"
 
 
-args = parser.parse_args()
-lis=[]
-if args.facebook:
-    lis.append("facebook")
-if args.twitter:
-    lis.append("twitter")
-else:
-    print "pls give any option"
+parser = argparse.ArgumentParser(prefix_chars='->')
+parser.add_argument("message")
+parser.add_argument("->chanels")
 
-print lis
+
+args=parser.parse_args(.split())
+print args.message
+print args.chanels
