@@ -2,7 +2,7 @@ import plugin
 import tweepy
 import engine_mocker
 
-class Tweet(plugin.Plugin):
+class twitter(plugin.plugin):
     """plugin tweets msg to twitter"""
     
     def __init__(self,msg):

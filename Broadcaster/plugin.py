@@ -1,4 +1,4 @@
-class Plugin(object):
+class plugin(object):
     """Provides abstract class for loaded plugins of each sites"""
 
     def __init__(self,msg):
