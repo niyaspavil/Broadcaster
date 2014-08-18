@@ -28,10 +28,10 @@ class Terminal_Ui(Ui):
         
         "read user input from the terminal"
 
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(usage='%(prog)s <your message> -ch <channel_list>',description='A way for Broadcast your messages')
 
-        parser.add_argument( '-m', '--message',type=str,required=True, help='Message to be sended')
-        parser.add_argument( '-ch', '--channels',type= str, required=True,choices=["facebook","twitter","gmail"],help='Channel list to send the message',)
+        parser.add_argument('message',type=str, help='Message to be sended')
+        parser.add_argument( '-ch', '--channels',type= str, required=True,help='Channel list to send the message',)
         args= parser.parse_args()
         self.message =args.message
         self.channels = args.channels
