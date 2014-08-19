@@ -17,10 +17,17 @@ class Ui(object):
     def display_status_and_error(self):
         
         "display the status and error return from other levels"
-
         raise NotImplementedError
+def is_None_Or_Empty_Or_BlankString (myString):
+              "function for check message is empty"
+    if myString:
+        if not myString.strip():
+            return True
+    else:
+        return True
 
-
+    return False     
+           
 
 class Terminal_Ui(Ui):
     
@@ -40,14 +47,14 @@ class Terminal_Ui(Ui):
         
         
         
-        
     
     def get_message_and_channel(self):
         
         "separate message and channel list from user input"
         channel_list=self.channels.split()
-	
-	if not self.message:
+	msg= self.message
+
+	if  is_None_Or_Empty_Or_BlankString(msg):
 		print "enter valid message"
 	elif not channel_list:
 			print "Enter any channel name"
@@ -59,3 +66,4 @@ class Terminal_Ui(Ui):
         "display the status and error return from other levels"
 
         pass
+   
