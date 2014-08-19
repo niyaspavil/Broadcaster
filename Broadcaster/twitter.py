@@ -13,9 +13,13 @@ class twitter(plugin.plugin):
     def post(self):
         """Method to invoke plugin to post message to site"""
         self.state="authenticating"
-        api=self.authenticate()
+        api=self.pre_authenticate()
         self.state="publishing"
-        api.update_status(self.msg)
+
+
+##        api.update_status(self.msg)
+
+
         self.state="done"
         return True
 
@@ -27,7 +31,7 @@ class twitter(plugin.plugin):
         """This method should kill the plugin activity"""
         raise NotImplementedError()
 
-    def authenticate(self):
+    def pre_authenticate(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -39,10 +43,23 @@ class twitter(plugin.plugin):
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
-        mocker=engine_mocker.Engine()
-        return [mocker.get_attrib('consumer_key'), mocker.get_attrib('consumer_secret')]
+        conf=engine_mocker.Engine()
+        key=conf.get_attrib('consumer_key')
+        secret=conf.get_attrib('consumer_secret')
+        if key=='' or secret=='':
+            self.state="waiting for consumer keys"
+            pass
+        self.state="authenticating"
+        return [key, secret]
 
     def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
-        mocker=engine_mocker.Engine()
-        return [mocker.get_attrib('user_token'), mocker.get_attrib('user_token_secret')]
+        conf=engine_mocker.Engine()
+        token=conf.get_attrib('user_token')
+        secret=conf.get_attrib('user_token_secret')
+        if token=='' or secret=='':
+            self.state="waiting for user keys"
+            pass
+        self.state="authenticating"
+        return [token, secret]
+###########################################################################################################################################
