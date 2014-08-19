@@ -19,14 +19,13 @@ class Ui(object):
         "display the status and error return from other levels"
         raise NotImplementedError
 def is_None_Or_Empty_Or_BlankString (myString):
-              "function for check message is empty"
-    if myString:
-        if not myString.strip():
-            return True
-    else:
-        return True
+ if myString:
+  if not myString.strip():
+   return True
+ else:
+  return True
 
-    return False     
+ return False     
            
 
 class Terminal_Ui(Ui):
