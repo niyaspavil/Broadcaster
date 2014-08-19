@@ -13,11 +13,7 @@ class twitter(plugin.plugin):
     def post(self):
         """Method to invoke plugin to post message to site"""
         self.state="authenticating"
-        consumer_key,consumer_secret=get_consumer_keys()
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        user_token,user_token_secret=get_user_keys()
-        auth.set_access_token(user_token, user_token_secret)
-        api = tweepy.API(auth)
+        api=self.authenticate()
         self.state="publishing"
         api.update_status(self.msg)
         self.state="done"
@@ -31,14 +27,22 @@ class twitter(plugin.plugin):
         """This method should kill the plugin activity"""
         raise NotImplementedError()
 
-##########################################################mocked####################################################################
- 
-def get_consumer_keys():
-    """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
-    mocker=engine_mocker.Engine()
-    return [mocker.get_attrib('consumer_key'), mocker.get_attrib('consumer_secret')]
+    def authenticate(self):
+        """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
+        consumer_key,consumer_secret=self.get_consumer_keys()
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        user_token,user_token_secret=self.get_user_keys()
+        auth.set_access_token(user_token, user_token_secret)
+        return tweepy.API(auth)
 
-def get_user_keys():
-    """retrieve keys from engine and return in list as [user_key,user_secret]"""
-    mocker=engine_mocker.Engine()
-    return [mocker.get_attrib('user_token'), mocker.get_attrib('user_token_secret')]
+##########################################################mocked####################################################################
+
+    def get_consumer_keys(self):
+        """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
+        mocker=engine_mocker.Engine()
+        return [mocker.get_attrib('consumer_key'), mocker.get_attrib('consumer_secret')]
+
+    def get_user_keys(self):
+        """retrieve keys from engine and return in list as [user_key,user_secret]"""
+        mocker=engine_mocker.Engine()
+        return [mocker.get_attrib('user_token'), mocker.get_attrib('user_token_secret')]
