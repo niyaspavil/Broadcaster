@@ -25,19 +25,7 @@ class Ui(object):
         """
         raise NotImplementedError
 
-def is_None_Or_Empty_Or_BlankString (myString):
-       
-        """
-                    This Function is used to check message is empty or not. Return 'True' when empty message comes
-        """
-	if myString:
-  		if not myString.strip():
-   			return True
- 	else:
-  		return True
 
- 	return False     
-           
 
 class Terminal_Ui(Ui):
     
@@ -58,8 +46,28 @@ class Terminal_Ui(Ui):
         self.channels = args.channels
 
     
+    def is_None_Or_Empty_Or_BlankString (self,myString):
+       
+        """
+                    This Function is used to check message is empty or not. Return 'True' when empty message comes
+        """
+	if myString:
+  		if not myString.strip():
+   			return True
+ 	else:
+  		return True
+
+ 	return False     
+           
         
-        
+    def is_empty_list(self,myList):
+        """
+               This Function check channel is empty or not
+        """
+        if myList == [' ']:
+              return True
+        else:
+              return False
         
     
     def get_message_and_channel(self):
@@ -69,20 +77,23 @@ class Terminal_Ui(Ui):
                  For example: heloo -ch fb,gmail ----->>>>>> ("heloo",['fb,gmail'])
         """
         
-        if len(self.channels) is 1:
+        if len(self.channels) == 1:
             channel_list =self.channels[0].split(',')  # channel_list contains channel names inputed  
         else:
             channel_list=self.channels
-	
+        print channel_list
+        for i,item in enumerate(channel_list):
+            channel_list[i]=channel_list[i]
+
         channel_list = list(set(channel_list))         # removes duplicate channel names
         
         
         message= self.message                          # message contains message to be sended
         
 
-	if  is_None_Or_Empty_Or_BlankString(message):  # check the message is empty or not
+	if self.is_None_Or_Empty_Or_BlankString(message):  # check the message is empty or not
 		print "\n\n\nEnter valid message\n\n\n"
-	elif not channel_list:
+	elif self.is_empty_list(channel_list):
                 print "\n\n\nEnter any channel name\n\n\n"
 	else:
             
