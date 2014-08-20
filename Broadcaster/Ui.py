@@ -68,16 +68,18 @@ class Terminal_Ui(Ui):
                This Function separate message and channel list from user input. Return a tuple of message string and list of channels 
                  For example: heloo -ch fb,gmail ----->>>>>> ("heloo",['fb,gmail'])
         """
-        channel_list=self.channels.split()
-	msg= self.message
+        print self.channels
+        channel_list=self.channels.split(',')
+	message= self.message
 
-	if  is_None_Or_Empty_Or_BlankString(msg):
+	if  is_None_Or_Empty_Or_BlankString(message):
 		print "\n\n\nEnter valid message\n\n\n"
 	elif not channel_list:
                 print "\n\n\nEnter any channel name\n\n\n"
 	else:
-        	return (self.message,channel_list)
-    
+            
+        	return (message,list(set(channel_list)))
+                 
     def display_status_and_error(self):
         
         "display the status and error return from other levels"
