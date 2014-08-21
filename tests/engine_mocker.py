@@ -16,6 +16,6 @@ class Engine(object):
         """stores option-value pair to the conf"""
         conf[option]=value
 
-    def prompt_user(self, msg):
+    def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
         return 999

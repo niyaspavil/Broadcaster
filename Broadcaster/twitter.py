@@ -61,7 +61,7 @@ class twitter(plugin.plugin):
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             redirect_url = auth.get_authorization_url()
-            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url))
+            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url), int)
             auth.get_access_token(pin)
             token=auth.access_token.key
             secret=auth.access_token.secret
