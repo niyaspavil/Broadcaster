@@ -9,6 +9,7 @@ class twitter(plugin.plugin):
         """initialise and set message recieved for post"""
         self.msg=msg
         self.state="waiting"
+        self.engine=engine_mocker.Engine()
 
     def post(self):
         """Method to invoke plugin to post message to site"""
@@ -43,9 +44,9 @@ class twitter(plugin.plugin):
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
-        engine=engine_mocker.Engine()
-        key=engine.get_attrib('consumer_key')
-        secret=engine.get_attrib('consumer_secret')
+
+        key=self.engine.get_attrib('consumer_key')
+        secret=self.engine.get_attrib('consumer_secret')
         if key=='' or secret=='':
             self.state="waiting for consumer keys"
             pass
@@ -54,18 +55,18 @@ class twitter(plugin.plugin):
 
     def get_user_keys(self, auth):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
-        engine=engine_mocker.Engine()
-        token=engine.get_attrib('user_token')
-        secret=engine.get_attrib('user_token_secret')
+
+        token=self.engine.get_attrib('user_token')
+        secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             redirect_url = auth.get_authorization_url()
-            pin=engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url))
+            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url))
             auth.get_access_token(pin)
             token=auth.access_token.key
             secret=auth.access_token.secret
-            engine.set_attrib('user_token',token)
-            engine.set_attrib('user_token_secret',secret)
+            self.engine.set_attrib('user_token',token)
+            self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
         return [token, secret]
 ###########################################################################################################################################
