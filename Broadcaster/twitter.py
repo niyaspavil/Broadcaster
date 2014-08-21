@@ -43,9 +43,9 @@ class twitter(plugin.plugin):
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
-        conf=engine_mocker.Engine()
-        key=conf.get_attrib('consumer_key')
-        secret=conf.get_attrib('consumer_secret')
+        engine=engine_mocker.Engine()
+        key=engine.get_attrib('consumer_key')
+        secret=engine.get_attrib('consumer_secret')
         if key=='' or secret=='':
             self.state="waiting for consumer keys"
             pass
@@ -54,9 +54,9 @@ class twitter(plugin.plugin):
 
     def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
-        conf=engine_mocker.Engine()
-        token=conf.get_attrib('user_token')
-        secret=conf.get_attrib('user_token_secret')
+        engine=engine_mocker.Engine()
+        token=engine.get_attrib('user_token')
+        secret=engine.get_attrib('user_token_secret')
         if token=='' or secret=='':
             self.state="waiting for user keys"
             pass
