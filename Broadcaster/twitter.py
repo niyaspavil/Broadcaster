@@ -35,7 +35,7 @@ class twitter(plugin.plugin):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        user_token,user_token_secret=self.get_user_keys()
+        user_token,user_token_secret=self.get_user_keys(auth)
         auth.set_access_token(user_token, user_token_secret)
         return tweepy.API(auth)
 
@@ -52,14 +52,20 @@ class twitter(plugin.plugin):
         self.state="authenticating"
         return [key, secret]
 
-    def get_user_keys(self):
+    def get_user_keys(self, auth):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
         engine=engine_mocker.Engine()
         token=engine.get_attrib('user_token')
         secret=engine.get_attrib('user_token_secret')
-        if token=='' or secret=='':
+        if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
-            pass
+            redirect_url = auth.get_authorization_url()
+            pin=engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url))
+            auth.get_access_token(pin)
+            token=auth.access_token.key
+            secret=auth.access_token.secret
+            engine.set_attrib('user_token',token)
+            engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
         return [token, secret]
 ###########################################################################################################################################
