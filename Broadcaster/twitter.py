@@ -1,6 +1,6 @@
 import plugin
 import tweepy
-import engine_mocker
+from tests import engine_mocker
 
 class twitter(plugin.plugin):
     """plugin tweets msg to twitter"""
