@@ -8,6 +8,7 @@ class twitter(plugin.plugin):
     def __init__(self,msg):
         """initialise and set message recieved for post"""
         self.msg=msg
+        self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
         self.engine=engine_mocker.Engine()
 
@@ -40,16 +41,18 @@ class twitter(plugin.plugin):
         auth.set_access_token(user_token, user_token_secret)
         return tweepy.API(auth)
 
-##########################################################mocked####################################################################
-
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
 
         key=self.engine.get_attrib('consumer_key')
         secret=self.engine.get_attrib('consumer_secret')
-        if key=='' or secret=='':
+        if key=='' or secret=='' or key==None or secret==None:
             self.state="waiting for consumer keys"
-            pass
+            self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (redirect_url), None)
+            key=self.engine.prompt_user("Enter app key", str)
+            secret=self.engine.prompt_user("Enter app secret", str)
+            self.engine.set_attrib('consumer_key', key)
+            self.engine.set_attrib('consumer_secret', secret)
         self.state="authenticating"
         return [key, secret]
 
@@ -61,7 +64,7 @@ class twitter(plugin.plugin):
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             redirect_url = auth.get_authorization_url()
-            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(redirect_url), int)
+            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" % (redirect_url), int)
             auth.get_access_token(pin)
             token=auth.access_token.key
             secret=auth.access_token.secret
@@ -69,4 +72,3 @@ class twitter(plugin.plugin):
             self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
         return [token, secret]
-###########################################################################################################################################
