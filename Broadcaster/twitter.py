@@ -1,5 +1,5 @@
 import plugin
-from tests import tweepy_mocker
+from tests import tweepy
 from tests import engine_mocker
 
 class twitter(plugin.plugin):
