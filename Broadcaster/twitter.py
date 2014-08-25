@@ -1,6 +1,6 @@
 import plugin
 from tests import tweepy
-from tests import engine_mocker
+from tests import engine
 
 class twitter(plugin.plugin):
     """plugin tweets msg to twitter"""
@@ -10,7 +10,7 @@ class twitter(plugin.plugin):
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
-        self.engine=engine_mocker.Engine()
+        self.engine=engine.Engine()
         self.auth=None
 
     def post(self):

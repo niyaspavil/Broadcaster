@@ -1,6 +1,5 @@
 import random
 import string
-import engine_mocker
 import tweepy
 from Broadcaster import twitter
 
