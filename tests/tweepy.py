@@ -21,3 +21,11 @@ class OAuthHandler(object):
       def set_access(self, key, secret):
          self.key=key
          self.secret=secret
+   
+class API(object):
+   
+   def __init__(self, auth):
+      pass
+
+   def update_status(self, msg):
+      pass
