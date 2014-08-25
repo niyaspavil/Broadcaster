@@ -1,6 +1,6 @@
 import random
 import string
-import tweepy
+from tweepy_mocker import OAuthHandler
 from Broadcaster import twitter
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
@@ -28,7 +28,7 @@ def test_get_consumer_keys():
 def test_get_user_keys():
     """test for get_user_keys method"""
 
-    tmp_plug.auth=tweepy.OAuthHandler()
+    tmp_plug.auth=OAuthHandler()
     assert tmp_plug.get_user_keys()==['user999','user999']
     assert tmp_plug.get_user_keys()==['user999','user999']
 
