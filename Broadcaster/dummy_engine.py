@@ -30,3 +30,18 @@ class Engine(object):
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
         return self.mock_input
+
+def broadcast(msg, chnl_list):
+    for chnl in chnl_list:
+        if has_channel(chnl):
+            plug=getattrib(__import__(chnl),chnl)(msg)
+            plug.post()
+
+def has_channel(chnl):
+    tmp_engine=Engine()
+    tmp_engine.plugin="general"
+    all_chnl=tmp_engine.get_attrib("channels")
+    if chnl in all_chnl:
+        return True
+    else:
+        return False
