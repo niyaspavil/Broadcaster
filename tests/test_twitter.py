@@ -1,6 +1,7 @@
 import random
 import string
 import engine_mocker
+import tweepy
 from Broadcaster import twitter
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
@@ -28,6 +29,7 @@ def test_get_consumer_keys():
 def test_get_user_keys():
     """test for get_user_keys method"""
 
+    tmp_plug.auth=tweepy.OAuthHandler()
     assert tmp_plug.get_user_keys()==[None,None]
     tmp_engine.conf['user_token']='user999'
     tmp_engine.conf['user_token_secret']='user999'
