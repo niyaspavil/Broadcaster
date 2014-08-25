@@ -48,7 +48,7 @@ class twitter(plugin.plugin):
         secret=self.engine.get_attrib('consumer_secret')
         if key=='' or secret=='' or key==None or secret==None:
             self.state="waiting for consumer keys"
-            self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (redirect_url), None)
+            self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
             key=self.engine.prompt_user("Enter app key", str)
             secret=self.engine.prompt_user("Enter app secret", str)
             self.engine.set_attrib('consumer_key', key)
