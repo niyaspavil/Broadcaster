@@ -37,4 +37,4 @@ def test_get_user_keys():
 def test_post():
     """test for post method"""
     
-    assert tmp_plugin.post()==True
+    assert tmp_plug.post()==True
