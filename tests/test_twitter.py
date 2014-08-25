@@ -34,8 +34,6 @@ def test_get_user_keys():
     assert tmp_plug.get_user_keys()==['user999','user999']
     assert tmp_plug.get_user_keys()==['user999','user999']
 
-tmp_engine.conf={'consumer_key':'BCxhHxyTR4vHtKXqa7jSTicv4', 'consumer_secret':'sCpiNzjR9MTcFHbVWkuukm0ucKbYXnyv1ZdZQpDlRXAyzSMfpy', 'user_token':'2736495205-8f8yRTQeQ7JFhQHsqfSPWtl2iDafsJiiPsymOW1', 'user_token_secret':'vbzYBj1AbX4FZrrDtT2caQCVPt16Di0LTvsVArXTjQ3Ht'}
-
 def test_post():
     """test for post method"""
     
