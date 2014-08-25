@@ -18,4 +18,4 @@ class Engine(object):
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
-        return mock_input
+        return self.mock_input
