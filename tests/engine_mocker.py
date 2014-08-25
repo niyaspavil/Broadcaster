@@ -10,11 +10,11 @@ class Engine(object):
 
     def get_attrib(self, option):
         """return attribute from conf"""
-        return conf.get(option)
+        return self.conf.get(option)
 
     def set_attrib(self, option, value):
         """stores option-value pair to the conf"""
-        conf[option]=value
+        self.conf[option]=value
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
