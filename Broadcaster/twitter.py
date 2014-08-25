@@ -39,7 +39,7 @@ class twitter(plugin.plugin):
         self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
         self.auth.set_access_token(user_token, user_token_secret)
-        return tweepy.API(auth)
+        return tweepy.API(self.auth)
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
