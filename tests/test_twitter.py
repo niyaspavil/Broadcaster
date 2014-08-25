@@ -30,9 +30,7 @@ def test_get_user_keys():
     """test for get_user_keys method"""
 
     tmp_plug.auth=tweepy.OAuthHandler()
-    assert tmp_plug.get_user_keys()==[None,None]
-    tmp_engine.conf['user_token']='user999'
-    tmp_engine.conf['user_token_secret']='user999'
+    assert tmp_plug.get_user_keys()==['user999','user999']
     assert tmp_plug.get_user_keys()==['user999','user999']
 
 def test_post():
