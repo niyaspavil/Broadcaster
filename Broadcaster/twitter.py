@@ -56,7 +56,7 @@ class twitter(plugin.plugin):
         self.state="authenticating"
         return [key, secret]
 
-    def get_user_keys(self, auth):
+    def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
 
         token=self.engine.get_attrib('user_token')
