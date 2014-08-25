@@ -36,8 +36,8 @@ class twitter(plugin.plugin):
     def pre_authenticate(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        user_token,user_token_secret=self.get_user_keys(auth)
+        self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        user_token,user_token_secret=self.get_user_keys()
         auth.set_access_token(user_token, user_token_secret)
         return tweepy.API(auth)
 
@@ -63,7 +63,7 @@ class twitter(plugin.plugin):
         secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
-            redirect_url = auth.get_authorization_url()
+##            redirect_url = self.auth.get_authorization_url()
             pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" % (redirect_url), int)
             auth.get_access_token(pin)
             token=auth.access_token.key
