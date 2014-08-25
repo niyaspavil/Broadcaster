@@ -1,5 +1,5 @@
 import plugin
-import tweepy
+from tests import tweepy_mocker
 from tests import engine_mocker
 
 class twitter(plugin.plugin):
@@ -17,11 +17,7 @@ class twitter(plugin.plugin):
         self.state="authenticating"
         api=self.pre_authenticate()
         self.state="publishing"
-
-
-##        api.update_status(self.msg)
-
-
+        api.update_status(self.msg)
         self.state="done"
         return True
 
@@ -63,11 +59,11 @@ class twitter(plugin.plugin):
         secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
-##            self.redirect_url = self.auth.get_authorization_url()
+            self.redirect_url = self.auth.get_authorization_url()
             pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" % (self.redirect_url), int)
-##            self.auth.get_access_token(pin)
-##            token=self.auth.access_token.key
-##            secret=self.auth.access_token.secret
+            self.auth.get_access_token(pin)
+            token=self.auth.access_token.key
+            secret=self.auth.access_token.secret
             self.engine.set_attrib('user_token',token)
             self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
