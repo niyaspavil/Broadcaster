@@ -1,24 +1,37 @@
 import plugin
 from tests import tweepy_mocker as tweepy
-from tests.engine_mocker import Engine
+from tests.engine_mocker import *
 
 class twitter(plugin.plugin):
     """plugin tweets msg to twitter"""
     
     def __init__(self,msg):
         """initialise and set message recieved for post"""
+
+        if len(msg)>160:
+            raise PluginError(0x01)
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
-        self.engine=Engine()
+        try:
+            self.engine=Engine()
+        except Exception:
+            raise PluginError(0x05)
         self.auth=None
 
     def post(self):
         """Method to invoke plugin to post message to site"""
+
         self.state="authenticating"
-        api=self.pre_authenticate()
+        try:
+            api=self.pre_authenticate()
+        except Exception:
+            raise PluginError(0x03)
         self.state="publishing"
-        api.update_status(self.msg)
+        try:
+            api.update_status(self.msg)
+        except Exception:
+            raise PluginError(0x02)
         self.state="done"
         return True
 
@@ -26,12 +39,9 @@ class twitter(plugin.plugin):
         """Method to query status of the plugin activity"""
         return self.state
 
-    def force_exit(self):
-        """This method should kill the plugin activity"""
-        raise NotImplementedError()
-
     def pre_authenticate(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
+
         consumer_key,consumer_secret=self.get_consumer_keys()
         self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
