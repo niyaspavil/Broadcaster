@@ -38,7 +38,7 @@ class twitter(plugin.plugin):
         consumer_key,consumer_secret=self.get_consumer_keys()
         self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
-        auth.set_access_token(user_token, user_token_secret)
+        self.auth.set_access_token(user_token, user_token_secret)
         return tweepy.API(auth)
 
     def get_consumer_keys(self):
@@ -66,8 +66,8 @@ class twitter(plugin.plugin):
 ##            self.redirect_url = self.auth.get_authorization_url()
             pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" % (self.redirect_url), int)
 ##            self.auth.get_access_token(pin)
-            token=self.auth.access_token.key
-            secret=self.auth.access_token.secret
+##            token=self.auth.access_token.key
+##            secret=self.auth.access_token.secret
             self.engine.set_attrib('user_token',token)
             self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
