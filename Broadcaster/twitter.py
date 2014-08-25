@@ -32,7 +32,6 @@ class twitter(plugin.plugin):
     def pre_authenticate(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
-        self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
         self.auth.set_access_token(user_token, user_token_secret)
         return tweepy.API(self.auth)
@@ -54,7 +53,7 @@ class twitter(plugin.plugin):
 
     def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
-
+	self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         token=self.engine.get_attrib('user_token')
         secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or token==None or secret==None:
