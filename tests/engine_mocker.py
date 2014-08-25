@@ -20,13 +20,4 @@ class Engine(object):
         """prompts user with msg and return the input from user"""
         return self.mock_input
 
-class PluginError(Exception):
-    """custom exception for plugins"""
 
-    def __init__(self, code):
-        """error code:....
-        0x01 ->  message errors
-        0x02 ->  network errors
-        0x03 ->  authenticate errors
-        0x04 ->  conf errors"""
-        self.code=code
