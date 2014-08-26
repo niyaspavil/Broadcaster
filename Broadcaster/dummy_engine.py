@@ -40,7 +40,7 @@ def broadcast(msg, chnl_list):
 def has_channel(chnl):
     tmp_engine=Engine()
     tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib("channels")
+    all_chnl=tmp_engine.get_attrib("channels").split(" ")
     if chnl in all_chnl:
         return True
     else:
