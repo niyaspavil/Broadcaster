@@ -19,11 +19,12 @@ class Plugin(object):
 
 class PluginError(Exception):
     """custom exception for plugins"""
+    
+    NET_ERROR="NETWORK FAILURE"
+    AUTH_ERROR="AUTHENTICATION FAILURE"
+    VALID_ERROR="MESSAGE VALIDATION FAILURE"
+    
 
-    def __init__(self, code):
-        """error code:....
-        0x01 ->  message errors
-        0x02 ->  network errors
-        0x03 ->  authenticate errors
-        0x04 ->  conf errors"""
-        self.code=code
+    def __init__(self, msg):
+        """get the associated error msg"""
+        self.msg=msg
