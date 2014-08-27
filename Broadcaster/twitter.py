@@ -1,6 +1,6 @@
-from plugin import *
-from tests import tweepy_mocker as tweepy
-from tests.engine_mocker import Engine
+from .plugin import Plugin, PluginError
+from ..tests import tweepy_mocker as tweepy
+from ..tests.engine_mocker import Engine
 
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
