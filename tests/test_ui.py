@@ -1,11 +1,14 @@
-
-from Broadcaster import Ui
-from Broadcaster import Mock_engin
+from Broadcaster import terminal_ui
 
 
-test =Ui.Terminal_Ui()
-f=test.get_message_and_channel()
-if f:
-    k=Mock_engin.engin(f)
+temp_ui =terminal_ui.Terminal_ui()
 
-    print k.get_response()
+def test_init():
+
+	assert temp_ui.message == "message"
+	assert temp_ui.channels == ['fb,twitter']
+
+def test_get_msg():
+	
+	assert temp_ui.get_mesg_and_chanl() == ("message",['fb','twitter'])
+                   
