@@ -9,14 +9,14 @@ class twitter(Plugin):
         """initialise and set message recieved for post"""
 
         if len(msg)>160:
-            raise PluginError(0x01)
+            raise PluginError(PluginError.VALID_ERROR)
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
         try:
             self.engine=Engine()
         except Exception:
-            raise PluginError(0x05)
+            raise PluginError(PluginError.ERROR)
         self.auth=None
 
     def post(self):
@@ -26,12 +26,12 @@ class twitter(Plugin):
         try:
             api=self.pre_authenticate()
         except Exception:
-            raise PluginError(0x03)
+            raise PluginError(PluginError.AUTH_ERROR)
         self.state="publishing"
         try:
             api.update_status(self.msg)
         except Exception:
-            raise PluginError(0x02)
+            raise PluginError(PluginError.NET_ERROR)
         self.state="done"
         return True
 
