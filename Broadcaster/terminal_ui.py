@@ -1,11 +1,11 @@
+
 from .ui import *
 import argparse
 
 
 class Terminal_ui(Ui):
     
-    def __init__(self,args):
-        
+    def __init__(self,args):    
         """
                      This constructor  read user input from the terminal.
                      
