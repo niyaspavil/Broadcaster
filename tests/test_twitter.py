@@ -1,7 +1,7 @@
 import random
 import string
-from tweepy_mocker import OAuthHandler
-from Broadcaster import twitter
+from .tweepy_mocker import OAuthHandler
+from ..Broadcaster import twitter
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 tmp_plug=twitter.twitter(msg)
