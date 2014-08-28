@@ -1,3 +1,4 @@
+
 from ..Broadcaster import terminal_ui
 
 import argparse
@@ -15,3 +16,4 @@ def test_main_with_empty_channels():
 def test_main():
 
        terminal_ui.main(["hello","-ch","fb", "twitter"])
+
