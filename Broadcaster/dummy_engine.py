@@ -1,4 +1,5 @@
 import ConfigParser
+import importlib
 
 cfgfile="conf.ini"
 
@@ -9,7 +10,7 @@ class Engine(object):
         """identifying plugin and setting-up conf"""
         self.plugin="twitter"
         self.conf=ConfigParser.ConfigParser()
-        conf.read(cfgfile)
+        self.conf.read(cfgfile)
         self.mock_input=''
 
     def get_attrib(self, option):
@@ -47,4 +48,5 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
-    retutn getattrib(__import__(chnl),chnl)(msg)
+    mod=importlib.import_module("."+chnl,"Broadcaster.Broadcaster")
+    return getattr(mod,chnl)(msg)

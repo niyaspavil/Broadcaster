@@ -1,4 +1,4 @@
-from .plugin import Plugin, PluginError
+from ..Broadcaster.plugin import Plugin, PluginError
 from ..tests import tweepy_mocker as tweepy
 from ..tests.engine_mocker import Engine
 
