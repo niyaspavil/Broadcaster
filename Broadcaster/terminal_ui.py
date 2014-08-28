@@ -1,10 +1,10 @@
-from ui import *
+from .ui import *
 import argparse
 
 
 class Terminal_ui(Ui):
     
-    def __init__(self):
+    def __init__(self,args):
         
         """
                      This constructor  read user input from the terminal.
@@ -16,7 +16,7 @@ class Terminal_ui(Ui):
 	self.channels=[]
         parser.add_argument('message',type=str, help='Message to be sended')
         parser.add_argument( '-ch', '--channels',type= str,nargs='+', required=True,help='Channel list to send the message',)
-        args= parser.parse_args()
+        args= parser.parse_args(args)
         self.message =args.message
         self.channels = args.channels
     
@@ -80,3 +80,13 @@ class Terminal_ui(Ui):
         print"\n                                                            ----------ERROR---------    "
  
         print"""\n\n\n%*100\n\n\n\n"""
+
+
+def main(args):
+    terminal_ui = Terminal_ui(args)
+    tup = terminal_ui.get_mesg_and_chanl()
+    return tup
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv[1:])
