@@ -34,14 +34,17 @@ class Engine(object):
 def broadcast(msg, chnl_list):
     for chnl in chnl_list:
         if has_channel(chnl):
-            plug=getattrib(__import__(chnl),chnl)(msg)
+            plug=load_plugin(chnl, msg)
             plug.post()
 
 def has_channel(chnl):
     tmp_engine=Engine()
     tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib("channels").split(" ")
+    all_chnl=tmp_engine.get_attrib("channels").split()
     if chnl in all_chnl:
         return True
     else:
         return False
+
+def load_plugin(chnl, msg):
+    retutn getattrib(__import__(chnl),chnl)(msg)
