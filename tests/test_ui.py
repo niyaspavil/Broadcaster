@@ -1,14 +1,17 @@
-from Broadcaster import terminal_ui
+from ..Broadcaster import terminal_ui
 
+import argparse
 
-temp_ui =terminal_ui.Terminal_ui()
+def test_main():
 
-def test_init():
+       terminal_ui.main(["hii", "-ch" ,"fb"]) 
+       
+def test_main_with_empty_message():
 
-	assert temp_ui.message == "message"
-	assert temp_ui.channels == ['fb,twitter']
+       terminal_ui.main([" ", "-ch","fb,twitter"])
+def test_main_with_empty_channels():
+       
+       terminal_ui.main(["hello","-ch"," "])
+def test_main():
 
-def test_get_msg():
-	
-	assert temp_ui.get_mesg_and_chanl() == ("message",['fb','twitter'])
-                   
+       terminal_ui.main(["hello","-ch","fb", "twitter"])
