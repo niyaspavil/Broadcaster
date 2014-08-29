@@ -3,6 +3,7 @@ import importlib
 import os.path
 
 cfgfile="conf.ini"
+UI=None
 
 class Engine(object):
     """class engine for plugins"""
@@ -11,6 +12,7 @@ class Engine(object):
         """identifying plugin and setting-up conf"""
         self.plugin="twitter"
         self.conf=ConfigParser.ConfigParser()
+	self.UI=UI
         if not os.path.isfile(cfgfile):
             conf_file=open(cfgfile,"w")
             self.conf.add_section("general")
@@ -38,9 +40,11 @@ class Engine(object):
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
-        return self.mock_input
+        return self.UI.prompt(msg)
 
 def broadcast(msg, chnl_list, ui):
+    global UI
+    UI=ui
     dict={}
     for chnl in chnl_list:
         if has_channel(chnl):
