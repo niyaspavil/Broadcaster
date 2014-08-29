@@ -1,6 +1,6 @@
 from .plugin import Plugin, PluginError
-from ..tests import tweepy_mocker as tweepy
-from ..tests.engine_mocker import Engine
+import tweepy
+from .dummy_engine import Engine
 
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
