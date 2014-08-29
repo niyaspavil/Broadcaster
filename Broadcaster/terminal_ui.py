@@ -73,10 +73,23 @@ class Terminal_ui(Ui):
         """
                   This Function displays the  errors
         """
-
+   
         print colored("Error",'red')
- 	print colored(error,'red')
+    	print colored(error,'red')
         print"\n"*7
+    def prompt(self,content):
+
+	"""
+
+		     This abstract function will prompt some content to the user and return reply to the engine
+	"""
+
+
+	return raw_input(content+"\n >>>")
+	
+	
+
+
 
 
 def report_status(status):
