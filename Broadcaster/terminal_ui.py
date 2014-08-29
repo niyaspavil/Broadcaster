@@ -81,16 +81,18 @@ class Terminal_ui(Ui):
 
 def report_status(status):
 	
-	for channel,statu in status:
+	for channel,statu in status.items():
 		print channel+">>>"+statu	
     
 
 def main(args):
+    status= None
     terminal_ui = Terminal_ui(args)
     tup = terminal_ui.get_mesg_and_chanl()
     if tup:
         status=broadcast(tup[0],tup[1],terminal_ui)
-    report_status(status)
+    if status:
+    	report_status(status)
 
 if __name__ == '__main__':
     import sys
