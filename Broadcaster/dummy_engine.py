@@ -40,16 +40,24 @@ class Engine(object):
         """prompts user with msg and return the input from user"""
         return self.mock_input
 
-def broadcast(msg, chnl_list):
+def broadcast(msg, chnl_list, ui):
+    dict={}
     for chnl in chnl_list:
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
-            plug.post()
+            try:
+                plug.post()
+                dict[chnl]="Successful"
+            except Exception:
+                dict[chnl]="Failed"
+        else:
+            dict[chnl]="Failed: Plugin not found..\n Add plugin file to Broadcaster/Broadcaster and add module name to conf.ini:-->general->plugins section (use blank space to seperate module names)"
+    return dict
 
 def has_channel(chnl):
     tmp_engine=Engine()
     tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib("channels").split()
+    all_chnl=tmp_engine.get_attrib("plugins").split()
     if chnl in all_chnl:
         return True
     else:
