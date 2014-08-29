@@ -1,8 +1,8 @@
 
-from .ui import *
+from ui import *
+from ..tests import mock_engine
 import argparse
-
-
+from termcolor import colored
 class Terminal_ui(Ui):
     
     def __init__(self,args):    
@@ -10,10 +10,7 @@ class Terminal_ui(Ui):
                      This constructor  read user input from the terminal.
                      
         """
-       # arg= " message -ch fb,twitter"
         parser = argparse.ArgumentParser(usage='%(prog)s <your message> -ch <channel_list>',description='A way for Broadcast your messages')
-	self.message=None
-	self.channels=[]
         parser.add_argument('message',type=str, help='Message to be sended')
         parser.add_argument( '-ch', '--channels',type= str,nargs='+', required=True,help='Channel list to send the message',)
         args= parser.parse_args(args)
@@ -23,7 +20,7 @@ class Terminal_ui(Ui):
     def empty_message (self,Message):
        
         """
-                    This Function is used to check message is empty or not. Return 'True' when empty message comes
+                                  check message is empty or not
         """
 	if not Message.strip():
             return True
@@ -33,7 +30,7 @@ class Terminal_ui(Ui):
         
     def empty_channel(self,Channel_List):
         """
-               This Function check channel is empty or not
+                                    check channels are empty or not
         """
         if not Channel_List[0].strip():
               return True
@@ -44,11 +41,10 @@ class Terminal_ui(Ui):
     def get_mesg_and_chanl(self):
         
         """
-               This Function separate message and channel list from user input. Return a tuple of message string and list of channels 
-                 For example: heloo -ch fb,gmail ----->>>>>> ("heloo",['fb,gmail'])
+               This Function separate message and channel list from user input.
         """
         
-        if len(self.channels) == 1:         # channel_list contains channel names inpute
+        if len(self.channels) == 1:     
             channel_list =self.channels[0].split(',')   # removes ',' and split into list
         else:
             channel_list=self.channels
@@ -64,10 +60,11 @@ class Terminal_ui(Ui):
 
 	if self.empty_message(message):  # check the message is empty or not
 		self.display_error( "\t\tEnter valid message\t\t")
+                return None
 
 	elif self.empty_channel(channel_list):
                 self.display_error("\t\tEnter any channel name\t\t")
-	
+                return None
         else:
             return (message,channel_list)  
                  
@@ -77,15 +74,23 @@ class Terminal_ui(Ui):
                   This Function displays the  errors
         """
 
-        print"\n                                                            ----------ERROR---------    "
- 
-        print"""\n\n\n%*100\n\n\n\n"""
+        print colored("Error",'red')
+ 	print colored(error,'red')
+        print"""\n\n\n\n\n\n\n"""
 
+
+def report_status(status):
+	
+	for channel,status in status:
+		print channel ">>>" status	
+    
 
 def main(args):
     terminal_ui = Terminal_ui(args)
     tup = terminal_ui.get_mesg_and_chanl()
-    return tup
+    if tup:
+        status=mock_engine.Engine(tup)
+     report_status(status)
 
 if __name__ == '__main__':
     import sys
