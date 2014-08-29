@@ -1,6 +1,6 @@
-from ..Broadcaster.plugin import Plugin, PluginError
-from ..tests import tweepy_mocker as tweepy
-from ..tests.engine_mocker import Engine
+from .plugin import Plugin, PluginError
+import tweepy
+from .dummy_engine import Engine
 
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
@@ -10,6 +10,7 @@ class twitter(Plugin):
 
         if len(msg)>160:
             raise PluginError(PluginError.VALID_ERROR)
+	self.tweepy=tweepy
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
@@ -43,10 +44,10 @@ class twitter(Plugin):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
 
         consumer_key,consumer_secret=self.get_consumer_keys()
-        self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        self.auth = self.tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
         self.auth.set_access_token(user_token, user_token_secret)
-        return tweepy.API(self.auth)
+        return self.tweepy.API(self.auth)
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
