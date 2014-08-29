@@ -1,6 +1,6 @@
 
 from ui import *
-from ..tests import mock_engine
+from dummy_engine import broadcast
 import argparse
 from termcolor import colored
 class Terminal_ui(Ui):
@@ -76,21 +76,21 @@ class Terminal_ui(Ui):
 
         print colored("Error",'red')
  	print colored(error,'red')
-        print"""\n\n\n\n\n\n\n"""
+        print"\n"*7
 
 
 def report_status(status):
 	
-	for channel,status in status:
-		print channel ">>>" status	
+	for channel,statu in status:
+		print channel+">>>"+statu	
     
 
 def main(args):
     terminal_ui = Terminal_ui(args)
     tup = terminal_ui.get_mesg_and_chanl()
     if tup:
-        status=mock_engine.Engine(tup)
-     report_status(status)
+        status=broadcast(tup[0],tup[1],terminal_ui)
+    report_status(status)
 
 if __name__ == '__main__':
     import sys
