@@ -79,11 +79,18 @@ class Terminal_ui(Ui):
         print"""\n\n\n\n\n\n\n"""
 
 
+def report_status(status):
+	
+	for channel,status in status:
+		print channel ">>>" status	
+    
+
 def main(args):
     terminal_ui = Terminal_ui(args)
     tup = terminal_ui.get_mesg_and_chanl()
     if tup:
-        mock_engine.Engine(tup)
+        status=mock_engine.Engine(tup)
+     report_status(status)
 
 if __name__ == '__main__':
     import sys
