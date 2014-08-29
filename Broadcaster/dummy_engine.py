@@ -12,7 +12,7 @@ class Engine(object):
         self.plugin="twitter"
         self.conf=ConfigParser.ConfigParser()
         if not os.path.isfile(cfgfile):
-            conf_file=open(cfg_file,"w")
+            conf_file=open(cfgfile,"w")
             self.conf.add_section("general")
             conf.set("general","plugins","")
             conf_file.close()
