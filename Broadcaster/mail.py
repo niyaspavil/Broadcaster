@@ -11,7 +11,9 @@ class mail(plugin):
         	"""Constructor for mail class. The msg is the content to be mailed to the others"""
         
 		self.msg=msg
+		self.username= None
 		self.state="waiting"
+		self.To_mail=[]
 		try:
 	            self.engine=Engine()
 	        except Exception:
@@ -28,15 +30,23 @@ class mail(plugin):
                 self.state="authenticating"
 	
 		try:
-           		api=self.pre_authenticate()
+           		self.pre_authenticate()
         	except Exception:
-            		raise PluginError(PluginError.AUTH_ERROR)	
+            		raise PluginError(PluginError.AUTH_ERROR)
+		mail=self.compose_mail()
 		
-    def status(self):
-        """Method to query status of the plugin activity"""
-        raise NotImplementedError()
+		for toAddr in To_Email:
+			try:
+				self.server.sendmail(fromAddr, toAddr, mail)
+				response[toAddr] = 'Mail Sent		
+		return True
 
-    def force_exit(self):
+		
+	def status(self):
+        	"""Method to query status of the plugin activity"""
+        	raise NotImplementedError()
+
+	def force_exit(self):
         """This method should kill the plugin activity"""
         raise NotImplementedError()
 
@@ -46,6 +56,7 @@ class mail(plugin):
 	def pre_authenticate(self):
         """This method gets username and password """
         user_name,user_password=self.get_consumer_details()
+	self.username = user_name
         self.server.login(user_name, user_password)
         return True 
 
@@ -68,3 +79,22 @@ class mail(plugin):
         self.state="authenticating"
         return [usrname, passwd]
 
+
+	def compose_mail(self):
+		"""this function composes mail"""
+
+		to=self.engine.prompt_user("To").split()
+		self.To_mail = to
+		subject=self.engine.prompt_user("Subject",str)
+		contents=self.engine.prompt_user("This is your message {} .press enter for continue, else type content".format{self.msg},str)
+		if contents:
+			message = contents
+		else:
+			message = self.msg
+		mail = MIMEMultipart()
+		mail['From'] = self.username
+		mail['To'] = to
+		mail['Subject'] = subject
+		mail.attach(MIMEText(message, 'plain'))
+		return mail.as_string()
+		
