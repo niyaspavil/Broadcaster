@@ -51,8 +51,8 @@ class twitter(Plugin):
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
 	
-        key=self.engine.get_attrib('consumer_key')
-        secret=self.engine.get_attrib('consumer_secret')
+        key=self.engine.get_attrib('consumer_key',self.name)
+        secret=self.engine.get_attrib('consumer_secret',self.name)
         if key=='' or secret=='' or key==None or secret==None:
             self.state="waiting for consumer keys"
             self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
@@ -66,8 +66,8 @@ class twitter(Plugin):
     def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
 
-        token=self.engine.get_attrib('user_token')
-        secret=self.engine.get_attrib('user_token_secret')
+        token=self.engine.get_attrib('user_token',self.name)
+        secret=self.engine.get_attrib('user_token_secret',self.name)
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             self.redirect_url = self.auth.get_authorization_url()
@@ -75,7 +75,7 @@ class twitter(Plugin):
             self.auth.get_access_token(pin)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
-            self.engine.set_attrib('user_token',token)
-            self.engine.set_attrib('user_token_secret',secret)
+            self.engine.set_attrib('user_token',token,self.name)
+            self.engine.set_attrib('user_token_secret',secret,self.name)
         self.state="authenticating"
         return [token, secret]
