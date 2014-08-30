@@ -11,8 +11,10 @@ def decode (code):
     # value of channel is set to be 0. 
     # It would be changed after the loop below if the input is valid.
     for section in cp.sections():
-        if code in cp.get(section, 'strings'):
-            channel = cp.get (section, 'channel')
+        codestring = cp.get(section, 'strings')
+        codelist = codestring.split()
+        if code in codelist:
+            return cp.get(section, 'channel')
             break
     return channel
 
