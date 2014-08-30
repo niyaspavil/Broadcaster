@@ -3,7 +3,7 @@ import tweepy
 from .dummy_engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
-
+import smtplib
 
 class mail(Plugin):
 
@@ -16,13 +16,11 @@ class mail(Plugin):
 		self.To_mail=[]
 		self.name = "mail"
 		try:
-		    print "test engine"
 	            self.engine=Engine()
 	        except Exception:
 	            raise PluginError(PluginError.ERROR)
 		try:
-			print "test server"
-			self.server = smtplib.SMTP('smtp.gmail.com:587')    
+			self.server = smtplib.SMTP('smtp.gmail.com',587)    
 			self.server.ehlo()
 			self.server.starttls()
 		except Exception:
@@ -37,10 +35,10 @@ class mail(Plugin):
         	except Exception:
             		raise PluginError(PluginError.AUTH_ERROR)
 		mail=self.compose_mail()
+		fromAddr = self.username
 		
-		for toAddr in To_Email:
+		for toAddr in self.To_mail:
 			try:
-				
 				self.server.sendmail(fromAddr, toAddr, mail)
 				response[toAddr] = 'Mail Sent'
 			except:
@@ -69,26 +67,24 @@ class mail(Plugin):
 
 	def get_consumer_details(self):
         	"""retrieve user details from engine and return in list as [user_name,user_password]"""
-	
-        	usrname=self.engine.get_attrib('user_name')
-        	psswd=self.engine.get_attrib('user_password')
+        	usrname=self.engine.get_attrib('user_name',self.name)
+        	passwd=self.engine.get_attrib('user_password',self.name)
         	if usrname=='' or passwd=='' or usrname==None or passwd==None:
         	    self.state="waiting for consumer detials"
         	    usrname=self.engine.prompt_user("Enter username", str)
         	    passwd=self.engine.prompt_user("Enter password", str)
         	    self.engine.set_attrib('user_name', usrname,self.name)
         	    self.engine.set_attrib('user_password', passwd,self.name)
-        	self.state="authenticating"
+        	self.state="authenticated"
         	return [usrname, passwd]
 
 
 	def compose_mail(self):
 		"""this function composes mail"""
-
-		to=self.engine.prompt_user("To").split()
-		self.To_mail = to
+		to = self.engine.prompt_user("To",str)
+		self.To_mail = to.split()
 		subject=self.engine.prompt_user("Subject",str)
-		contents=self.engine.prompt_user("This is your message {} .press enter for continue, else type content".format(self.msg),str)
+		contents=self.engine.prompt_user("This is your message '{}' .press enter for continue, else type content".format(self.msg),str)
 		if contents:
 			message = contents
 		else:
