@@ -14,6 +14,7 @@ class twitter(Plugin):
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
+	self.name = "twitter"
         try:
             self.engine=Engine()
         except Exception:
@@ -57,8 +58,8 @@ class twitter(Plugin):
             self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
             key=self.engine.prompt_user("Enter app key", str)
             secret=self.engine.prompt_user("Enter app secret", str)
-            self.engine.set_attrib('consumer_key', key)
-            self.engine.set_attrib('consumer_secret', secret)
+            self.engine.set_attrib('consumer_key', key,self.name)
+            self.engine.set_attrib('consumer_secret', secret,self.name)
         self.state="authenticating"
         return [key, secret]
 

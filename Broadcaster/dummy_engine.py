@@ -18,20 +18,22 @@ class Engine(object):
             conf.set("general","plugins","")
             conf_file.close()
 
-    def get_attrib(self, option):
+    def get_attrib(self, option,plug_name):
         """return attribute from conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
+	self.plugin = plug_name
         if self.conf.has_section(self.plugin):
             value=self.conf.get(self.plugin,option)
         else:
             value=""
         return value
 
-    def set_attrib(self, option, value):
+    def set_attrib(self, option, value,plug_name):
         """stores option-value pair to the conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
+	self.plugin = plug.name
         if not self.conf.has_section(self.plugin):
             self.conf.add_section(self.plugin)
         self.conf.set(self.plugin, option, value)
