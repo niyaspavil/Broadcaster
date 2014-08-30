@@ -10,9 +10,20 @@ class mail(plugin):
 	  def __init__(self,msg):
         """Constructor for mail class. The msg is the content to be mailed to the others"""
         
-	        self.msg=msg
-
-    def post(self):
+	self.msg=msg
+	self.state="waiting"
+	try:
+            self.engine=Engine()
+        except Exception:
+            raise PluginError(PluginError.ERROR)
+	try:
+		self.server = smtplib.SMTP('smtp.gmail.com:587')    
+		self.server.ehlo()
+		self.server.starttls()
+	except Exception:
+	     raise PluginError(pluginError.ERROR)
+	
+	def post(self):
         """Method to invoke plugin to post message to site"""
         raise NotImplementedError()
 
