@@ -14,6 +14,7 @@ class mail(plugin):
 		self.username= None
 		self.state="waiting"
 		self.To_mail=[]
+		self.name = "mail"
 		try:
 	            self.engine=Engine()
 	        except Exception:
@@ -74,8 +75,8 @@ class mail(plugin):
             self.state="waiting for consumer detials"
             usrname=self.engine.prompt_user("Enter username", str)
             passwd=self.engine.prompt_user("Enter password", str)
-            self.engine.set_attrib('user_name', usrname)
-            self.engine.set_attrib('user_password', passwd)
+            self.engine.set_attrib('user_name', usrname,self.name)
+            self.engine.set_attrib('user_password', passwd,self.name)
         self.state="authenticating"
         return [usrname, passwd]
 
