@@ -5,9 +5,9 @@ from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 
 
-class mail(plugin):
+class mail(Plugin):
 
-	  def __init__(self,msg):
+	def __init__(self,msg):
         	"""Constructor for mail class. The msg is the content to be mailed to the others"""
         
 		self.msg=msg
@@ -16,20 +16,22 @@ class mail(plugin):
 		self.To_mail=[]
 		self.name = "mail"
 		try:
+		    print "test engine"
 	            self.engine=Engine()
 	        except Exception:
 	            raise PluginError(PluginError.ERROR)
 		try:
+			print "test server"
 			self.server = smtplib.SMTP('smtp.gmail.com:587')    
 			self.server.ehlo()
 			self.server.starttls()
 		except Exception:
-		     raise PluginError(pluginError.ERROR)
+		     raise PluginError(PluginError.ERROR)
 		
 	def post(self):
 	        """Method to send mail"""
                 self.state="authenticating"
-	
+		response = {}
 		try:
            		self.pre_authenticate()
         	except Exception:
@@ -38,28 +40,27 @@ class mail(plugin):
 		
 		for toAddr in To_Email:
 			try:
+				
 				self.server.sendmail(fromAddr, toAddr, mail)
-				response[toAddr] = 'Mail Sent		
+				response[toAddr] = 'Mail Sent'
+			except:
+				response[toAddr] = 'Mail Sending Failed'		
 		return True
 
 		
 	def status(self):
         	"""Method to query status of the plugin activity"""
-        	raise NotImplementedError()
-
-	def force_exit(self):
-        """This method should kill the plugin activity"""
-        raise NotImplementedError()
-
+        	return self.state
+	
 
 
 
 	def pre_authenticate(self):
-        """This method gets username and password """
-        user_name,user_password=self.get_consumer_details()
-	self.username = user_name
-        self.server.login(user_name, user_password)
-        return True 
+		"""This method gets username and password """
+		user_name,user_password=self.get_consumer_details()
+		self.username = user_name
+        	self.server.login(user_name, user_password)
+        	return True 
 
 
 
@@ -67,18 +68,18 @@ class mail(plugin):
 
 
 	def get_consumer_details(self):
-        """retrieve user details from engine and return in list as [user_name,user_password]"""
+        	"""retrieve user details from engine and return in list as [user_name,user_password]"""
 	
-        usrname=self.engine.get_attrib('user_name')
-        psswd=self.engine.get_attrib('user_password')
-        if usrname=='' or passwd=='' or usrname==None or passwd==None:
-            self.state="waiting for consumer detials"
-            usrname=self.engine.prompt_user("Enter username", str)
-            passwd=self.engine.prompt_user("Enter password", str)
-            self.engine.set_attrib('user_name', usrname,self.name)
-            self.engine.set_attrib('user_password', passwd,self.name)
-        self.state="authenticating"
-        return [usrname, passwd]
+        	usrname=self.engine.get_attrib('user_name')
+        	psswd=self.engine.get_attrib('user_password')
+        	if usrname=='' or passwd=='' or usrname==None or passwd==None:
+        	    self.state="waiting for consumer detials"
+        	    usrname=self.engine.prompt_user("Enter username", str)
+        	    passwd=self.engine.prompt_user("Enter password", str)
+        	    self.engine.set_attrib('user_name', usrname,self.name)
+        	    self.engine.set_attrib('user_password', passwd,self.name)
+        	self.state="authenticating"
+        	return [usrname, passwd]
 
 
 	def compose_mail(self):
@@ -87,7 +88,7 @@ class mail(plugin):
 		to=self.engine.prompt_user("To").split()
 		self.To_mail = to
 		subject=self.engine.prompt_user("Subject",str)
-		contents=self.engine.prompt_user("This is your message {} .press enter for continue, else type content".format{self.msg},str)
+		contents=self.engine.prompt_user("This is your message {} .press enter for continue, else type content".format(self.msg),str)
 		if contents:
 			message = contents
 		else:
