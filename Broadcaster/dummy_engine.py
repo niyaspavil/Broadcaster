@@ -11,6 +11,7 @@ class Engine(object):
         """identifying plugin and setting-up conf"""
         self.plugin="twitter"
         self.conf=ConfigParser.ConfigParser()
+	self.UI=UI
         if not os.path.isfile(cfgfile):
             conf_file=open(cfgfile,"w")
             self.conf.add_section("general")
@@ -38,7 +39,7 @@ class Engine(object):
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
- 	return self.UI.prompt(msg)
+        return self.UI.prompt(msg)
 
 def broadcast(msg, chnl_list, ui):
     global UI
