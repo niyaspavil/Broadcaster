@@ -9,7 +9,7 @@ class Engine(object):
     
     def __init__(self):
         """identifying plugin and setting-up conf"""
-        self.plugin="twitter"
+        self.section=" "
         self.conf=ConfigParser.ConfigParser()
 	self.UI=UI
         if not os.path.isfile(cfgfile):
@@ -18,25 +18,25 @@ class Engine(object):
             conf.set("general","plugins","")
             conf_file.close()
 
-    def get_attrib(self, option,plug_name):
+    def get_attrib(self, option,section):
         """return attribute from conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
-	self.plugin = plug_name
-        if self.conf.has_section(self.plugin):
-            value=self.conf.get(self.plugin,option)
+	self.section = section
+ 	if self.conf.has_option(self.section,option):
+            value=self.conf.get(self.section,option)
         else:
             value=""
         return value
 
-    def set_attrib(self, option, value,plug_name):
+    def set_attrib(self, option, value,section):
         """stores option-value pair to the conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
-	self.plugin = plug.name
-        if not self.conf.has_section(self.plugin):
-            self.conf.add_section(self.plugin)
-        self.conf.set(self.plugin, option, value)
+	self.section = section
+        if not self.conf.has_section(self.section):
+            self.conf.add_section(self.section)
+        self.conf.set(self.section, option, value)
         self.conf.write(open(cfgfile,"w"))
 
     def prompt_user(self, msg, type):
@@ -62,7 +62,7 @@ def broadcast(msg, chnl_list, ui):
 def has_channel(chnl):
     tmp_engine=Engine()
     tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib('plugins').split()
+    all_chnl=tmp_engine.get_attrib('plugins','general').split()
     if chnl in all_chnl:
         return True
     else:
