@@ -3,7 +3,7 @@ import importlib
 import os.path
 
 cfgfile="conf.ini"
-
+UI=None
 class Engine(object):
     """class engine for plugins"""
     
@@ -21,7 +21,7 @@ class Engine(object):
         """return attribute from conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
-        if self.conf.has_option(self.plugin, option):
+        if self.conf.has_section(self.plugin):
             value=self.conf.get(self.plugin,option)
         else:
             value=""
@@ -38,9 +38,11 @@ class Engine(object):
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
-        return self.mock_input
+ 	return self.UI.prompt(msg)
 
 def broadcast(msg, chnl_list, ui):
+    global UI
+    UI=ui
     dict={}
     for chnl in chnl_list:
         if has_channel(chnl):
@@ -57,7 +59,7 @@ def broadcast(msg, chnl_list, ui):
 def has_channel(chnl):
     tmp_engine=Engine()
     tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib("plugins").split()
+    all_chnl=tmp_engine.get_attrib('plugins').split()
     if chnl in all_chnl:
         return True
     else:

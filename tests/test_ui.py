@@ -6,7 +6,6 @@ import argparse
 def test_main():
 
        terminal_ui.main(["hii", "-ch" ,"fb"]) 
-	
        
 def test_main_with_empty_message():
 

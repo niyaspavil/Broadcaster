@@ -22,7 +22,6 @@ class twitter(Plugin):
 
     def post(self):
         """Method to invoke plugin to post message to site"""
-
         self.state="authenticating"
         try:
             api=self.pre_authenticate()
@@ -42,7 +41,6 @@ class twitter(Plugin):
 
     def pre_authenticate(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
-
         consumer_key,consumer_secret=self.get_consumer_keys()
         self.auth = self.tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
@@ -51,7 +49,7 @@ class twitter(Plugin):
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
-
+	
         key=self.engine.get_attrib('consumer_key')
         secret=self.engine.get_attrib('consumer_secret')
         if key=='' or secret=='' or key==None or secret==None:
@@ -72,7 +70,7 @@ class twitter(Plugin):
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             self.redirect_url = self.auth.get_authorization_url()
-            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" % (self.redirect_url), int)
+            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(self.redirect_url), int)
             self.auth.get_access_token(pin)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret

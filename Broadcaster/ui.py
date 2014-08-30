@@ -30,6 +30,7 @@ class Ui(object):
                      This is an abstract function for display the error.
         """
 	raise NotImplementedError
+    
     def prompt(self,content):
 
 	"""
@@ -37,4 +38,4 @@ class Ui(object):
 		     This abstract function will prompt some content to the user and return reply to the engine
 	"""
 
-	
+	raise NotImplementedError
