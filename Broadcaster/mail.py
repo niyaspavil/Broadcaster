@@ -1,5 +1,4 @@
 from .plugin import Plugin, PluginError
-import tweepy
 from .dummy_engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
@@ -54,7 +53,7 @@ class mail(Plugin):
 
 
 	def pre_authenticate(self):
-		"""This method gets username and password """
+		"""This method create a server object """
 		user_name,user_password=self.get_consumer_details()
 		self.username = user_name
         	self.server.login(user_name, user_password)
