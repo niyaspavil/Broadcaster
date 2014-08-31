@@ -27,9 +27,10 @@ class blog(Plugin):
 		
 		try:
 			post_id = self.server.metaWeblog.newPost('', self.username, self.password, post, True)
-			return True
-		except:
-			return False
+		except Exception:
+            		raise PluginError(PluginError.NET_ERROR)
+        self.state="done"
+        return True
 		
 	def status(self):
         	"""Method to query status of the plugin activity"""
