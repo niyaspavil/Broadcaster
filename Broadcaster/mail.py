@@ -40,10 +40,11 @@ class mail(Plugin):
 			try:
 				self.server.sendmail(fromAddr, toAddr, mail)
 				response[toAddr] = 'Mail Sent'
-				return True
 			except Exception:
 				response[toAddr] = 'Mail Sending Failed'		
-				return False
+            			raise PluginError(PluginError.NET_ERROR)
+        	self.state="done"
+        	return True
 
 		
 	def status(self):
