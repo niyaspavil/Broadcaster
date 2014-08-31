@@ -24,11 +24,11 @@ class blog(Plugin):
         	except Exception:
             		raise PluginError(PluginError.AUTH_ERROR)
 		post=self.compose_post()
+		
 		try:
 			post_id = self.server.metaWeblog.newPost('', self.username, self.password, post, True)
 			return True
 		except:
-			print"test failed"
 			return False
 		
 	def status(self):
@@ -48,7 +48,6 @@ class blog(Plugin):
 		wp_url  = wp_url+"/xmlrpc.php"
 		try:
 			self.server = xmlrpclib.ServerProxy(wp_url)
-			print self.server
 		except:
 			print "server error"
 		user_name,user_password=self.get_consumer_details()
@@ -86,8 +85,8 @@ class blog(Plugin):
 			message = contents
 		else:
 			message = self.msg
+		date_created = xmlrpclib.DateTime(datetime.datetime.today())
 		
-		post = {'title': title, 'description': message, 'categories': categories, 'mt_keywords': tags}
-		print post
+		post = {'title': title, 'description': message, 'categories': categories, 'dateCreated': date_created,'mt_keywords': tags}
 
 		return post
