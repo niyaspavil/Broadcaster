@@ -51,6 +51,7 @@ def broadcast(msg, chnl_list, ui):
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
             try:
+		print '\n'+chnl+'\n'
                 plug.post()
                 dict[chnl]="Successful"
             except Exception:
