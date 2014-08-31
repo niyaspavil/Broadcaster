@@ -12,7 +12,7 @@ def decode (code):
     # It would be changed after the loop below if the input is valid.
     for section in cp.sections():
         codestring = cp.get(section, 'strings')
-        codelist = codestring.split()
+        codelist = codestring.split(",")
         if code in codelist:
             return cp.get(section, 'channel')
             break
