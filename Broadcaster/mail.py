@@ -40,9 +40,10 @@ class mail(Plugin):
 			try:
 				self.server.sendmail(fromAddr, toAddr, mail)
 				response[toAddr] = 'Mail Sent'
-			except:
+				return True
+			except Exception:
 				response[toAddr] = 'Mail Sending Failed'		
-		return True
+				return False
 
 		
 	def status(self):
