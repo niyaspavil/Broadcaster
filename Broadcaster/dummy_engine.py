@@ -1,8 +1,10 @@
 import ConfigParser
 import importlib
 import os.path
+from termcolor import colored
 
 cfgfile="conf.ini"
+
 UI=None
 class Engine(object):
     """class engine for plugins"""
@@ -51,7 +53,7 @@ def broadcast(msg, chnl_list, ui):
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
             try:
-		print '\n'+chnl+'\n'
+		print colored('\n'+'\t'*4+chnl.title()+'\n','green')
                 plug.post()
                 dict[chnl]="Successful"
             except Exception:
