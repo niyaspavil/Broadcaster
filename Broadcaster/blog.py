@@ -29,8 +29,8 @@ class blog(Plugin):
 			post_id = self.server.metaWeblog.newPost('', self.username, self.password, post, True)
 		except Exception:
             		raise PluginError(PluginError.NET_ERROR)
-        self.state="done"
-        return True
+                self.state="done"
+                return True
 		
 	def status(self):
         	"""Method to query status of the plugin activity"""
@@ -78,7 +78,11 @@ class blog(Plugin):
 	def compose_post(self):
 		"""this function composes post to blog"""
 		title = self.engine.prompt_user("Title",str)
-		categories=self.engine.prompt_user("Catogories",str)
+                category = ""
+                categories =self. server.metaWeblog.getCategories('',self.username, self.password)
+                for item in categories:
+                        category=category+'\n\t\t'+ item['description'] + '\n'
+		categories=self.engine.prompt_user("These are the Catogories available:\n \t {} \n Enter your categories \n".format(category),str)
 		tags=self.engine.prompt_user("Tags",str)
 		tags=tags.replace(";",",")
 		contents=self.engine.prompt_user("This is your current post '{}' .press enter for continue, else type content".format(self.msg),str)
