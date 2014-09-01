@@ -2,6 +2,8 @@ from .plugin import Plugin, PluginError
 import tweepy
 from .dummy_engine import Engine
 
+__plugin_name__="twitter"
+
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
     
@@ -16,7 +18,7 @@ class twitter(Plugin):
         self.state="waiting"
 	self.name = "twitter"
         try:
-            self.engine=Engine()
+            self.engine=Engine(__plugin_name__)
         except Exception:
             raise PluginError(PluginError.ERROR)
         self.auth=None
@@ -32,6 +34,7 @@ class twitter(Plugin):
         try:
             api.update_status(self.msg)
         except Exception:
+            self.stat="failed"
             raise PluginError(PluginError.NET_ERROR)
         self.state="done"
         return True
@@ -51,23 +54,23 @@ class twitter(Plugin):
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
 	
-        key=self.engine.get_attrib('consumer_key',self.name)
-        secret=self.engine.get_attrib('consumer_secret',self.name)
+        key=self.engine.get_attrib('consumer_key')
+        secret=self.engine.get_attrib('consumer_secret')
         if key=='' or secret=='' or key==None or secret==None:
             self.state="waiting for consumer keys"
             self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
             key=self.engine.prompt_user("Enter app key", str)
             secret=self.engine.prompt_user("Enter app secret", str)
-            self.engine.set_attrib('consumer_key', key,self.name)
-            self.engine.set_attrib('consumer_secret', secret,self.name)
+            self.engine.set_attrib('consumer_key', key)
+            self.engine.set_attrib('consumer_secret', secret)
         self.state="authenticating"
         return [key, secret]
 
     def get_user_keys(self):
         """retrieve keys from engine and return in list as [user_key,user_secret]"""
 
-        token=self.engine.get_attrib('user_token',self.name)
-        secret=self.engine.get_attrib('user_token_secret',self.name)
+        token=self.engine.get_attrib('user_token')
+        secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or token==None or secret==None:
             self.state="waiting for user keys"
             self.redirect_url = self.auth.get_authorization_url()
@@ -75,7 +78,7 @@ class twitter(Plugin):
             self.auth.get_access_token(pin)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
-            self.engine.set_attrib('user_token',token,self.name)
-            self.engine.set_attrib('user_token_secret',secret,self.name)
+            self.engine.set_attrib('user_token',token)
+            self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
         return [token, secret]

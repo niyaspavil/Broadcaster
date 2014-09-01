@@ -9,9 +9,9 @@ UI=None
 class Engine(object):
     """class engine for plugins"""
     
-    def __init__(self):
+    def __init__(self, plugin):
         """identifying plugin and setting-up conf"""
-        self.section=" "
+        self.section=plugin
         self.conf=ConfigParser.ConfigParser()
 	self.UI=UI
         if not os.path.isfile(cfgfile):
@@ -20,22 +20,20 @@ class Engine(object):
             conf.set("general","plugins","")
             conf_file.close()
 
-    def get_attrib(self, option,section):
+    def get_attrib(self, option):
         """return attribute from conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
-	self.section = section
  	if self.conf.has_option(self.section,option):
             value=self.conf.get(self.section,option)
         else:
             value=""
         return value
 
-    def set_attrib(self, option, value,section):
+    def set_attrib(self, option, value):
         """stores option-value pair to the conf"""
         self.conf.__init__()
         self.conf.read(cfgfile)
-	self.section = section
         if not self.conf.has_section(self.section):
             self.conf.add_section(self.section)
         self.conf.set(self.section, option, value)
@@ -63,9 +61,8 @@ def broadcast(msg, chnl_list, ui):
     return dict
 
 def has_channel(chnl):
-    tmp_engine=Engine()
-    tmp_engine.plugin="general"
-    all_chnl=tmp_engine.get_attrib('plugins','general').split()
+    tmp_engine=Engine("general")
+    all_chnl=tmp_engine.get_attrib('plugins').split()
     if chnl in all_chnl:
         return True
     else:
