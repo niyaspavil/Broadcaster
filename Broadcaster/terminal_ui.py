@@ -85,7 +85,7 @@ class Terminal_ui(Ui):
 	"""
 
 
-	return raw_input(content+"\n >>>")
+	return raw_input(colored(content+":\n >>>\t",'red'))
 	
 	
 
