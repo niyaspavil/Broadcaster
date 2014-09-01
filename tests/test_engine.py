@@ -6,7 +6,7 @@ UI=Mock_ui()
 cfgfile="/tmp/conf.ini"
 
 def test_engine():
-    engine=dummy_engine.Engine()
+    engine=dummy_engine.Engine("test_section")
     engine.UI=UI
     engine.get_attrib("twitter")
     engine.set_attrib("user","999")
