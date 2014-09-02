@@ -1,10 +1,16 @@
 import ConfigParser
 import importlib
 import os.path
+import glob
+from os.path import basename, splitext, expanduser, sep
+from os import makedirs
 
-cfgfile="conf.ini"
-
+plugins_dir = "./Broadcaster/plugins"
+private_home=expanduser("~")+sep+".Broadcaster"
+cfgfile=private_home+sep+"conf.ini"
+__all_chnl__=None
 UI=None
+
 class Engine(object):
     """class engine for plugins"""
     
@@ -14,6 +20,8 @@ class Engine(object):
         self.conf=ConfigParser.ConfigParser()
 	self.UI=UI
         if not os.path.isfile(cfgfile):
+            if not os.path.exists(private_home):
+                os.makedirs(private_home)
             conf_file=open(cfgfile,"w")
             self.conf.add_section("general")
             self.conf.set("general","plugins","")
@@ -44,9 +52,10 @@ class Engine(object):
         return self.UI.prompt(msg)
 
 def broadcast(msg, chnl_list, ui):
-    global UI
+    global UI,__all_chnl__
     UI=ui
     dict={}
+    __all_chnl__=find_chnls()
     for chnl in chnl_list:
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
@@ -56,13 +65,21 @@ def broadcast(msg, chnl_list, ui):
             except Exception:
                 dict[chnl]="Failed"
         else:
-            dict[chnl]="Failed: Plugin not found..\n Add plugin file to Broadcaster/Broadcaster and add module name to conf.ini:-->general->plugins section (use blank space to seperate module names)"
+            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to Broadcaster/plugins"
     return dict
 
+def find_chnls():
+    plugins = []
+    plugin_files = glob.glob("{}/*.py".format(plugins_dir))
+    for plugin_file in plugin_files:
+        if plugin_file.endswith("__init__.py"):
+            continue
+        name, ext = splitext(basename(plugin_file))
+        plugins.append(name)
+    return plugins
+
 def has_channel(chnl):
-    tmp_engine=Engine("general")
-    all_chnl=tmp_engine.get_attrib('plugins').split()
-    if chnl in all_chnl:
+    if chnl in __all_chnl__:
         return True
     else:
         return False
