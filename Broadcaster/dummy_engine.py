@@ -17,7 +17,8 @@ class Engine(object):
         if not os.path.isfile(cfgfile):
             conf_file=open(cfgfile,"w")
             self.conf.add_section("general")
-            conf.set("general","plugins","")
+            self.conf.set("general","plugins","")
+            self.conf.write(conf_file)
             conf_file.close()
 
     def get_attrib(self, option):
