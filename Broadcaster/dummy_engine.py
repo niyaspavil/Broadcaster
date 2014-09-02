@@ -1,7 +1,6 @@
 import ConfigParser
 import importlib
 import os.path
-from termcolor import colored
 
 cfgfile="conf.ini"
 
@@ -52,7 +51,6 @@ def broadcast(msg, chnl_list, ui):
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
             try:
-		print colored('\n'+'\t'*4+chnl.title()+'\n','green')
                 plug.post()
                 dict[chnl]="Successful"
             except Exception:
