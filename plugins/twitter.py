@@ -1,6 +1,6 @@
-from .plugin import Plugin, PluginError
+from ..Broadcaster.plugin import Plugin, PluginError
+from ..Broadcaster.dummy_engine import Engine
 import tweepy
-from .dummy_engine import Engine
 
 __plugin_name__="twitter"
 

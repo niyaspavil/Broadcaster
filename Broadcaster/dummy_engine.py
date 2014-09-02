@@ -70,5 +70,5 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
-    mod=importlib.import_module("."+chnl,"Broadcaster.Broadcaster")
+    mod=importlib.import_module("."+chnl,"Broadcaster.plugins")
     return getattr(mod,chnl)(msg)

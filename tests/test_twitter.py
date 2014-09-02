@@ -1,7 +1,7 @@
 import random
 import string
 import tweepy_mocker
-from ..Broadcaster import twitter
+from ..plugins import twitter
 from .engine_mocker import Engine
 from ..Broadcaster.plugin import PluginError
 
