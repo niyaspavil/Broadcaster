@@ -3,13 +3,20 @@ import string
 import tweepy_mocker
 from ..Broadcaster import twitter
 from .engine_mocker import Engine
+from ..Broadcaster.plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 tmp_plug=twitter.twitter(msg)
-tmp_engine=Engine()
+tmp_engine=Engine("twitter")
 tmp_plug.engine=tmp_engine
 tmp_plug.tweepy=tweepy_mocker
 tmp_engine.mock_input="consumer999"
+
+try:
+    test_msg=''.join(random.choice(string.lowercase) for x in range(200))
+    twitter.twitter(test_msg)
+except PluginError:
+    pass
 
 def test_init():
     """test for twitter plugin initialisation"""
@@ -39,6 +46,8 @@ def test_post():
     """test for post method"""
     
     assert tmp_plug.post()==True
+
+
 
 #def test_real():
 #    tmp_plug=twitter.twitter(msg)
