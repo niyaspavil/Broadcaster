@@ -2,9 +2,9 @@
 class Engine(object):
     """Mocker class for engine"""
     
-    def __init__(self):
+    def __init__(self, plugin):
         """identifying plugin and setting-up conf"""
-        self.plugin="twitter"
+        self.plugin=plugin
         self.conf={}
         self.mock_input=''
 

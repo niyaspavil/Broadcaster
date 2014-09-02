@@ -23,6 +23,7 @@ class PluginError(Exception):
     NET_ERROR="NETWORK FAILURE"
     AUTH_ERROR="AUTHENTICATION FAILURE"
     VALID_ERROR="MESSAGE VALIDATION FAILURE"
+    ERROR="INTERNAL ERROR OCCURED"
     
 
     def __init__(self, msg):
