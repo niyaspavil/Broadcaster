@@ -6,16 +6,13 @@ import os
 UI=Mock_ui()
 
 def test_engine():
-    cwd=os.getcwd()
-    os.chdir("/tmp")
+    
     engine=dummy_engine.Engine("test_section")
     engine.UI=UI
     engine.get_attrib("twitter")
     engine.set_attrib("user","999")
     engine.get_attrib("user")
     engine.prompt_user("hello",str)
-    os.remove("conf.ini")
-    os.chdir(cwd)
 
 from ..Broadcaster import dummy_engine
 

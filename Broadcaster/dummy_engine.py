@@ -3,7 +3,7 @@ import importlib
 import os.path
 import glob
 from os.path import basename, splitext, expanduser, sep
-from os import makedirs
+import os
 
 plugins_dir = "./Broadcaster/plugins"
 private_home=expanduser("~")+sep+".Broadcaster"
@@ -22,11 +22,7 @@ class Engine(object):
         if not os.path.isfile(cfgfile):
             if not os.path.exists(private_home):
                 os.makedirs(private_home)
-            conf_file=open(cfgfile,"w")
-            self.conf.add_section("general")
-            self.conf.set("general","plugins","")
-            self.conf.write(conf_file)
-            conf_file.close()
+            open(cfgfile,"w").close()
 
     def get_attrib(self, option):
         """return attribute from conf"""
