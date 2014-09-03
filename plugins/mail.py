@@ -21,12 +21,7 @@ class mail(Plugin):
             self.engine=Engine(__plugin_name__)
 	except Exception:
 	    raise PluginError(PluginError.ERROR)
-	try:
-	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
-	    self.server.ehlo()
-	    self.server.starttls()
-	except Exception:
-	    raise PluginError(PluginError.ERROR)
+	
 		
     def post(self):
         """Method to send mail"""
@@ -59,7 +54,14 @@ class mail(Plugin):
         """This method create a server object """
 	user_name,user_password=self.get_consumer_details()
 	self.username = user_name
-        self.server.login(user_name, user_password)
+	try:
+	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
+	    self.server.ehlo()
+	    self.server.starttls()
+	except Exception:
+	    raise PluginError(PluginError.ERROR)        
+	self.server.login(user_name, user_password)
+	
         return True 
 
 
