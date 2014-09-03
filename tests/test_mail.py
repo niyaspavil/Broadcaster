@@ -6,10 +6,10 @@ from .engine_mocker import Engine
 from ..Broadcaster.plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
+mail.smtplib = smtplib_mocker
 tmp_plug=mail.mail(msg)
 tmp_engine=Engine("mail")
-tmp_plug.engine=tmp_engine
-tmp_plug.smtplib=smtplib_mocker
+tmp_plug.engine=tmp_engine	
 tmp_engine.mock_input="consumer999"
 
 
@@ -26,18 +26,18 @@ def test_status():
 
 def test_get_consumer_details():
     """test for get_consumer_keys method"""
-
+  
     assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
     assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
 
 def test_pre_authenicate():
     """test for get_user_keys method"""
-    tmp_plug.server = smtplib_mocker.SMTP() 
+    #mail.smptplib = smtplib_mocker
     assert tmp_plug.pre_authenticate()==True
 
 def test_post():
     """test for post method"""
-    
+    tmp_plug.server = smtplib_mocker.SMTP() 
     assert tmp_plug.post()==True
 
 #def test_real():
