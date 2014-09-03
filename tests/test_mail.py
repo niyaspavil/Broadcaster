@@ -13,12 +13,6 @@ tmp_plug.smtplib=smtplib_mocker
 tmp_engine.mock_input="consumer999"
 
 
-try:
-    test_msg=''.join(random.choice(string.lowercase) for x in range(200))
-    mail.mail(test_msg)
-except PluginError:
-    pass
-
 def test_init():
     """test for twitter plugin initialisation"""
 
