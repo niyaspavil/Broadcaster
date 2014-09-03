@@ -77,15 +77,17 @@ class Terminal_ui(Ui):
         print colored("Error",'red')
     	print colored(error,'red')
         print"\n"*7
-    def prompt(self,content):
+    def prompt(self,content,type):
 
 	"""
 
 		     This abstract function will prompt some content to the user and return reply to the engine
 	"""
-
-
-	return raw_input(colored(content+":\n >>>\t",'red'))
+	if(type == None):
+	
+		print colored(colored(content+":\n >>>\t",'red'))
+	else:
+	    return raw_input(colored(content+":\n >>>\t",'red'))
 	
 	
 
