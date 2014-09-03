@@ -42,9 +42,7 @@ class mail(Plugin):
 	for toAddr in self.To_mail:
 	    try:
 	        self.server.sendmail(fromAddr, toAddr, mail)
-		response[toAddr] = 'Mail Sent'
-	    except Exception:
-	        response[toAddr] = 'Mail Sending Failed'		
+	    except Exception:		
             	raise PluginError(PluginError.NET_ERROR)
         self.state="done"
         return True
