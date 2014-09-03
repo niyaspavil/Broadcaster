@@ -13,7 +13,6 @@ tmp_plug.smtplib=smtplib_mocker
 tmp_engine.mock_input="consumer999"
 
 
-
 try:
     test_msg=''.join(random.choice(string.lowercase) for x in range(200))
     mail.mail(test_msg)
@@ -37,12 +36,10 @@ def test_get_consumer_details():
     assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
     assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
 
-def test_compose_mail():
+def test_pre_authenicate():
     """test for get_user_keys method"""
-
-    tmp_plug.auth=tweepy_mocker.OAuthHandler()
-    assert tmp_plug.get_user_keys()==['user999','user999']
-    assert tmp_plug.get_user_keys()==['user999','user999']
+    tmp_plug.server = smtplib_mocker.SMTP() 
+    assert tmp_plug.pre_authenticate()==True
 
 def test_post():
     """test for post method"""
