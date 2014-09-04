@@ -111,7 +111,7 @@ def main(args):
     terminal_ui = Terminal_ui(args)
     tup = terminal_ui.get_mesg_and_chanl()
     if tup:
-        status=broadcast(tup[0],tup[1],terminal_ui)
+        status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
     if status:
     	report_status(status)
 

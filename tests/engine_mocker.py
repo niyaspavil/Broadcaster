@@ -23,4 +23,5 @@ class Engine(object):
         """prompts user with msg and return the input from user"""
         return self.mock_input
 
-
+def broadcast(msg,chanl,debug,ui):
+	return {"plugin":"test"}
