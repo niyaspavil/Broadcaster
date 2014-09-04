@@ -10,7 +10,10 @@ class Engine(object):
 
     def get_attrib(self, option):
         """return attribute from conf"""
-        return self.conf.get(option)
+        if self.conf.get(option):
+		return self.conf.get(option)
+	else:
+		return ""
 
     def set_attrib(self, option, value):
         """stores option-value pair to the conf"""

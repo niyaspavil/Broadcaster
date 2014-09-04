@@ -12,11 +12,11 @@ class twitter(Plugin):
 
         if len(msg)>160:
             raise PluginError(PluginError.VALID_ERROR)
-	self.tweepy=tweepy
         self.msg=msg
         self.redirect_url="https://apps.twitter.com"
         self.state="waiting"
-	self.name = "twitter"
+	self.reset_user=False
+	self.reset_consumer=False
         try:
             self.engine=Engine(__plugin_name__)
         except Exception:
@@ -46,17 +46,17 @@ class twitter(Plugin):
     def pre_auth(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
-        self.auth = self.tweepy.OAuthHandler(consumer_key, consumer_secret)
+        self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         user_token,user_token_secret=self.get_user_keys()
         self.auth.set_access_token(user_token, user_token_secret)
-        return self.tweepy.API(self.auth)
+        return tweepy.API(self.auth)
 
     def get_consumer_keys(self):
         """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
 	
         key=self.engine.get_attrib('consumer_key')
         secret=self.engine.get_attrib('consumer_secret')
-        if key=='' or secret=='' or key==None or secret==None:
+        if key=='' or secret=='' or self.reset_consumer:
             self.state="waiting for consumer keys"
             self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
             key=self.engine.prompt_user("Enter app key", str)
@@ -71,7 +71,7 @@ class twitter(Plugin):
 
         token=self.engine.get_attrib('user_token')
         secret=self.engine.get_attrib('user_token_secret')
-        if token=='' or secret=='' or token==None or secret==None:
+        if token=='' or secret=='' or self.reset_user:
             self.state="waiting for user keys"
             self.redirect_url = self.auth.get_authorization_url()
             pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(self.redirect_url), int)
