@@ -2,7 +2,9 @@
 from ..Broadcaster import terminal_ui
 
 import argparse
+from .engine_mocker import broadcast
 
+terminal_ui.broadcast = broadcast
 def test_main():
 
        terminal_ui.main(["hii","-ch","fb"]) 
@@ -23,3 +25,5 @@ def test_prompt():
 def test_ui_with_debug():
 	
        terminal_ui.main(["hello","-ch","fb", "twitter","-dbug"])
+def test_report_status():
+	terminal_ui.report_status({'mail':'test'})
