@@ -33,10 +33,9 @@ class twitter(Plugin):
         self.state="publishing"
         try:
             api.update_status(self.msg)
-        except Exception:
-            self.stat="failed"
-            raise PluginError(PluginError.NET_ERROR)
-        self.state="done"
+            self.state="done"
+        except tweepy.TweepError:
+            self.error_handler()
         return True
 
     def status(self):
@@ -82,3 +81,6 @@ class twitter(Plugin):
             self.engine.set_attrib('user_token_secret',secret)
         self.state="authenticating"
         return [token, secret]
+
+    def error_handler(self):
+        pass
