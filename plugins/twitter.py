@@ -27,7 +27,7 @@ class twitter(Plugin):
         """Method to invoke plugin to post message to site"""
         self.state="authenticating"
         try:
-            api=self.pre_authenticate()
+            api=self.pre_auth()
         except Exception:
             raise PluginError(PluginError.AUTH_ERROR)
         self.state="publishing"
@@ -43,7 +43,7 @@ class twitter(Plugin):
         """Method to query status of the plugin activity"""
         return self.state
 
-    def pre_authenticate(self):
+    def pre_auth(self):
         """This method gets the user and developer authentication via tweetpy api and return tweepy api object"""
         consumer_key,consumer_secret=self.get_consumer_keys()
         self.auth = self.tweepy.OAuthHandler(consumer_key, consumer_secret)
