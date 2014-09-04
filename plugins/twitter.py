@@ -33,9 +33,9 @@ class twitter(Plugin):
         self.state="publishing"
         try:
             api.update_status(self.msg)
-            self.state="done"
-        except tweepy.TweepError:
-            self.error_handler()
+        except tweepy.TweepError as error:
+            self.error_handler(1, error)
+        self.state="done"
         return True
 
     def status(self):
@@ -62,6 +62,7 @@ class twitter(Plugin):
             secret=self.engine.prompt_user("Enter app secret", str)
             self.engine.set_attrib('consumer_key', key)
             self.engine.set_attrib('consumer_secret', secret)
+            self.reset_consumer=False
         self.state="authenticating"
         return [key, secret]
 
@@ -79,8 +80,42 @@ class twitter(Plugin):
             secret=self.auth.access_token.secret
             self.engine.set_attrib('user_token',token)
             self.engine.set_attrib('user_token_secret',secret)
+            self.reset_user=False
         self.state="authenticating"
         return [token, secret]
 
-    def error_handler(self):
+    def error_handler(self, level, error):
+        if type(error.respone)==None:
+            raise PluginError(PluginError.NET_ERROR)
+        elif str(error.response.status).startswith("5"):
+            raise PluginError(PluginError.SERV_ERROR)
+        elif error.response.status<400:
+            raise PluginError(PluginError.SERV_ERROR)
+        elif level==1:
+            self.handle_user(error)
+        elif level==0:
+            self.handle_consumer(error)
+        else:
+            raise PluginError(PluginError.ERROR)
+
+    def handle_user(self, error):
+        if error.message[0]["code"]==187:
+            raise PluginError(PluginError.VALID_ERROR)
+        elif error.message[0]["code"]==185:
+            raise PluginError(PluginError.SERV_ERROR)
+        elif error.message[0]["code"]==261:
+            raise PluginError(PluginError.SERV_ERROR)
+        elif error.message[0]["code"]==226:
+            raise PluginError(PluginError.SERV_ERROR)
+        elif error.message[0]["code"]==215:
+            self.reset_user=True
+            self.reset_consumer=True
+            self.post()
+            return None
+        elif error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==135:
+            self.reset_user=True
+            self.post()
+            return None
+
+    def handle_consumer(self, error):
         pass
