@@ -1,22 +1,26 @@
+from ..Broadcaster.ui import Ui
 
-from ..Broadcaster import terminal_ui
+class tester_ui(Ui):
+    def __init__(self):
+        pass
+try:
+    base_ui=Ui()
+except NotImplementedError:
+    pass
 
-import argparse
+ui_test_obj=tester_ui()
 
-def test_main():
+try:
+    ui_test_obj.get_mesg_and_chanl()
+except NotImplementedError:
+    pass
 
-       terminal_ui.main(["hii","-ch","fb"]) 
-       
-def test_main_with_empty_message():
+try:
+    ui_test_obj.display_error("test error")
+except NotImplementedError:
+    pass
 
-       terminal_ui.main([" ", "-ch","fb,twitter"])
-def test_main_with_empty_channels():
-       
-       terminal_ui.main(["hello","-ch"," "])
-def test_main_with_two_chanels():
-
-       terminal_ui.main(["hello","-ch","fb", "twitter"])
-
-def test_prompt():
-	tmp_ui=terminal_ui.Terminal_ui(["hello","-ch","fb", "twitter"])
-	tmp_ui.prompt("hello",None)
+try:
+    ui_test_obj.prompt("test prompt")
+except NotImplementedError:
+    pass

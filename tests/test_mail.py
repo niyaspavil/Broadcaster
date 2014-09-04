@@ -9,8 +9,7 @@ msg=''.join(random.choice(string.lowercase) for x in range(10))
 mail.smtplib = smtplib_mocker
 mail.Engine=Engine
 tmp_plug=mail.mail(msg)	
-tmp_engine=tmp_plug.engine
-tmp_engine.mock_input="consumer999"
+tmp_plug.engine.mock_input="consumer999"
 
 
 def test_init():
