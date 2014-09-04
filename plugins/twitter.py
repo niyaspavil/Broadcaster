@@ -13,7 +13,7 @@ class twitter(Plugin):
         if len(msg)>160:
             raise PluginError(PluginError.VALID_ERROR)
         self.msg=msg
-        self.redirect_url="https://apps.twitter.com"
+        self.auth_url="https://apps.twitter.com"
         self.state="waiting"
 	self.reset_user=False
 	self.reset_consumer=False
@@ -58,7 +58,7 @@ class twitter(Plugin):
         secret=self.engine.get_attrib('consumer_secret')
         if key=='' or secret=='' or self.reset_consumer:
             self.state="waiting for consumer keys"
-            self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.redirect_url), None)
+            self.engine.prompt_user("Visit the %s and create a twitter application with read and write permission" % (self.auth_url), None)
             key=self.engine.prompt_user("Enter app key", str)
             secret=self.engine.prompt_user("Enter app secret", str)
             self.engine.set_attrib('consumer_key', key)
@@ -73,8 +73,8 @@ class twitter(Plugin):
         secret=self.engine.get_attrib('user_token_secret')
         if token=='' or secret=='' or self.reset_user:
             self.state="waiting for user keys"
-            self.redirect_url = self.auth.get_authorization_url()
-            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(self.redirect_url), int)
+            self.auth_url = self.auth.get_authorization_url()
+            pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(self.auth_url), int)
             self.auth.get_access_token(pin)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
