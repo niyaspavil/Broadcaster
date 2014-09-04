@@ -45,7 +45,7 @@ class Engine(object):
 
     def prompt_user(self, msg, type):
         """prompts user with msg and return the input from user"""
-        return self.UI.prompt(msg)
+        return self.UI.prompt(msg, type)
 
 def broadcast(msg, chnl_list, ui):
     global UI,__all_chnl__

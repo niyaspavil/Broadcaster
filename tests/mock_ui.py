@@ -5,6 +5,6 @@ class Mock_ui(object):
     
         pass
 
-    def prompt(self,content):
+    def prompt(self,content,type):
 	
 	pass
