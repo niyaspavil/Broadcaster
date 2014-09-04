@@ -28,8 +28,8 @@ class twitter(Plugin):
         self.state="authenticating"
         try:
             api=self.pre_auth()
-        except Exception:
-            raise PluginError(PluginError.AUTH_ERROR)
+        except tweepy.TweepError as error:
+            self.error_handler(0, error)
         self.state="publishing"
         try:
             api.update_status(self.msg)
@@ -111,11 +111,16 @@ class twitter(Plugin):
             self.reset_user=True
             self.reset_consumer=True
             self.post()
-            return None
         elif error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==135:
             self.reset_user=True
             self.post()
-            return None
+        else:
+            raise PluginError(PluginError.ERROR)
 
     def handle_consumer(self, error):
-        pass
+        if error.response.status==401:
+            self.reset_consumer=True
+            self.reset_user=True
+            self.post()
+        else:
+            raise PluginError(PluginError.ERROR)
