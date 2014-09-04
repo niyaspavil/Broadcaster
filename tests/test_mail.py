@@ -7,9 +7,9 @@ from ..Broadcaster.plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 mail.smtplib = smtplib_mocker
-tmp_plug=mail.mail(msg)
-tmp_engine=Engine("mail")
-tmp_plug.engine=tmp_engine	
+mail.Engine=Engine
+tmp_plug=mail.mail(msg)	
+tmp_engine=tmp_plug.engine
 tmp_engine.mock_input="consumer999"
 
 

@@ -6,11 +6,10 @@ from .engine_mocker import Engine
 from ..Broadcaster.plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
+twitter.tweepy=tweepy_mocker
+twitter.Engine=Engine
 tmp_plug=twitter.twitter(msg)
-tmp_engine=Engine("twitter")
-tmp_plug.engine=tmp_engine
-tmp_plug.tweepy=tweepy_mocker
-tmp_engine.mock_input="consumer999"
+tmp_plug.engine.mock_input="consumer999"
 
 try:
     test_msg=''.join(random.choice(string.lowercase) for x in range(200))
