@@ -17,13 +17,6 @@ class Ui(object):
 
         raise NotImplementedError
     
-    def display_status(self,status):
-        
-        """
-                     This is an abstract Function for display the status from engine.
-        """
-        raise NotImplementedError
-    
     def display_error(self,error):
         
         """
