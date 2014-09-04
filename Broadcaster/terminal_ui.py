@@ -12,10 +12,15 @@ class Terminal_ui(Ui):
         """
         parser = argparse.ArgumentParser(usage='%(prog)s <your message> -ch <channel_list>',description='A way for Broadcast your messages')
         parser.add_argument('message',type=str, help='Message to be sended')
-        parser.add_argument( '-ch', '--channels',type= str,nargs='+', required=True,help='Channel list to send the message',)
+        parser.add_argument( '-ch', '--channels',type= str,nargs='+', required=True,help='Channel list to send the message')
+	parser.add_argument('-dbug','--debug',action='store_true',help='it will give more useful and informative output to understand error..')
         args= parser.parse_args(args)
         self.message =args.message
         self.channels = args.channels
+	if args.debug:
+	    self.debug=True
+	else:
+	    self.debug=False
     
     def empty_message (self,Message):
        
@@ -25,7 +30,7 @@ class Terminal_ui(Ui):
 	if not Message.strip():
             return True
  	else:
-  		return False
+  	    return False
            
         
     def empty_channel(self,Channel_List):
@@ -33,9 +38,9 @@ class Terminal_ui(Ui):
                                     check channels are empty or not
         """
         if not Channel_List[0].strip():
-              return True
+            return True
         else:
-              return False
+            return False
         
     
     def get_mesg_and_chanl(self):
@@ -59,14 +64,14 @@ class Terminal_ui(Ui):
         
 
 	if self.empty_message(message):  # check the message is empty or not
-		self.display_error( "\t\tEnter valid message\t\t")
-                return None
+	    self.display_error( "\t\tEnter valid message\t\t")
+            return None
 
 	elif self.empty_channel(channel_list):
-                self.display_error("\t\tEnter any channel name\t\t")
-                return None
+            self.display_error("\t\tEnter any channel name\t\t")
+            return None
         else:
-            return (message,channel_list)  
+            return (message,channel_list,self.debug)  
                  
     def display_error(self,error):
         
@@ -77,6 +82,7 @@ class Terminal_ui(Ui):
         print colored("Error",'red')
     	print colored(error,'red')
         print"\n"*7
+    
     def prompt(self,content,type):
 
 	"""
@@ -85,7 +91,7 @@ class Terminal_ui(Ui):
 	"""
 	if(type == None):
 	
-		print colored(colored(content+":\n >>>\t",'red'))
+		print colored(content+":\n >>>\t",'red')
 	else:
 	    return raw_input(colored(content+":\n >>>\t",'red'))
 	
@@ -97,7 +103,7 @@ class Terminal_ui(Ui):
 def report_status(status):
 	
 	for channel,statu in status.items():
-		print channel+">>>"+statu	
+	    print channel+">>>"+statu	
     
 
 def main(args):
