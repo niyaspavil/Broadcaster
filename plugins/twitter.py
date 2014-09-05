@@ -25,12 +25,14 @@ class twitter(Plugin):
 
     def post(self):
         """Method to invoke plugin to post message to site"""
-        while True:
+	self.retry=3
+        while self.retry:
             self.state="authenticating"
             try:
                 api=self.pre_auth()
             except tweepy.TweepError as error:
                 self.error_handler(error, 1)
+		self.retry-=1
                 continue
             self.state="publishing"
             try:
@@ -39,7 +41,9 @@ class twitter(Plugin):
                 return True
             except tweepy.TweepError as error:
                 self.error_handler(error, 0)
+		self.retry-=1
                 continue
+	raise PluginError(PluginError.AUTH_ERROR)
 
     def status(self):
         """Method to query status of the plugin activity"""
