@@ -85,7 +85,7 @@ class twitter(Plugin):
         return [token, secret]
 
     def error_handler(self, level, error):
-        if type(error.respone)==None:
+        if type(error.response)==None:
             raise PluginError(PluginError.NET_ERROR)
         elif str(error.response.status).startswith("5"):
             raise PluginError(PluginError.SERV_ERROR)
