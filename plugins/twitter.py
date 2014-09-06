@@ -85,7 +85,7 @@ class twitter(Plugin):
             try:
                 self.auth.get_access_token(pin)
             except tweepy.TweepError as error:
-                print "wrong pin"
+                self.engine.prompt_user("entered pin is wrong",None,True)
                 raise PluginError(PluginError.ERROR)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
