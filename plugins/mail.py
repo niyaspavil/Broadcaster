@@ -17,6 +17,7 @@ class mail(Plugin):
 	self.state="waiting"
 	self.To_mail=[]
 	self.name = "mail"
+	self.debug = False
 	try:
             self.engine=Engine(__plugin_name__)
 	except Exception:
@@ -26,11 +27,22 @@ class mail(Plugin):
     def post(self):
         """Method to send mail"""
         self.state="authenticating"
-	response = {}
-	try:
-            self.pre_authenticate()
-        except Exception:
-            raise PluginError(PluginError.AUTH_ERROR)
+        try:
+	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
+	    self.server.ehlo()
+	    self.server.starttls()
+	except Exception:
+	    self.engine.prompt_user("Network Disconnected",None,debug=True) 
+	
+        response = {}
+        auth=True
+	while auth:
+	    try:
+                self.pre_authenticate()
+                auth=True
+            except Exception:
+                self.engine.prompt_user("Username and Password not accepted",None,debug=True)
+	
 	mail=self.compose_mail()
 	fromAddr = self.username
 		
@@ -54,14 +66,9 @@ class mail(Plugin):
         """This method create a server object """
 	user_name,user_password=self.get_consumer_details()
 	self.username = user_name
-	try:
-	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
-	    self.server.ehlo()
-	    self.server.starttls()
-	except Exception:
-	    raise PluginError(PluginError.ERROR)        
+	     
 	self.server.login(user_name, user_password)
-	
+	      
         return True 
 
 

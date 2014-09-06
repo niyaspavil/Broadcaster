@@ -7,14 +7,24 @@ class Terminal_ui(Ui):
     
     def __init__(self,args):    
         """
-                     This constructor  read user input from the terminal.
+            This constructor  read user input from the terminal.
                      
         """
-        parser = argparse.ArgumentParser(usage='%(prog)s <your message> -ch <channel_list>',description='A way for Broadcast your messages')
-        parser.add_argument('message',type=str, help='Message to be sended')
-        parser.add_argument( '-ch', '--channels',type= str,nargs='+', required=True,help='Channel list to send the message')
-	parser.add_argument('-dbug','--debug',action='store_true',help='it will give more useful and informative output to understand error..')
-        args= parser.parse_args(args)
+	try:
+            parser = argparse.ArgumentParser(
+	        usage="\n\t%(prog)s <your message> -ch <channel_list> [-dbug]\n",
+	        description='A way for Broadcast your messages')
+            parser.add_argument(
+	        'message',type=str, help='Message to be sended')
+            parser.add_argument( 
+                '-ch', '--channels',type= str,nargs='+',
+	        required=True,help='Channel list to send the message')
+	    parser.add_argument(
+	        '-dbug','--debug',action='store_true',
+	        help='give more useful and informative output to understand error..')
+            args= parser.parse_args(args)
+	except Exception:
+		parser.print_help() 
         self.message =args.message
         self.channels = args.channels
 	if args.debug:
@@ -25,7 +35,7 @@ class Terminal_ui(Ui):
     def empty_message (self,Message):
        
         """
-                                  check message is empty or not
+                       check message is empty or not
         """
 	if not Message.strip():
             return True
@@ -35,7 +45,7 @@ class Terminal_ui(Ui):
         
     def empty_channel(self,Channel_List):
         """
-                                    check channels are empty or not
+                      check channels are empty or not
         """
         if not Channel_List[0].strip():
             return True
@@ -50,20 +60,20 @@ class Terminal_ui(Ui):
         """
         
         if len(self.channels) == 1:     
-            channel_list =self.channels[0].split(',')   # removes ',' and split into list
+            channel_list =self.channels[0].split(',') 
         else:
             channel_list=self.channels
         
-        for i,item in enumerate(channel_list):        # removes space in channels list
+        for i,item in enumerate(channel_list):        
             channel_list[i]=channel_list[i]
 
-        channel_list = list(set(channel_list))         # removes duplicate channel names
+        channel_list = list(set(channel_list))   # removes duplicate channel names
         
         
-        message= self.message                          # message contains message to be sended
+        message= self.message                         
         
 
-	if self.empty_message(message):  # check the message is empty or not
+	if self.empty_message(message):  
 	    self.display_error( "\t\tEnter valid message\t\t")
             return None
 
@@ -86,8 +96,7 @@ class Terminal_ui(Ui):
     def prompt(self,content,type):
 
 	"""
-
-		     This abstract function will prompt some content to the user and return reply to the engine
+              Function for prompt some datas to user
 	"""
 	if(type == None):
 	
