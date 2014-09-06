@@ -10,6 +10,7 @@ private_home=expanduser("~")+sep+".Broadcaster"
 cfgfile=private_home+sep+"conf.ini"
 __all_chnl__=None
 UI=None
+debug_mode=False
 
 class Engine(object):
     """class engine for plugins"""
@@ -43,13 +44,18 @@ class Engine(object):
         self.conf.set(self.section, option, value)
         self.conf.write(open(cfgfile,"w"))
 
-    def prompt_user(self, msg, type):
+    def prompt_user(self, msg, type=None, debug=False):
         """prompts user with msg and return the input from user"""
-        return self.UI.prompt(msg, type)
+        if debug and (not debug_mode):
+            return None
+        else:
+            return self.UI.prompt(msg, type)
+        
 
-def broadcast(msg, chnl_list,debug, ui):
-    global UI,__all_chnl__
+def broadcast(msg, chnl_list, mode, ui):
+    global UI,__all_chnl__,debug_mode
     UI=ui
+    debug_mode=mode
     dict={}
     __all_chnl__=find_chnls()
     for chnl in chnl_list:

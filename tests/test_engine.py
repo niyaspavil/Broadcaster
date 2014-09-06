@@ -24,9 +24,9 @@ def test_load_plugin():
 
 def test_broadcast():
     dummy_engine.load_plugin=plugin_mocker
-    assert dummy_engine.broadcast("testing", ['twitter'],UI) == {"twitter":"Successful"}
+    assert dummy_engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Successful"}
     dummy_engine.load_plugin=fail_post
-    assert dummy_engine.broadcast("testing", ['twitter'],UI) == {"twitter":"Failed"}
+    assert dummy_engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Failed"}
 
 def fail_post(chn, msg):
     pass

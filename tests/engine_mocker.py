@@ -19,7 +19,7 @@ class Engine(object):
         """stores option-value pair to the conf"""
         self.conf[option]=value
 
-    def prompt_user(self, msg, type):
+    def prompt_user(self, msg, type=None, debug=None):
         """prompts user with msg and return the input from user"""
         return self.mock_input
 

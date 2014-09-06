@@ -25,18 +25,25 @@ class twitter(Plugin):
 
     def post(self):
         """Method to invoke plugin to post message to site"""
-        self.state="authenticating"
-        try:
-            api=self.pre_auth()
-        except tweepy.TweepError as error:
-            self.error_handler(0, error)
-        self.state="publishing"
-        try:
-            api.update_status(self.msg)
-        except tweepy.TweepError as error:
-            self.error_handler(1, error)
-        self.state="done"
-        return True
+	self.retry=3
+        while self.retry:
+            self.state="authenticating"
+            try:
+                api=self.pre_auth()
+            except tweepy.TweepError as error:
+                self.error_handler(error, 1)
+		self.retry-=1
+                continue
+            self.state="publishing"
+            try:
+                api.update_status(self.msg)
+                self.state="done"
+                return True
+            except tweepy.TweepError as error:
+                self.error_handler(error, 0)
+		self.retry-=1
+                continue
+	raise PluginError(PluginError.AUTH_ERROR)
 
     def status(self):
         """Method to query status of the plugin activity"""
@@ -75,7 +82,11 @@ class twitter(Plugin):
             self.state="waiting for user keys"
             self.auth_url = self.auth.get_authorization_url()
             pin=self.engine.prompt_user("Visit the %s and enter the authorization pin" %(self.auth_url), int)
-            self.auth.get_access_token(pin)
+            try:
+                self.auth.get_access_token(pin)
+            except tweepy.TweepError as error:
+                print "wrong pin"
+                raise PluginError(PluginError.ERROR)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
             self.engine.set_attrib('user_token',token)
@@ -84,43 +95,28 @@ class twitter(Plugin):
         self.state="authenticating"
         return [token, secret]
 
-    def error_handler(self, level, error):
-        if type(error.respone)==None:
+    def error_handler(self, error, level):
+        self.engine.prompt_user(error.__str__(), None, True)
+        if type(error.message)==str:
+            self.engine.prompt_user("--Unable to connect to internet--", None, True)
             raise PluginError(PluginError.NET_ERROR)
-        elif str(error.response.status).startswith("5"):
-            raise PluginError(PluginError.SERV_ERROR)
-        elif error.response.status<400:
-            raise PluginError(PluginError.SERV_ERROR)
-        elif level==1:
-            self.handle_user(error)
         elif level==0:
-            self.handle_consumer(error)
+            return self.user_handler(error)
+        elif level==1:
+            return self.consumer_handler(error)
         else:
-            raise PluginError(PluginError.ERROR)
+            self.engine.prompt_user("--error not handled by plugin--", None, True)
+            raise PluginError(PluginError.Error)
 
-    def handle_user(self, error):
-        if error.message[0]["code"]==187:
-            raise PluginError(PluginError.VALID_ERROR)
-        elif error.message[0]["code"]==185:
-            raise PluginError(PluginError.SERV_ERROR)
-        elif error.message[0]["code"]==261:
-            raise PluginError(PluginError.SERV_ERROR)
-        elif error.message[0]["code"]==226:
-            raise PluginError(PluginError.SERV_ERROR)
-        elif error.message[0]["code"]==215:
+    def user_handler(self, error):
+        if error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==215:
+            self.engine.prompt_user("--resetting user keys--", None, True)
             self.reset_user=True
-            self.reset_consumer=True
-            self.post()
-        elif error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==135:
-            self.reset_user=True
-            self.post()
         else:
-            raise PluginError(PluginError.ERROR)
-
-    def handle_consumer(self, error):
-        if error.response.status==401:
-            self.reset_consumer=True
-            self.reset_user=True
-            self.post()
-        else:
-            raise PluginError(PluginError.ERROR)
+            self.engine.prompt_user("--exception unhandled at user_handler--", None, True)
+            raise PluginError(PluginError.Error)
+            
+    def consumer_handler(self, error):
+        self.engine.prompt_user("--resetting consumer keys--", None, True)
+        self.reset_consumer=True
+        
