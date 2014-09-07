@@ -3,7 +3,7 @@ from ..Broadcaster.dummy_engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
-
+import socket
 __plugin_name__="mail"
 
 
@@ -17,7 +17,7 @@ class mail(Plugin):
 	self.state="waiting"
 	self.To_mail=[]
 	self.name = "mail"
-	self.debug = False
+        self.reset_user=False
 	try:
             self.engine=Engine(__plugin_name__)
 	except Exception:
@@ -27,32 +27,36 @@ class mail(Plugin):
     def post(self):
         """Method to send mail"""
         self.state="authenticating"
-        try:
-	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
-	    self.server.ehlo()
-	    self.server.starttls()
-	except Exception:
-	    self.engine.prompt_user("Network Disconnected",None,debug=True) 
-	
-        response = {}
-        auth=True
-	while auth:
+	self.retry=3
+        while self.retry:
 	    try:
                 self.pre_authenticate()
-                auth=True
-            except Exception:
-                self.engine.prompt_user("Username and Password not accepted",None,debug=True)
-	
-	mail=self.compose_mail()
-	fromAddr = self.username
+            except smtplib.SMTPAuthenticationError as error:
+	        self.engine.prompt_user(error.__str__(), None, True)
+		self.retry-=1
+		continue
+            except socket.giaerror:
+		  self.engine.prompt_user("--Unable to connect to internet--", None, True)
+		  raise PluginError(PluginError.NET_ERROR)
+        while self.retry:	
+	    mail=self.compose_mail()
+	    fromAddr = self.username
 		
-	for toAddr in self.To_mail:
-	    try:
-	        self.server.sendmail(fromAddr, toAddr, mail)
-	    except Exception:		
-            	raise PluginError(PluginError.NET_ERROR)
+	    for toAddr in self.To_mail:
+	        try:
+	            self.server.sendmail(fromAddr, toAddr, mail)
+	        except SMTPRecipientsRefused as error:
+	            self.engine.prompt_user(error.__str__(), None, True)
+                    self.retry-=1
+		    break
+                except SMTPDataError as error:
+		    self.engine.prompt_user(error.__str__(), None, True)
+                    self.retry-=1
+		    break
+		except SMTPConnectError as error:
+		    self.engine.prompt_user("--Unable to connect to internet--", None, True)
+		    raise PluginError(PluginError.NET_ERROR)
         self.state="done"
-        return True
 
 		
     def status(self):
@@ -64,7 +68,11 @@ class mail(Plugin):
 
     def pre_authenticate(self):
         """This method create a server object """
-	user_name,user_password=self.get_consumer_details()
+	self.server = smtplib.SMTP('smtp.gmail.com',587)    
+	self.server.ehlo()
+	self.server.starttls()
+
+	user_name,user_password=self.get_user_details()
 	self.username = user_name
 	     
 	self.server.login(user_name, user_password)
@@ -76,7 +84,7 @@ class mail(Plugin):
 
 
 
-    def get_consumer_details(self):
+    def get_user_details(self):
         """retrieve user details from engine and return in list as [user_name,user_password]"""
         usrname=self.engine.get_attrib('user_name')
         passwd=self.engine.get_attrib('user_password')
@@ -106,4 +114,3 @@ class mail(Plugin):
 	mail['Subject'] = subject
 	mail.attach(MIMEText(message, 'plain'))
 	return mail.as_string()
-		
