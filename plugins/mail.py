@@ -34,6 +34,7 @@ class mail(Plugin):
             except smtplib.SMTPAuthenticationError as error:
 	        self.engine.prompt_user(error.__str__(), None, True)
 		self.retry-=1
+                self.reset_user=True
 		continue
             except socket.giaerror:
 		self.engine.prompt_user("--Unable to connect to internet--", None, True)
@@ -50,6 +51,7 @@ class mail(Plugin):
                     self.state="done"
                     return True
 	        except smtplib.SMTPRecipientsRefused as error:
+		    self.engine.prompt_user("Invalid Recipient Address", None, False)
 	            self.engine.prompt_user(error.__str__(), None, True)
                     self.retry-=1
                     break
@@ -92,7 +94,7 @@ class mail(Plugin):
         """retrieve user details from engine and return in list as [user_name,user_password]"""
         usrname=self.engine.get_attrib('user_name')
         passwd=self.engine.get_attrib('user_password')
-        if usrname=='' or passwd=='' or usrname==None or passwd==None:
+        if usrname == '' or passwd =='' or usrname == None or passwd == None or self.reset_user:
             self.state="waiting for consumer detials"
             usrname=self.engine.prompt_user("Enter username", str,False)
        	    passwd=self.engine.prompt_user("Enter password", str,False)

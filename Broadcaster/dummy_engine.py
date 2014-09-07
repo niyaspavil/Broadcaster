@@ -72,7 +72,6 @@ def broadcast(msg, chnl_list, mode, ui):
 
 def find_chnls():
     plugins = []
-    print plugins_dir
     plugin_files = glob.glob("{}/*.py".format(plugins_dir))
     for plugin_file in plugin_files:
         if plugin_file.endswith("__init__.py"):
