@@ -1,6 +1,7 @@
 import random
 import string
 import smtplib_mocker
+from .compose_mail_mocker import compose_mail
 from ..plugins import mail
 from .engine_mocker import Engine
 from ..Broadcaster.plugin import PluginError
@@ -23,11 +24,11 @@ def test_status():
     
     assert tmp_plug.status()=="waiting"
 
-def test_get_consumer_details():
+def test_get_user_details():
     """test for get_consumer_details method"""
   
-    assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
-    assert tmp_plug.get_consumer_details()==['consumer999','consumer999']
+    assert tmp_plug.get_user_details()==['consumer999','consumer999']
+    assert tmp_plug.get_user_details()==['consumer999','consumer999']
 
 def test_pre_authenicate():
     """test for pre_authenticate method"""
@@ -35,5 +36,52 @@ def test_pre_authenicate():
 
 def test_post():
     """test for post method"""
-    tmp_plug.server = smtplib_mocker.SMTP() 
     assert tmp_plug.post()==True
+
+def test_exception():
+    tmp_plug.engine=Engine("mail")
+    tmp_plug.engine.mock_input="consumer9999"
+
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
+def test_exception2():
+    tmp_plug.engine=Engine("mail")
+    tmp_plug.engine.mock_input="consumer999"
+    tmp_plug.compose_mail=compose_mail
+    tmp_plug.To_mail = ['consumer99']
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
+
+def test_exception3():
+    tmp_plug.engine=Engine("mail")
+    tmp_plug.engine.mock_input="consumer999"
+    tmp_plug.compose_mail=compose_mail
+    tmp_plug.To_mail = ['consumer9']
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
+def test_exception4():
+    mail.Engine="fake_engine"
+    try:
+        plug=mail.mail(msg)
+    except PluginError:
+        pass
+def test_exception5():
+    tmp_plug.engine=Engine("mail")
+    tmp_plug.engine.mock_input="consumer999"
+    tmp_plug.compose_mail=compose_mail
+    tmp_plug.To_mail = ['consumer99999']
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
+    #mail.Engine="fake_engine"
+    #try:
+     #   plug=mail.mail(msg)
+    #except PluginError:
+        #pass

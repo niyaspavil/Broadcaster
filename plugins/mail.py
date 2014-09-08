@@ -3,7 +3,7 @@ from ..Broadcaster.dummy_engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
-
+import socket
 __plugin_name__="mail"
 
 
@@ -17,6 +17,7 @@ class mail(Plugin):
 	self.state="waiting"
 	self.To_mail=[]
 	self.name = "mail"
+        self.reset_user=False
 	try:
             self.engine=Engine(__plugin_name__)
 	except Exception:
@@ -26,23 +27,44 @@ class mail(Plugin):
     def post(self):
         """Method to send mail"""
         self.state="authenticating"
-	response = {}
-	try:
-            self.pre_authenticate()
-        except Exception:
-            raise PluginError(PluginError.AUTH_ERROR)
-	mail=self.compose_mail()
-	fromAddr = self.username
-		
-	for toAddr in self.To_mail:
+	self.retry=3
+        while self.retry:
 	    try:
-	        self.server.sendmail(fromAddr, toAddr, mail)
-	    except Exception:		
-            	raise PluginError(PluginError.NET_ERROR)
-        self.state="done"
-        return True
+                self.pre_authenticate()
+            except smtplib.SMTPAuthenticationError as error:
+	        self.engine.prompt_user(error.__str__(), None, True)
+		self.retry-=1
+                self.reset_user=True
+		continue
+            except socket.giaerror:
+		self.engine.prompt_user("--Unable to connect to internet--", None, True)
 
+                raise PluginError(PluginError.NET_ERROR)
+        	continue
+
+	    mail=self.compose_mail()
+	    fromAddr = self.username
 		
+	    for toAddr in self.To_mail:
+	        try:
+                    self.server.sendmail(fromAddr, toAddr,mail)
+                    self.state="done"
+                    return True
+	        except smtplib.SMTPRecipientsRefused as error:
+		    self.engine.prompt_user("Invalid Recipient Address", None, False)
+	            self.engine.prompt_user(error.__str__(), None, True)
+                    self.retry-=1
+                    break
+                except smtplib.SMTPDataError as error:
+		    self.engine.prompt_user(error.__str__(), None, True)
+                    self.retry-=1
+                    break
+                except smtplib.SMTPConnectError as error:
+		    self.engine.prompt_user("--Unable to connect to internet--", None, True)
+		    raise PluginError(PluginError.NET_ERROR)
+                    break
+                    
+	raise PluginError(PluginError.AUTH_ERROR)		
     def status(self):
         """Method to query status of the plugin activity"""
         return self.state
@@ -52,16 +74,15 @@ class mail(Plugin):
 
     def pre_authenticate(self):
         """This method create a server object """
-	user_name,user_password=self.get_consumer_details()
+	self.server = smtplib.SMTP('smtp.gmail.com',587)    
+	self.server.ehlo()
+	self.server.starttls()
+
+	user_name,user_password=self.get_user_details()
 	self.username = user_name
-	try:
-	    self.server = smtplib.SMTP('smtp.gmail.com',587)    
-	    self.server.ehlo()
-	    self.server.starttls()
-	except Exception:
-	    raise PluginError(PluginError.ERROR)        
+	     
 	self.server.login(user_name, user_password)
-	
+	      
         return True 
 
 
@@ -69,14 +90,14 @@ class mail(Plugin):
 
 
 
-    def get_consumer_details(self):
+    def get_user_details(self):
         """retrieve user details from engine and return in list as [user_name,user_password]"""
         usrname=self.engine.get_attrib('user_name')
         passwd=self.engine.get_attrib('user_password')
-        if usrname=='' or passwd=='' or usrname==None or passwd==None:
+        if usrname == '' or passwd =='' or usrname == None or passwd == None or self.reset_user:
             self.state="waiting for consumer detials"
-            usrname=self.engine.prompt_user("Enter username", str)
-       	    passwd=self.engine.prompt_user("Enter password", str)
+            usrname=self.engine.prompt_user("Enter username", str,False)
+       	    passwd=self.engine.prompt_user("Enter password", str,False)
             self.engine.set_attrib('user_name', usrname)
        	    self.engine.set_attrib('user_password', passwd)
        	self.state="authenticated"
@@ -85,10 +106,10 @@ class mail(Plugin):
 
     def compose_mail(self):
         """this function composes mail"""
-	to = self.engine.prompt_user("To",str)
+	to = self.engine.prompt_user("To",str,False)
 	self.To_mail = to.split()
-	subject=self.engine.prompt_user("Subject",str)
-	contents=self.engine.prompt_user("This is your message '{}' .press enter for continue, else type content".format(self.msg),str)
+	subject=self.engine.prompt_user("Subject",str,False)
+	contents=self.engine.prompt_user("This is your message '{}' .press enter for continue, else type content".format(self.msg),str,False)
 	if contents:
 	    message = contents
 	else:
@@ -99,4 +120,3 @@ class mail(Plugin):
 	mail['Subject'] = subject
 	mail.attach(MIMEText(message, 'plain'))
 	return mail.as_string()
-		
