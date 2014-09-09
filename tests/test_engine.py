@@ -31,5 +31,5 @@ def test_broadcast():
 def fail_post(chn, msg):
     pass
 
-def test_find_chnls():
-    dummy_engine.find_chnls()
+def test_get_chnls():
+    dummy_engine.get_chnls()
