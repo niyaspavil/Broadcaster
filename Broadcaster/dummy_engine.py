@@ -52,12 +52,12 @@ class Engine(object):
             return self.UI.prompt(msg, type)
         
 
-def broadcast(msg, chnl_list, mode, ui):
+def broadcast(msg, chnl_list, mode,reset, ui):
     global UI,__all_chnl__,debug_mode
     UI=ui
     debug_mode=mode
     dict={}
-    __all_chnl__=find_chnls()
+    __all_chnl__=get_chnls()
     for chnl in chnl_list:
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
@@ -70,7 +70,7 @@ def broadcast(msg, chnl_list, mode, ui):
             dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to Broadcaster/plugins"
     return dict
 
-def find_chnls():
+def get_chnls():
     plugins = []
     plugin_files = glob.glob("{}/*.py".format(plugins_dir))
     for plugin_file in plugin_files:
