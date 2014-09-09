@@ -52,7 +52,7 @@ class Engine(object):
             return self.UI.prompt(msg, type)
         
 
-def broadcast(msg, chnl_list, mode, ui):
+def broadcast(msg, chnl_list, mode, ui,reset=False):
     global UI,__all_chnl__,debug_mode
     UI=ui
     debug_mode=mode
@@ -61,6 +61,8 @@ def broadcast(msg, chnl_list, mode, ui):
     for chnl in chnl_list:
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
+            if reset:
+                reset_plugin(chnl)
             try:
                 plug.post()
                 dict[chnl]="Successful"
@@ -89,3 +91,15 @@ def has_channel(chnl):
 def load_plugin(chnl, msg):
     mod=importlib.import_module("."+chnl,"Broadcaster.plugins")
     return getattr(mod,chnl)(msg)
+
+def reset_plugin(chnl):
+    try:
+        if os.path.isfile(cfgfile):
+            conf=ConfigParser.ConfigParser()
+            conf.read(cfgfile)
+            if conf.has_section(chnl):
+                conf.remove_section(chnl)
+        return True
+    except Exception:
+        return False
+                
