@@ -102,6 +102,7 @@ def reset_plugin(chnls):
                     dict[chnl]="reset"
                 else:
                     dict[chnl]="no data to reset"
+            conf.write(open(cfgfile,"w"))
         else:
             dict["all-channel"]="no data to reset"
         return dict
