@@ -1,11 +1,11 @@
 
 from ui import *
-from dummy_engine import broadcast
+from dummy_engine import broadcast,get_chnls
 import argparse
 from termcolor import colored
 class Terminal_ui(Ui):
     
-    def __init__(self,args):    
+    def __init__(self,args,chnls):    
         """
             This constructor  read user input from the terminal.
                      
@@ -18,15 +18,20 @@ class Terminal_ui(Ui):
 	        'message',type=str, help='Message to be sended')
             parser.add_argument( 
                 '-ch', '--channels',type= str,nargs='+',
-	        required=True,help='Channel list to send the message')
+	        choices=chnls,required=True,help='Channel list to send the message')
 	    parser.add_argument(
 	        '-dbug','--debug',action='store_true',
 	        help='give more useful and informative output to understand error..')
+            args= parser.parse_args(args)
+	    parser.add_argument(
+	        '-rset','--reset',type= str,nargs='+',choices=chnls,
+	        help='used to reset user configuration of chanels..')
             args= parser.parse_args(args)
 	except Exception:
 		parser.print_help() 
         self.message =args.message
         self.channels = args.channels
+	self.reset= args.reset
 	if args.debug:
 	    self.debug=True
 	else:
@@ -81,7 +86,7 @@ class Terminal_ui(Ui):
             self.display_error("\t\tEnter any channel name\t\t")
             return None
         else:
-            return (message,channel_list,self.debug)  
+            return (message,channel_list,self.debug,self.reset)  
                  
     def display_error(self,error):
         
@@ -100,9 +105,9 @@ class Terminal_ui(Ui):
 	"""
 	if(type == None):
 	
-		print colored(content+":\n >>>\t",'red')
+		print colored(content+":\n >>>\t",'green')
 	else:
-	    return raw_input(colored(content+":\n >>>\t",'red'))
+	    return raw_input(colored(content+":\n >>>\t",'green'))
 	
 	
 
@@ -117,10 +122,12 @@ def report_status(status):
 
 def main(args):
     status= None
-    terminal_ui = Terminal_ui(args)
+    chnls=get_chnls()
+    terminal_ui = Terminal_ui(args,chnls)
+    
     tup = terminal_ui.get_mesg_and_chanl()
     if tup:
-        status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
+        status=broadcast(tup[0],tup[1],tup[2],tup[3],terminal_ui)
     if status:
     	report_status(status)
 
