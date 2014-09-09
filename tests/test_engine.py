@@ -16,6 +16,7 @@ def test_engine():
     assert engine.get_attrib("twitter") == ""
     engine.set_attrib("user","999")
     assert engine.get_attrib("user") == "999"
+    assert dummy_engine.reset_plugin(["test_section"])=={"test_section":"reset"}
     engine.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
