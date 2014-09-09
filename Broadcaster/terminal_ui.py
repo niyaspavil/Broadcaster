@@ -1,6 +1,6 @@
 
 from ui import *
-from dummy_engine import broadcast,get_chnls
+from dummy_engine import broadcast,get_chnls,reset_plugin
 import argparse
 from termcolor import colored
 class Terminal_ui(Ui):
@@ -22,7 +22,6 @@ class Terminal_ui(Ui):
 	    parser.add_argument(
 	        '-dbug','--debug',action='store_true',
 	        help='give more useful and informative output to understand error..')
-            args= parser.parse_args(args)
 	    parser.add_argument(
 	        '-rset','--reset',type= str,nargs='+',choices=chnls,
 	        help='used to reset user configuration of chanels..')
@@ -86,7 +85,7 @@ class Terminal_ui(Ui):
             self.display_error("\t\tEnter any channel name\t\t")
             return None
         else:
-            return (message,channel_list,self.debug,self.reset)  
+            return (message,channel_list,self.debug)  
                  
     def display_error(self,error):
         
@@ -123,11 +122,20 @@ def report_status(status):
 def main(args):
     status= None
     chnls=get_chnls()
-    terminal_ui = Terminal_ui(args,chnls)
-    
-    tup = terminal_ui.get_mesg_and_chanl()
-    if tup:
-        status=broadcast(tup[0],tup[1],tup[2],tup[3],terminal_ui)
+    for i,optn in enumerate(args):
+        if optn == 'rset' or '--reset':
+	    parser = argparse.ArgumentParser()
+	    parser.add_argument(
+	        '-rset','--reset',type= str,nargs='+',choices=chnls,
+	        help='used to reset user configuration of chanels..')
+            arg= parser.parse_args([args[i+1]])
+            
+            status=reset_plugin(arg.reset)
+        else:
+	    terminal_ui = Terminal_ui(args,chnls)  
+    	    tup = terminal_ui.get_mesg_and_chanl()
+    	    if tup:
+                status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
     if status:
     	report_status(status)
 

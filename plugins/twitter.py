@@ -58,7 +58,7 @@ class twitter(Plugin):
         return tweepy.API(self.auth)
 
     def get_consumer_keys(self):
-        """retrieve keys from engine and return in list as [consumer_key,consumer_secret]"""
+        """retrieve twitter application keys through engine and return in list as [consumer_key,consumer_secret]"""
 	
         key=self.engine.get_attrib('consumer_key')
         secret=self.engine.get_attrib('consumer_secret')
@@ -74,7 +74,7 @@ class twitter(Plugin):
         return [key, secret]
 
     def get_user_keys(self):
-        """retrieve keys from engine and return in list as [user_key,user_secret]"""
+        """retrieve user auth keys through engine and return in list as [user_key,user_secret]"""
 
         token=self.engine.get_attrib('user_token')
         secret=self.engine.get_attrib('user_token_secret')
@@ -85,7 +85,7 @@ class twitter(Plugin):
             try:
                 self.auth.get_access_token(pin)
             except tweepy.TweepError as error:
-                print "wrong pin"
+                self.engine.prompt_user("entered pin is wrong",None,True)
                 raise PluginError(PluginError.ERROR)
             token=self.auth.access_token.key
             secret=self.auth.access_token.secret
@@ -96,6 +96,7 @@ class twitter(Plugin):
         return [token, secret]
 
     def error_handler(self, error, level):
+        """primary error handle which analyse tweepy exceptions and decides whether to raise exception or handle internally. This handler highly relies on error codes passed by tweepy from twitter."""
         self.engine.prompt_user(error.__str__(), None, True)
         if type(error.message)==str:
             self.engine.prompt_user("--Unable to connect to internet--", None, True)
@@ -105,10 +106,11 @@ class twitter(Plugin):
         elif level==1:
             return self.consumer_handler(error)
         else:
-            self.engine.prompt_user("--error not handled by plugin--", None, True)
+            self.engine.prompt_user("--exception unhandled by plugin--", None, True)
             raise PluginError(PluginError.Error)
 
     def user_handler(self, error):
+        """exception handler which identifies auth key errors and flags for reset user keys"""
         if error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==215:
             self.engine.prompt_user("--resetting user keys--", None, True)
             self.reset_user=True
@@ -117,6 +119,8 @@ class twitter(Plugin):
             raise PluginError(PluginError.Error)
             
     def consumer_handler(self, error):
+        """handler which sets flag to reset application keys and user keys """
         self.engine.prompt_user("--resetting consumer keys--", None, True)
         self.reset_consumer=True
+        self.reset_user=True
         
