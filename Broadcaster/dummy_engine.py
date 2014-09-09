@@ -92,13 +92,19 @@ def load_plugin(chnl, msg):
 
 def reset_plugin(chnls):
     try:
-        for chnl in chnls:
-            if os.path.isfile(cfgfile):
-                conf=ConfigParser.ConfigParser()
-                conf.read(cfgfile)
+        dict={}
+        if os.path.isfile(cfgfile):
+            conf=ConfigParser.ConfigParser()
+            conf.read(cfgfile)
+            for chnl in chnls:
                 if conf.has_section(chnl):
                     conf.remove_section(chnl)
-        return True
+                    dict[chnl]="reset"
+                else:
+                    dict[chnl]="no data to reset"
+        else:
+            dict["all-channel"]="no data to reset"
+        return dict
     except Exception:
-        return False
+        return {"all-channel":"reset failed"}
                 
