@@ -3,6 +3,7 @@ from ui import *
 from dummy_engine import broadcast,get_chnls,reset_plugin
 import argparse
 from termcolor import colored
+import sys
 class Terminal_ui(Ui):
     
     def __init__(self,args,chnls):    
@@ -16,22 +17,25 @@ class Terminal_ui(Ui):
 	    self.channels = False
 	    self.debug = False
             parser = argparse.ArgumentParser(
-	        usage="\n\t%(prog)s <your message> -ch <channel_list> [-dbug]\n",
-	        description='A way for Broadcast your messages')
+	        usage=colored(
+		"\n\tEnter 'your message' -ch <channel list> [-dbug]"+'\n \t\t\tor\n'
+		+"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
+		+"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
+	        description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
             parser.add_argument(
-	        'message',type=str, help='Message to be sended')
+	        'message',type=str, help=colored('Message to be sended','cyan'))
             parser.add_argument( 
                 '-ch', '--channels',type= str,nargs='+',
-	        choices=chnls,required=True,help='Channel list to send the message')
+	        choices=chnls,required=True,help=colored('Channel list to send the message','cyan'))
 	    parser.add_argument(
 	        '-dbug','--debug',action='store_true',
-	        help='give more useful and informative output to understand error..')
+	        help=colored('give more useful and informative output to understand error..','cyan'))
+	   
 	    parser_reset = argparse.ArgumentParser(
-	            usage="\n\t -rset or --reset <channel name>\n",)
+	            usage=colored("\n\t -rset or --reset <channel name>\n",'yellow',attrs=['bold']))
 	    parser_reset.add_argument(
 	        '-rset','--reset',type= str,nargs='+',choices=chnls,
-	        help='used to reset user configuration of chanels..')
-	    print args
+	        help=colored('used to reset user configuration of chanels..','cyan'))
 	    if ('-rset' or '--reset') in args:
 		
 	        arg= parser_reset.parse_args(args)
@@ -83,10 +87,8 @@ class Terminal_ui(Ui):
                   This Function displays the  errors
         """
    
-        print colored("Error",'red')
-    	print colored(error,'red')
+        print colored("\nError"+'>>>'+error,'red')
         print"\n"*7
-    
     def prompt(self,content,type):
 
 	"""
@@ -94,13 +96,14 @@ class Terminal_ui(Ui):
 	"""
 	if(type == None):
 	
-		print colored(content+":\n >>>\t",'green')
+		print colored('\n'+content+"\n",'green')
 	else:
-	    return raw_input(colored(content+":\n >>>\t",'green'))
+	    return raw_input(colored('\n'+content+":\n >>>\t",'green'))
 	
 	
-
-
+    def print_help (self):
+	print "usage: "
+	sys.exit()
 
 
 def report_status(status):
