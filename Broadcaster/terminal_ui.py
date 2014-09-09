@@ -22,15 +22,11 @@ class Terminal_ui(Ui):
 	    parser.add_argument(
 	        '-dbug','--debug',action='store_true',
 	        help='give more useful and informative output to understand error..')
-	    parser.add_argument(
-	        '-rset','--reset',type= str,nargs='+',choices=chnls,
-	        help='used to reset user configuration of chanels..')
             args= parser.parse_args(args)
 	except Exception:
 		parser.print_help() 
         self.message =args.message
         self.channels = args.channels
-	self.reset= args.reset
 	if args.debug:
 	    self.debug=True
 	else:
@@ -125,7 +121,8 @@ def main(args):
     try:
         for i,optn in enumerate(args):
             if optn == '-rset' or optn == '--reset':
-            	parser = argparse.ArgumentParser()
+            	parser = argparse.ArgumentParser(
+	            usage="\n\t -rset or --reset <channel name>\n",)
 		parser.add_argument(
 	        '-rset','--reset',type= str,nargs='+',choices=chnls,
 	        help='used to reset user configuration of chanels..')
