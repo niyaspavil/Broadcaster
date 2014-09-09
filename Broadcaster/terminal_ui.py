@@ -122,20 +122,24 @@ def report_status(status):
 def main(args):
     status= None
     chnls=get_chnls()
-    for i,optn in enumerate(args):
-        if optn == 'rset' or '--reset':
-	    parser = argparse.ArgumentParser()
-	    parser.add_argument(
+    try:
+        for i,optn in enumerate(args):
+            if optn == '-rset' or optn == '--reset':
+            	parser = argparse.ArgumentParser()
+		parser.add_argument(
 	        '-rset','--reset',type= str,nargs='+',choices=chnls,
 	        help='used to reset user configuration of chanels..')
-            arg= parser.parse_args([args[i+1]])
-            
-            status=reset_plugin(arg.reset)
-        else:
-	    terminal_ui = Terminal_ui(args,chnls)  
-    	    tup = terminal_ui.get_mesg_and_chanl()
-    	    if tup:
-                status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
+		arg= parser.parse_args(args)
+                status=reset_plugin(arg.reset)
+	        break
+            else:
+	        terminal_ui = Terminal_ui(args,chnls)  
+    	        tup = terminal_ui.get_mesg_and_chanl()
+    	        if tup:
+                    status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
+		break
+    except Exception as e:
+        print e
     if status:
     	report_status(status)
 
