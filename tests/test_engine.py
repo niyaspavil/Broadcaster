@@ -6,7 +6,7 @@ import shutil
 
 UI=Mock_ui()
 dummy_engine.cfgfile="/tmp/test/conf.ini"
-dummy_engine.plugins_dir="./plugins"
+dummy_engine.plugins_dir="./broadcaster/plugins"
 
 def test_engine():
     dummy_engine.cfgfile="/tmp/test/conf.ini"

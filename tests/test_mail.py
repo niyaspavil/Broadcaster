@@ -2,7 +2,7 @@ import random
 import string
 import smtplib_mocker
 from .compose_mail_mocker import compose_mail
-from ..plugins import mail
+from ..broadcaster.plugins import mail
 from .engine_mocker import Engine
 from ..broadcaster.plugin import PluginError
 

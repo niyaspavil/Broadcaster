@@ -1,5 +1,5 @@
-from ..broadcaster.plugin import Plugin, PluginError
-from ..broadcaster.dummy_engine import Engine
+from ..plugin import Plugin, PluginError
+from ..dummy_engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib

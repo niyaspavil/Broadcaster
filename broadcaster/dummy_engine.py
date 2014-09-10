@@ -5,7 +5,7 @@ import glob
 from os.path import basename, splitext, expanduser, sep
 import os
 
-plugins_dir = "./Broadcaster/plugins"
+plugins_dir = "./Broadcaster/broadcaster/plugins"
 private_home=expanduser("~")+sep+".Broadcaster"
 cfgfile=private_home+sep+"conf.ini"
 __all_chnl__=None
@@ -67,7 +67,7 @@ def broadcast(msg, chnl_list, mode, ui):
             except Exception:
                 dict[chnl]="Failed"
         else:
-            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to Broadcaster/plugins"
+            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
     return dict
 
 def get_chnls():
@@ -87,7 +87,7 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
-    mod=importlib.import_module("."+chnl,"Broadcaster.plugins")
+    mod=importlib.import_module("."+chnl,"Broadcaster.broadcaster.plugins")
     return getattr(mod,chnl)(msg)
 
 def reset_plugin(chnls):
