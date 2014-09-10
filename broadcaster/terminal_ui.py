@@ -123,7 +123,3 @@ def main(args):
             status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
     if status:
     	report_status(status)
-
-if __name__ == '__main__':
-    import sys
-    main(sys.argv[1:])
