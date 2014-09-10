@@ -5,7 +5,7 @@ import glob
 from os.path import basename, splitext, expanduser, sep
 import os
 
-plugins_dir = "./Broadcaster/broadcaster/plugins"
+plugins_dir = "./broadcaster/plugins"
 private_home=expanduser("~")+sep+".Broadcaster"
 cfgfile=private_home+sep+"conf.ini"
 pkg="broadcaster.plugins"
