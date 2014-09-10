@@ -8,6 +8,7 @@ import os
 plugins_dir = "./Broadcaster/broadcaster/plugins"
 private_home=expanduser("~")+sep+".Broadcaster"
 cfgfile=private_home+sep+"conf.ini"
+pkg="broadcaster.plugins"
 __all_chnl__=None
 UI=None
 debug_mode=False
@@ -87,7 +88,7 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
-    mod=importlib.import_module("."+chnl,"Broadcaster.broadcaster.plugins")
+    mod=importlib.import_module("."+chnl,pkg)
     return getattr(mod,chnl)(msg)
 
 def reset_plugin(chnls):
