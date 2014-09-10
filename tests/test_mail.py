@@ -4,7 +4,7 @@ import smtplib_mocker
 from .compose_mail_mocker import compose_mail
 from ..plugins import mail
 from .engine_mocker import Engine
-from ..Broadcaster.plugin import PluginError
+from ..broadcaster.plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 mail.smtplib = smtplib_mocker

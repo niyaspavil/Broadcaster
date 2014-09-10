@@ -1,4 +1,4 @@
-from ..Broadcaster import ui
+from ..broadcaster import ui
 class Mock_ui(object):
 	 
     def __init__(self):

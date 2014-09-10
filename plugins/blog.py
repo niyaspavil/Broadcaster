@@ -1,5 +1,5 @@
-from ..Broadcaster.plugin import Plugin, PluginError
-from ..Broadcaster.dummy_engine import Engine
+from ..broadcaster.plugin import Plugin, PluginError
+from ..broadcaster.dummy_engine import Engine
 import datetime
 import xmlrpclib
 

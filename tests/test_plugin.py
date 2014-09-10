@@ -1,4 +1,4 @@
-from ..Broadcaster.plugin import Plugin
+from ..broadcaster.plugin import Plugin
 
 class tester_plugin(Plugin):
     def __init__(self, msg):

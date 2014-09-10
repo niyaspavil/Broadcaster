@@ -1,5 +1,5 @@
 
-from ..Broadcaster import terminal_ui
+from ..broadcaster import terminal_ui
 
 import argparse
 from .engine_mocker import broadcast,get_chnls
