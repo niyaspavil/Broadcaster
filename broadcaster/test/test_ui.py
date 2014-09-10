@@ -1,4 +1,4 @@
-from ..broadcaster.ui import Ui
+from ..ui import Ui
 
 class tester_ui(Ui):
     def __init__(self):

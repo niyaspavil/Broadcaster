@@ -2,9 +2,9 @@ import random
 import string
 import smtplib_mocker
 from .compose_mail_mocker import compose_mail
-from ..broadcaster.plugins import mail
+from ..plugins import mail
 from .engine_mocker import Engine
-from ..broadcaster.plugin import PluginError
+from ..plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 mail.smtplib = smtplib_mocker

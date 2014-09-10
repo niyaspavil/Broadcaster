@@ -1,9 +1,9 @@
 import random
 import string
 import tweepy_mocker
-from ..broadcaster.plugins import twitter
+from ..plugins import twitter
 from .engine_mocker import Engine
-from ..broadcaster.plugin import PluginError
+from ..plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 twitter.tweepy=tweepy_mocker

@@ -1,4 +1,4 @@
-from ..broadcaster import dummy_engine
+from .. import dummy_engine
 from .plugin_mocker import plugin_mocker
 from .mock_ui import Mock_ui
 import os
