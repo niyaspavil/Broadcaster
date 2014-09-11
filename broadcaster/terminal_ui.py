@@ -45,8 +45,7 @@ class Terminal_ui(Ui):
 		self.message = args.message
 		self.channels = args.channels
 		self.debug = args.debug	
-	except Exception as e:
-		#parser.print_help() 
+	except Exception as e: 
 		print e	
 
     
@@ -86,7 +85,7 @@ class Terminal_ui(Ui):
                   This Function displays the  errors
         """
    
-        print colored("\nError"+'>>>'+error,'red')
+        print colored("\nError"+'\t>>>'+error,'red')
         print"\n"*7
     def prompt(self,content,type):
 
@@ -94,21 +93,14 @@ class Terminal_ui(Ui):
               Function for prompt some datas to user
 	"""
 	if(type == None):
-	
-		print colored('\n'+content+"\n",'green')
+	    print colored('\n'+content+"\n",'green')
 	else:
 	    return raw_input(colored('\n'+content+":\n >>>\t",'green'))
-	
-	
-    def print_help (self):
-	print "usage: "
-	sys.exit()
-
 
 def report_status(status):
 	
-	for channel,statu in status.items():
-	    print channel+">>>"+statu	
+	for channel,stats in status.items():
+	    print colored(channel+">>>"+stats,'green')	
     
 
 def main(args):
