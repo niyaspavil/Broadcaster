@@ -6,26 +6,26 @@ import shutil
 import ConfigParser
 
 UI=Mock_ui()
-dummy_engine.cfgfile="/tmp/test/conf.ini"
-dummy_engine.plugins_dir="./broadcaster/plugins"
+dummy_engine.__cfgfile__="/tmp/test/conf.ini"
+dummy_engine.__plugins_dir__="./broadcaster/plugins"
 
 def test_engine():
-    dummy_engine.cfgfile="/tmp/test/conf.ini"
-    dummy_engine.private_home="/tmp/test"
+    dummy_engine.__cfgfile__="/tmp/test/conf.ini"
+    dummy_engine.__private_home__="/tmp/test"
     tmp_conf=dummy_engine.get_conf()
     engine=dummy_engine.Engine("test_section")
     engine.UI=UI
-    dummy_engine.conf=tmp_conf
+    dummy_engine.__conf__=tmp_conf
     assert engine.get_attrib("twitter") == ""
     engine.set_attrib("user","999")
-    dummy_engine.set_conf(dummy_engine.conf)
+    dummy_engine.set_conf(dummy_engine.__conf__)
     assert engine.get_attrib("user") == "999"
     assert dummy_engine.reset_plugin(["test_section"])=={"test_section":"reset"}
     engine.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
-    dummy_engine.pkg="Broadcaster.broadcaster.plugins"
+    dummy_engine.__pkg__="Broadcaster.broadcaster.plugins"
     dummy_engine.load_plugin("twitter","test")
 
 def test_broadcast():
