@@ -7,8 +7,9 @@ import os
 
 plugins_dir = "./broadcaster/plugins"
 private_home=expanduser("~")+sep+".Broadcaster"
-cfgfile=private_home+sep+"conf.ini"
 pkg="broadcaster.plugins"
+cfgfile=private_home+sep+"conf.ini"
+conf=None
 __all_chnl__=None
 UI=None
 debug_mode=False
@@ -19,31 +20,22 @@ class Engine(object):
     def __init__(self, plugin):
         """identifying plugin and setting-up conf"""
         self.section=plugin
-        self.conf=ConfigParser.ConfigParser()
 	self.UI=UI
-        if not os.path.isfile(cfgfile):
-            if not os.path.exists(private_home):
-                os.makedirs(private_home)
-            open(cfgfile,"w").close()
 
     def get_attrib(self, option):
         """return attribute from conf"""
-        self.conf.__init__()
-        self.conf.read(cfgfile)
- 	if self.conf.has_option(self.section,option):
-            value=self.conf.get(self.section,option)
+ 	if conf.has_option(self.section,option):
+            value=conf.get(self.section,option)
         else:
             value=""
         return value
 
     def set_attrib(self, option, value):
         """stores option-value pair to the conf"""
-        self.conf.__init__()
-        self.conf.read(cfgfile)
-        if not self.conf.has_section(self.section):
-            self.conf.add_section(self.section)
-        self.conf.set(self.section, option, value)
-        self.conf.write(open(cfgfile,"w"))
+        global conf
+        if not conf.has_section(self.section):
+            conf.add_section(self.section)
+        conf.set(self.section, option, value)
 
     def prompt_user(self, msg, type=None, debug=False):
         """prompts user with msg and return the input from user"""
@@ -54,11 +46,12 @@ class Engine(object):
         
 
 def broadcast(msg, chnl_list, mode, ui):
-    global UI,__all_chnl__,debug_mode
+    global UI, __all_chnl__, debug_mode, conf
     UI=ui
     debug_mode=mode
     dict={}
     __all_chnl__=get_chnls()
+    conf=get_conf()
     for chnl in chnl_list:
         if has_channel(chnl):
             plug=load_plugin(chnl, msg)
@@ -69,6 +62,7 @@ def broadcast(msg, chnl_list, mode, ui):
                 dict[chnl]="Failed"
         else:
             dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
+    set_conf(conf)
     return dict
 
 def get_chnls():
@@ -91,6 +85,23 @@ def load_plugin(chnl, msg):
     engine=Engine(chnl)
     mod=importlib.import_module("."+chnl,pkg)
     return getattr(mod,chnl)(engine, msg)
+
+def get_conf():
+    conf=ConfigParser.ConfigParser()
+    conf.read(cfgfile)
+    return conf
+
+def set_conf(conf):
+    try:
+        if not os.path.isfile(cfgfile):
+            if not os.path.exists(private_home):
+                os.makedirs(private_home)
+        conf_file=open(cfgfile,"w")
+        conf.write(conf_file)
+        conf.close()
+        return True
+    except Exception:
+        return False
 
 def reset_plugin(chnls):
     try:

@@ -3,6 +3,7 @@ from .plugin_mocker import plugin_mocker
 from .mock_ui import Mock_ui
 import os
 import shutil
+import ConfigParser
 
 UI=Mock_ui()
 dummy_engine.cfgfile="/tmp/test/conf.ini"
@@ -11,10 +12,13 @@ dummy_engine.plugins_dir="./broadcaster/plugins"
 def test_engine():
     dummy_engine.cfgfile="/tmp/test/conf.ini"
     dummy_engine.private_home="/tmp/test"
+    tmp_conf=dummy_engine.get_conf()
     engine=dummy_engine.Engine("test_section")
     engine.UI=UI
+    dummy_engine.conf=tmp_conf
     assert engine.get_attrib("twitter") == ""
     engine.set_attrib("user","999")
+    dummy_engine.set_conf(dummy_engine.conf)
     assert engine.get_attrib("user") == "999"
     assert dummy_engine.reset_plugin(["test_section"])=={"test_section":"reset"}
     engine.prompt_user("hello",str)
