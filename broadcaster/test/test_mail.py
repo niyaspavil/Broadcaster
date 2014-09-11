@@ -8,8 +8,8 @@ from ..plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 mail.smtplib = smtplib_mocker
-mail.Engine=Engine
-tmp_plug=mail.mail(msg)	
+engine=Engine("mail")
+tmp_plug=mail.mail(engine, msg)	
 tmp_plug.engine.mock_input="consumer999"
 
 
@@ -65,12 +65,7 @@ def test_exception3():
         tmp_plug.post()
     except PluginError:
         pass
-def test_exception4():
-    mail.Engine="fake_engine"
-    try:
-        plug=mail.mail(msg)
-    except PluginError:
-        pass
+
 def test_exception5():
     tmp_plug.engine=Engine("mail")
     tmp_plug.engine.mock_input="consumer999"
@@ -80,8 +75,4 @@ def test_exception5():
         tmp_plug.post()
     except PluginError:
         pass
-    #mail.Engine="fake_engine"
-    #try:
-     #   plug=mail.mail(msg)
-    #except PluginError:
-        #pass
+   

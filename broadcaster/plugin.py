@@ -1,7 +1,7 @@
 class Plugin(object):
     """Provides abstract class for loaded plugins of each sites"""
 
-    def __init__(self,msg):
+    def __init__(self, engine, msg):
         """Constructor for Plugin class. The msg is the content to be posted to the site like tweet for twitter etc"""
         raise NotImplementedError()
 

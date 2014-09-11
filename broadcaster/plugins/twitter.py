@@ -7,21 +7,17 @@ __plugin_name__="twitter"
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
     
-    def __init__(self,msg):
+    def __init__(self, engine, msg):
         """initialise and set message recieved for post"""
 
         if len(msg)>160:
             raise PluginError(PluginError.VALID_ERROR)
+	self.engine=engine
         self.msg=msg
         self.auth_url="https://apps.twitter.com"
         self.state="waiting"
 	self.reset_user=False
 	self.reset_consumer=False
-        try:
-            self.engine=Engine(__plugin_name__)
-        except Exception:
-            raise PluginError(PluginError.ERROR)
-        self.auth=None
 
     def post(self):
         """Method to invoke plugin to post message to site"""

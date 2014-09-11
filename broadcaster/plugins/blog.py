@@ -7,17 +7,14 @@ __plugin_name__="blog"
 
 class blog(Plugin):
 
-    def __init__(self,msg):
+    def __init__(self, engine, msg):
         """Constructor for mail class. The msg is the content to be mailed to the others"""
-        
+        self.engine=engine
 	self.msg=msg
 	self.username= None
 	self.state="waiting"
 	self.name = "blog"
-	try:
-            self.engine=Engine(__plugin_name__)
-        except Exception:
-            raise PluginError(PluginError.ERROR)
+
     def post(self):
         """Method to post in a blog """
         self.state="authenticating"

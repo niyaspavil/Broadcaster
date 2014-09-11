@@ -88,8 +88,9 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
+    engine=Engine(chnl)
     mod=importlib.import_module("."+chnl,pkg)
-    return getattr(mod,chnl)(msg)
+    return getattr(mod,chnl)(engine, msg)
 
 def reset_plugin(chnls):
     try:
