@@ -7,13 +7,13 @@ from ..plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
 twitter.tweepy=tweepy_mocker
-twitter.Engine=Engine
-tmp_plug=twitter.twitter(msg)
+engine=Engine("twitter")
+tmp_plug=twitter.twitter(engine, msg)
 tmp_plug.engine.mock_input="consumer999"
 
 try:
     test_msg=''.join(random.choice(string.lowercase) for x in range(200))
-    twitter.twitter(test_msg)
+    twitter.twitter(engine, test_msg)
 except PluginError:
     pass
 
@@ -59,12 +59,4 @@ def test_exception():
         tmp_plug.post()
     except PluginError:
         pass
-    twitter.Engine="fake_engine"
-    try:
-        plug=twitter.twitter(msg)
-    except PluginError:
-        pass
 
-#def test_real():
-#    tmp_plug=twitter.twitter(msg)
-#    assert tmp_plug.post()==True

@@ -7,21 +7,17 @@ __plugin_name__="twitter"
 class twitter(Plugin):
     """plugin tweets msg to twitter"""
     
-    def __init__(self,msg):
+    def __init__(self, engine, msg):
         """initialise and set message recieved for post"""
 
         if len(msg)>160:
             raise PluginError(PluginError.VALID_ERROR)
+	self.engine=engine
         self.msg=msg
         self.auth_url="https://apps.twitter.com"
         self.state="waiting"
 	self.reset_user=False
 	self.reset_consumer=False
-        try:
-            self.engine=Engine(__plugin_name__)
-        except Exception:
-            raise PluginError(PluginError.ERROR)
-        self.auth=None
 
     def post(self):
         """Method to invoke plugin to post message to site"""
@@ -107,16 +103,18 @@ class twitter(Plugin):
             return self.consumer_handler(error)
         else:
             self.engine.prompt_user("--exception unhandled by plugin--", None, True)
-            raise PluginError(PluginError.Error)
+            raise PluginError(PluginError.ERROR)
 
     def user_handler(self, error):
         """exception handler which identifies auth key errors and flags for reset user keys"""
         if error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==215:
             self.engine.prompt_user("--resetting user keys--", None, True)
             self.reset_user=True
+        elif error.message[0]["code"]==187:
+            raise PluginError("Duplicate tweet is not allowed!!")
         else:
             self.engine.prompt_user("--exception unhandled at user_handler--", None, True)
-            raise PluginError(PluginError.Error)
+            raise PluginError(PluginError.ERROR)
             
     def consumer_handler(self, error):
         """handler which sets flag to reset application keys and user keys """
