@@ -32,13 +32,13 @@ class mail(Plugin):
 	    try:
                 self.pre_authenticate()
             except smtplib.SMTPAuthenticationError as error:
+		self.engine.prompt_user("Invalid user name or password else check your security level", None, False)
 	        self.engine.prompt_user(error.__str__(), None, True)
 		self.retry-=1
                 self.reset_user=True
 		continue
-            except socket.giaerror:
-		self.engine.prompt_user("--Unable to connect to internet--", None, True)
-
+            except Exception as e:
+		self.engine.prompt_user("--Unable to connect to internet--", None, False)
                 raise PluginError(PluginError.NET_ERROR)
         	continue
 
@@ -82,8 +82,7 @@ class mail(Plugin):
 	self.username = user_name
 	     
 	self.server.login(user_name, user_password)
-	      
-        return True 
+	       
 
 
 
