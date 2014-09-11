@@ -29,4 +29,4 @@ class PluginError(Exception):
 
     def __init__(self, msg):
         """get the associated error msg"""
-        self.msg=msg
+        self.message=msg

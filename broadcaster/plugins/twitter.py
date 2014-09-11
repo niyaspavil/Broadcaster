@@ -103,16 +103,18 @@ class twitter(Plugin):
             return self.consumer_handler(error)
         else:
             self.engine.prompt_user("--exception unhandled by plugin--", None, True)
-            raise PluginError(PluginError.Error)
+            raise PluginError(PluginError.ERROR)
 
     def user_handler(self, error):
         """exception handler which identifies auth key errors and flags for reset user keys"""
         if error.message[0]["code"]==32 or error.message[0]["code"]==89 or error.message[0]["code"]==215:
             self.engine.prompt_user("--resetting user keys--", None, True)
             self.reset_user=True
+        elif error.message[0]["code"]==187:
+            raise PluginError("Duplicate tweet is not allowed!!")
         else:
             self.engine.prompt_user("--exception unhandled at user_handler--", None, True)
-            raise PluginError(PluginError.Error)
+            raise PluginError(PluginError.ERROR)
             
     def consumer_handler(self, error):
         """handler which sets flag to reset application keys and user keys """
