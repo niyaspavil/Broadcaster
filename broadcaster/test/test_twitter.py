@@ -1,20 +1,19 @@
 import random
 import string
 import tweepy_mocker
-from ..Broadcaster import twitter
+from ..plugins import twitter
 from .engine_mocker import Engine
-from ..Broadcaster.plugin import PluginError
+from ..plugin import PluginError
 
 msg=''.join(random.choice(string.lowercase) for x in range(10))
-tmp_plug=twitter.twitter(msg)
-tmp_engine=Engine("twitter")
-tmp_plug.engine=tmp_engine
-tmp_plug.tweepy=tweepy_mocker
-tmp_engine.mock_input="consumer999"
+twitter.tweepy=tweepy_mocker
+engine=Engine("twitter")
+tmp_plug=twitter.twitter(engine, msg)
+tmp_plug.engine.mock_input="consumer999"
 
 try:
     test_msg=''.join(random.choice(string.lowercase) for x in range(200))
-    twitter.twitter(test_msg)
+    twitter.twitter(engine, test_msg)
 except PluginError:
     pass
 
@@ -38,17 +37,26 @@ def test_get_consumer_keys():
 def test_get_user_keys():
     """test for get_user_keys method"""
 
-    tmp_plug.auth=tweepy_mocker.OAuthHandler()
+    tmp_plug.auth=tweepy_mocker.OAuthHandler("consumer999", "consumer999")
+    
     assert tmp_plug.get_user_keys()==['user999','user999']
     assert tmp_plug.get_user_keys()==['user999','user999']
 
 def test_post():
     """test for post method"""
-    
     assert tmp_plug.post()==True
 
+def test_exception():
+    tmp_plug.engine=Engine("twitter")
+    tmp_plug.engine.mock_input="consumer9999"
+    tmp_plug.auth.access_token.key=""
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
+    tmp_plug.engine.conf={"consumer_key":"consumer999", "consumer_secret":"consumer999","user_token":"kjkl","user_token_secret":"fg"}
+    try:
+        tmp_plug.post()
+    except PluginError:
+        pass
 
-
-#def test_real():
-#    tmp_plug=twitter.twitter(msg)
-#    assert tmp_plug.post()==True

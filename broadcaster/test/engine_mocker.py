@@ -10,14 +10,21 @@ class Engine(object):
 
     def get_attrib(self, option):
         """return attribute from conf"""
-        return self.conf.get(option)
+        if self.conf.get(option):
+		return self.conf.get(option)
+	else:
+		return ""
 
     def set_attrib(self, option, value):
         """stores option-value pair to the conf"""
         self.conf[option]=value
 
-    def prompt_user(self, msg, type):
+    def prompt_user(self, msg, type=None, debug=None):
         """prompts user with msg and return the input from user"""
         return self.mock_input
 
+def broadcast(msg,chanl,debug,ui):
+	return {"plugin":"test"}
 
+def get_chnls():
+	return ['mail','twitter']
