@@ -38,7 +38,7 @@ def test_post():
     """test for post method"""
     assert tmp_plug.post()==True
 
-def test_exception():
+def test_SMTPAuthenticationError():
     tmp_plug.engine=Engine("mail")
     tmp_plug.engine.mock_input="consumer9999"
 
@@ -46,7 +46,7 @@ def test_exception():
         tmp_plug.post()
     except PluginError:
         pass
-def test_exception2():
+def test_SMTPRecipientsRefused():
     tmp_plug.engine=Engine("mail")
     tmp_plug.engine.mock_input="consumer999"
     tmp_plug.compose_mail=compose_mail
@@ -56,7 +56,7 @@ def test_exception2():
     except PluginError:
         pass
 
-def test_exception3():
+def test_SMTPDataError():
     tmp_plug.engine=Engine("mail")
     tmp_plug.engine.mock_input="consumer999"
     tmp_plug.compose_mail=compose_mail
@@ -71,7 +71,7 @@ def test_exception4():
         plug=mail.mail(msg)
     except PluginError:
         pass
-def test_exception5():
+def test_SMTPConnectionError():
     tmp_plug.engine=Engine("mail")
     tmp_plug.engine.mock_input="consumer999"
     tmp_plug.compose_mail=compose_mail
@@ -80,8 +80,4 @@ def test_exception5():
         tmp_plug.post()
     except PluginError:
         pass
-    #mail.Engine="fake_engine"
-    #try:
-     #   plug=mail.mail(msg)
-    #except PluginError:
-        #pass
+  
