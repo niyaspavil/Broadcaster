@@ -1,4 +1,4 @@
-from .. import dummy_engine
+from .. import engine
 from .plugin_mocker import plugin_mocker
 from .mock_ui import Mock_ui
 import os
@@ -6,36 +6,36 @@ import shutil
 import ConfigParser
 
 UI=Mock_ui()
-dummy_engine.__cfgfile__="/tmp/test/conf.ini"
-dummy_engine.__plugins_dir__="./broadcaster/plugins"
+engine.__cfgfile__="/tmp/test/conf.ini"
+engine.__plugins_dir__="./broadcaster/plugins"
 
 def test_engine():
-    dummy_engine.__cfgfile__="/tmp/test/conf.ini"
-    dummy_engine.__private_home__="/tmp/test"
-    tmp_conf=dummy_engine.get_conf()
-    engine=dummy_engine.Engine("test_section")
-    engine.UI=UI
-    dummy_engine.__conf__=tmp_conf
-    assert engine.get_attrib("twitter") == ""
-    engine.set_attrib("user","999")
-    dummy_engine.set_conf(dummy_engine.__conf__)
-    assert engine.get_attrib("user") == "999"
-    assert dummy_engine.reset_plugin(["test_section"])=={"test_section":"reset"}
-    engine.prompt_user("hello",str)
+    engine.__cfgfile__="/tmp/test/conf.ini"
+    engine.__private_home__="/tmp/test"
+    tmp_conf=engine.get_conf()
+    engin=engine.Engine("test_section")
+    engin.UI=UI
+    engine.__conf__=tmp_conf
+    assert engin.get_attrib("twitter") == ""
+    engin.set_attrib("user","999")
+    engine.set_conf(engine.__conf__)
+    assert engin.get_attrib("user") == "999"
+    assert engine.reset_plugin(["test_section"])=={"test_section":"reset"}
+    engin.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
-    dummy_engine.__pkg__="Broadcaster.broadcaster.plugins"
-    dummy_engine.load_plugin("twitter","test")
+    engine.__pkg__="Broadcaster.broadcaster.plugins"
+    engine.load_plugin("twitter","test")
 
 def test_broadcast():
-    dummy_engine.load_plugin=plugin_mocker
-    assert dummy_engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Successful"}
-    dummy_engine.load_plugin=fail_post
-    assert dummy_engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Failed ::-> 'NoneType' object has no attribute 'post'"}
+    engine.load_plugin=plugin_mocker
+    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Successful"}
+    engine.load_plugin=fail_post
+    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Failed ::-> 'NoneType' object has no attribute 'post'"}
 
 def fail_post(chn, msg):
     pass
 
 def test_get_chnls():
-    dummy_engine.get_chnls()
+    engine.get_chnls()
