@@ -1,5 +1,5 @@
 from ..plugin import Plugin, PluginError
-from ..dummy_engine import Engine
+from ..engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
