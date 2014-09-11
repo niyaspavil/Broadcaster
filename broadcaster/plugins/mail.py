@@ -82,7 +82,7 @@ class mail(Plugin):
 	self.username = user_name
 	     
 	self.server.login(user_name, user_password)
-	       
+	return True     
 
 
 
