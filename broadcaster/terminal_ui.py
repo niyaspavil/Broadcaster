@@ -35,11 +35,13 @@ class Terminal_ui(Ui):
 	    parser_reset.add_argument(
 	        '-rset','--reset',type= str,nargs='+',choices=chnls,
 	        help=colored('used to reset user configuration of chanels..','cyan'))
-	    if ('-rset' or '--reset') in args:
+	    if '-rset' in args or '--reset' in args:
 		
 	        arg= parser_reset.parse_args(args)
 		self.reset = arg.reset
-		
+	    elif '-h' in args or '--help' in args:
+		print "print help here"
+		sys.exit()  	
 	    else:
             	args= parser.parse_args(args)
 		self.message = args.message
