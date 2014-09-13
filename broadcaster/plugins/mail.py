@@ -40,26 +40,31 @@ class mail(Plugin):
 
 	    mail=self.compose_mail()
 	    fromAddr = self.username
-		
+	    self.retry-=1	
 	    for toAddr in self.To_mail:
 	        try:
                     self.server.sendmail(fromAddr, toAddr,mail)
                     self.state="done"
-                    return True
+		    self.engine.prompt_user("sended mail to  "+ toAddr, None, False)			
+		    continue
 	        except smtplib.SMTPRecipientsRefused as error:
-		    self.engine.prompt_user("Invalid Recipient Address", None, False)
+		    self.engine.prompt_user("Invalid Recipient Address  "+toAddr, None, False)
 	            self.engine.prompt_user(error.__str__(), None, True)
                     self.retry-=1
-                    break
+		    continue
                 except smtplib.SMTPDataError as error:
 		    self.engine.prompt_user(error.__str__(), None, True)
                     self.retry-=1
-                    break
+                    continue
                 except smtplib.SMTPConnectError as error:
 		    self.engine.prompt_user("--Unable to connect to internet--", None, True)
 		    raise PluginError(PluginError.NET_ERROR)
-                    break
-                    
+                    continue
+		print toAddr
+            if toAddr == self.To_mail[-1] and self.state == 'done':
+                return True
+	    else:
+                break     
 	raise PluginError(PluginError.AUTH_ERROR)		
     def status(self):
         """Method to query status of the plugin activity"""
