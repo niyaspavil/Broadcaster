@@ -1,5 +1,5 @@
 from ui import *
-from engine import broadcast,get_chnls,reset_plugin
+from engine import broadcast,get_channels,reset_channels
 import argparse
 from termcolor import colored
 import sys
@@ -97,10 +97,10 @@ def report_status(status):
 
 def main(args):
     status= None
-    chnls=get_chnls()        # recieves plugin names from engine
+    chnls=get_channels()        # recieves plugin names from engine
     terminal_ui = Terminal_ui(args,chnls)
     if terminal_ui.reset:
-	status = reset_plugin(terminal_ui.reset)
+	status = reset_channels(terminal_ui.reset)
     else:  
         tup = terminal_ui.get_mesg_and_chanl()
     	if tup:
