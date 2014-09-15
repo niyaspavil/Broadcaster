@@ -47,3 +47,30 @@ class blog():
         self.state="authenticated"
         return [usrname, passwd]
 
+
+    def compose_post(self):
+        """this function composes post to blog"""
+        title = self.engine.prompt_user("Title",str)
+        category = ""
+        categories =self. server.metaWeblog.getCategories('',self.username, self.password)
+        for item in categories:
+            category=category+'\n\t\t'+ item['description'] + '\n'
+        categories=self.engine.prompt_user(
+            "These are the Catogories available:\n \t {} \n Enter your categories \n".format(category),str)
+        tags=self.engine.prompt_user("Tags",str)
+        tags=tags.replace(";",",")
+        contents=self.engine.prompt_user(
+            "This is your current post '{}' .press enter for continue, else type content".format(self.msg),str)
+        if contents:
+            message = contents
+        else:
+            message = self.msg
+        date_created = xmlrpclib.DateTime(datetime.datetime.today())
+		
+        post = {'title': title,
+                'description': message,
+                'categories': categories,
+                'dateCreated': date_created,
+                'mt_keywords': tags}
+
+        return post
