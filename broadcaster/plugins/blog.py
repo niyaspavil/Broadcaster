@@ -33,3 +33,17 @@ class blog():
         self.username = user_name
         self.password = user_password
         return True 
+
+    def get_consumer_details(self):
+        """retrieve user details from engine and return in list as [user_name,user_password]"""
+        usrname=self.engine.get_attrib('user_name',self.name)
+        passwd=self.engine.get_attrib('user_password',self.name)
+        if usrname=='' or passwd=='' or usrname==None or passwd==None:
+            self.state="waiting for consumer detials"
+            usrname=self.engine.prompt_user("Enter username", str)
+            passwd=self.engine.prompt_user("Enter password", str)
+            self.engine.set_attrib('user_name', usrname,self.name)
+            self.engine.set_attrib('user_password', passwd,self.name)
+        self.state="authenticated"
+        return [usrname, passwd]
+
