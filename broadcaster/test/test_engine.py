@@ -25,7 +25,7 @@ def test_engine():
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
-    engine.__pkg__="Broadcaster.broadcaster.plugins"
+ 
     engine.load_plugin("twitter","test")
 
 def test_broadcast():
