@@ -15,15 +15,18 @@ __ui__=None
 __debug_mode__=False
 
 class Engine(object):
-    """class engine for plugins"""
+    """Provides the methods required by plugins for persistent storage
+    and retrieval of data and user interactions. An instance of this
+    class is passed to each plugin when it is loaded"""
     
     def __init__(self, plugin):
-        """identifying plugin and setting-up conf"""
+        """identifying plugin and and binds UI"""
         self.section=plugin
 	self.UI=__ui__
 
     def get_attrib(self, option):
-        """return attribute from conf"""
+        """returns requested attribute from conf. if unavailable empty
+        string is returned"""
  	if __conf__.has_option(self.section,option):
             value=__conf__.get(self.section,option)
         else:
@@ -38,7 +41,8 @@ class Engine(object):
         __conf__.set(self.section, option, value)
 
     def prompt_user(self, msg, type=None, debug=False):
-        """prompts user with msg and return the input from user"""
+        """prompts user with msg and return the input from user based
+        on debug flag"""
         if debug and (not __debug_mode__):
             return None
         else:
@@ -46,6 +50,12 @@ class Engine(object):
         
 
 def broadcast(msg, chnl_list, mode, ui):
+    """Provides the basic method which enable broadcasting the message
+    to requested channels using the plugins.
+    msg --> user message to be broadcasted
+    chnl_list --> list of channels to which broadcast is to be made
+    mode --> debug mode(boolean)
+    ui --> UI object which is able to handle requests and responses from engine"""
     global __ui__, __all_chnl__, __debug_mode__, __conf__
     __ui__=ui
     __debug_mode__=mode
@@ -66,6 +76,8 @@ def broadcast(msg, chnl_list, mode, ui):
     return dict
 
 def get_chnls():
+    """returns list of available channel/plugins by searching
+    plugin directory"""
     plugins = []
     plugin_files = glob.glob("{}/*.py".format(__plugins_dir__))
     for plugin_file in plugin_files:
@@ -82,16 +94,20 @@ def has_channel(chnl):
         return False
 
 def load_plugin(chnl, msg):
+    """loads and returns the plugin object"""
     engine=Engine(chnl)
     mod=importlib.import_module("."+chnl, __pkg__)
     return getattr(mod,chnl)(engine, msg)
 
 def get_conf():
+    """returns ConfigParser object after initialising with contents of
+    configuration file"""
     conf=ConfigParser.ConfigParser()
     conf.read(__cfgfile__)
     return conf
 
 def set_conf(conf):
+    """saves the ConfigParser object contents to configuration file"""
     try:
         if not os.path.isfile(__cfgfile__):
             if not os.path.exists(__private_home__):
@@ -104,6 +120,8 @@ def set_conf(conf):
         return False
 
 def reset_plugin(chnls):
+    """Provides the facility to reset configuration data of each
+    plugins passed"""
     try:
         dict={}
         if os.path.isfile(__cfgfile__):
