@@ -6,7 +6,7 @@ class ServerProxy():
             return "first post"
 
         def getCategories(x, username, password):
-            return "categorys' list"
+            return ["vinayak","password"]
 
 def DateTime():
     return "today's date"
