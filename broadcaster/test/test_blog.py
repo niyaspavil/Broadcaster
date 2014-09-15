@@ -16,8 +16,5 @@ def test_init():
     assert tmp_plug.msg==msg
 
 def test_pre_authenticate():
-    tmp_plug = blog.blog()
-    assert tmp_plug.username == "vinayak"
-    assert tmp_plug.password == "password"
     assert tmp_plug.pre_authenticate() == True
     
