@@ -18,3 +18,5 @@ def test_init():
 def test_pre_authenticate():
     assert tmp_plug.pre_authenticate() == True
     
+def test_customer_details():
+    assert tmp_plug.customer_details() == ["vinayak", "password"]
