@@ -22,8 +22,14 @@ def test_customer_details():
     assert tmp_plug.customer_details() == ["vinayak","password"]
 
 def test_compose_post():
-    pass
-    #Edit this.
-
+    assert post = {
+        'title': '',
+        'description': self.msg,
+        'categories': '',
+        'dateCreated': "todays date",
+        'mt_keywords': ''
+    }
+    
 def test_post():
     assert tmp_plug.post() == True
+
