@@ -14,5 +14,6 @@ setup(
     install_requires=[
         "argparse==1.2.1",
         "tweepy==2.3.0",
+	"termcolor",
         ],
 )
