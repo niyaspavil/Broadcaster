@@ -19,4 +19,11 @@ def test_pre_authenticate():
     assert tmp_plug.pre_authenticate() == True
     
 def test_customer_details():
-    assert tmp_plug.customer_details() == ["vinayak", "password"]
+    assert tmp_plug.customer_details() == ["vinayak","password"]
+
+def test_compose_post():
+    pass
+    #Edit this.
+
+def test_post():
+    assert tmp_plug.post() == True
