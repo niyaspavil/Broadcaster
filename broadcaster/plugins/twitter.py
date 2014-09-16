@@ -1,5 +1,4 @@
 from ..plugin import Plugin, PluginError
-from ..engine import Engine
 import tweepy
 
 __plugin_name__="twitter"

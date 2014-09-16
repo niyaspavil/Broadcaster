@@ -1,5 +1,4 @@
 from ..plugin import Plugin, PluginError
-from ..engine import Engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
@@ -28,13 +27,14 @@ class mail(Plugin):
 	    try:
                 self.pre_authenticate()
             except smtplib.SMTPAuthenticationError as error:
-		self.engine.prompt_user("Invalid user name or password else check your security level", None, False)
+		self.engine.prompt_user(
+		    "Invalid user name or password else check your security level", None, False)
 	        self.engine.prompt_user(error.__str__(), None, True)
 		self.retry-=1
                 self.reset_user=True
 		continue
             except Exception as e:
-		self.engine.prompt_user("--Unable to connect to internet--", None, False)
+		self.engine.prompt_user("--Unable to connect to internet--", None, True)
                 raise PluginError(PluginError.NET_ERROR)
         	continue
 
@@ -48,7 +48,8 @@ class mail(Plugin):
 		    self.engine.prompt_user("sended mail to  "+ toAddr, None, False)			
 		    continue
 	        except smtplib.SMTPRecipientsRefused as error:
-		    self.engine.prompt_user("Invalid Recipient Address  "+toAddr, None, False)
+		    self.engine.prompt_user(
+                        "Invalid Recipient Address  "+toAddr, None, False)
 	            self.engine.prompt_user(error.__str__(), None, True)
                     self.retry-=1
 		    continue
@@ -70,26 +71,16 @@ class mail(Plugin):
         """Method to query status of the plugin activity"""
         return self.state
 	
-
-
-
     def pre_authenticate(self):
         """This method create a server object """
 	self.server = smtplib.SMTP('smtp.gmail.com',587)    
 	self.server.ehlo()
 	self.server.starttls()
-
 	user_name,user_password=self.get_user_details()
 	self.username = user_name
-	     
 	self.server.login(user_name, user_password)
 	return True     
-
-
-
-
-
-
+    
     def get_user_details(self):
         """retrieve user details from engine and return in list as [user_name,user_password]"""
         usrname=self.engine.get_attrib('user_name')

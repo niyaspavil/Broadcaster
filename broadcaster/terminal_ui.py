@@ -1,5 +1,5 @@
 from ui import *
-from engine import broadcast,get_chnls,reset_plugin
+from engine import broadcast,get_channels,reset_channels
 import argparse
 from termcolor import colored
 import sys
@@ -40,7 +40,7 @@ class Terminal_ui(Ui):
 	        arg= parser_reset.parse_args(args)
 		self.reset = arg.reset
 	    elif '-h' in args or '--help' in args:
-		print "print help here"
+		print ""
 		sys.exit()  	
 	    else:
             	args= parser.parse_args(args)
@@ -61,32 +61,23 @@ class Terminal_ui(Ui):
  	else:
   	    return False
            
-        
-        
-    
     def get_mesg_and_chanl(self):
         
         """
                This Function separate message and channel list from user input.
         """
-        
         channel_list = list(set(self.channels))   # removes duplicate channel names
-        
         message= self.message                         
-        
-
-	if self.empty_message(message):  
+        if self.empty_message(message):  
 	    self.display_error( "\t\tEnter valid message\t\t")
             return None
         else:
             return (message,channel_list,self.debug)  
-                 
     def display_error(self,error):
         
         """
                   This Function displays the  errors
         """
-   
         print colored("\nError"+'\t>>>'+error,'red')
         print"\n"*7
     def prompt(self,content,type):
@@ -100,20 +91,19 @@ class Terminal_ui(Ui):
 	    return raw_input(colored('\n'+content+":\n >>>\t",'green'))
 
 def report_status(status):
-	
-	for channel,stats in status.items():
-	    print colored(channel+">>>"+stats,'green')	
+    for channel,stats in status.items():
+        print colored(channel+">>>"+stats,'green')	
     
 
 def main(args):
     status= None
-    chnls=get_chnls()
+    chnls=get_channels()        # recieves plugin names from engine
     terminal_ui = Terminal_ui(args,chnls)
     if terminal_ui.reset:
-	status = reset_plugin(terminal_ui.reset)
+	status = reset_channels(terminal_ui.reset)
     else:  
         tup = terminal_ui.get_mesg_and_chanl()
     	if tup:
-            status=broadcast(tup[0],tup[1],tup[2],terminal_ui)
+            status=broadcast(tup[0],tup[1],tup[2],terminal_ui) #return channel,message,debug-mode and ui object to engine
     if status:
     	report_status(status)
