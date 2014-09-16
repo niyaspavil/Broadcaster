@@ -17,6 +17,22 @@ class blog():
         except Exception:
             raise PluginError(PluginError.ERROR)
 
+    def post(self):
+        """Method to post a blog """
+        self.state="authenticating"
+        try:
+            self.pre_authenticate()
+        except Exception:
+            raise PluginError(PluginError.AUTH_ERROR)
+        post=self.compose_post()
+        try:
+            post_id = self.server.metaWeblog.newPost(
+                '', self.username, self.password, post, True)
+        except Exception:
+            raise PluginError(PluginError.NET_ERROR)
+        self.state="done"
+        return True
+		
     def pre_authenticate(self):
         """This method create a server objct and user names and password"""
         wp_url=self.engine.get_attrib('wp_url',self.name)
@@ -67,7 +83,7 @@ class blog():
             message = self.msg
         date_created = xmlrpclib.DateTime(datetime.datetime.today())
 		
-        post = {'title': title,
+        post = {'title': title, 
                 'description': message,
                 'categories': categories,
                 'dateCreated': date_created,
