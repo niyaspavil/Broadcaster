@@ -4,3 +4,5 @@
 *.ini
 .coverage
 htmlcov/
+dist/
+*.egg-info/
