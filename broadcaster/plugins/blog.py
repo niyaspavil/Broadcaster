@@ -1,21 +1,17 @@
-from .plugin import Plugin, PluginError
-from .dummy_engine import Engine
+from ..plugin import Plugin, PluginError
+from ..engine import Engine
 import datetime
 import xmlrpclib
 
 class blog():
 
-    def __init__(self,msg):
+    def __init__(self,engine,msg):
         """Constructor for mail class. The msg is the content to be mailed to the others"""
-        
         self.msg=msg
         self.username= None
         self.state="waiting"
         self.name = "blog"
-        try:
-            self.engine=Engine()
-        except Exception:
-            raise PluginError(PluginError.ERROR)
+        self.engine = engine
 
     def post(self):
         """Method to post a blog """
@@ -35,11 +31,11 @@ class blog():
 		
     def pre_authenticate(self):
         """This method create a server objct and user names and password"""
-        wp_url=self.engine.get_attrib('wp_url',self.name)
+        wp_url=self.engine.get_attrib('wp_url')
         if wp_url=='' or wp_url==None:
             self.state="waiting for wordpress url detials"
             wp_url=self.engine.prompt_user("Enter wordpress url", str)
-            self.engine.set_attrib('wp_url',wp_url,self.name)
+            self.engine.set_attrib('wp_url',wp_url)
         wp_url  = wp_url+"/xmlrpc.php"
         try:
             self.server = xmlrpclib.ServerProxy(wp_url)
@@ -52,14 +48,14 @@ class blog():
 
     def get_consumer_details(self):
         """retrieve user details from engine and return in list as [user_name,user_password]"""
-        usrname=self.engine.get_attrib('user_name',self.name)
-        passwd=self.engine.get_attrib('user_password',self.name)
+        usrname=self.engine.get_attrib('user_name')
+        passwd=self.engine.get_attrib('user_password')
         if usrname=='' or passwd=='' or usrname==None or passwd==None:
             self.state="waiting for consumer detials"
-            usrname=self.engine.prompt_user("Enter username", str)
-            passwd=self.engine.prompt_user("Enter password", str)
-            self.engine.set_attrib('user_name', usrname,self.name)
-            self.engine.set_attrib('user_password', passwd,self.name)
+            usrname=self.engine.prompt_user("Enter username", str,False)
+            passwd=self.engine.prompt_user("Enter password", str, False)
+            self.engine.set_attrib('user_name', usrname)
+            self.engine.set_attrib('user_password', passwd)
         self.state="authenticated"
         return [usrname, passwd]
 
