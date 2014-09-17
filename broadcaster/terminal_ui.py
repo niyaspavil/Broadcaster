@@ -24,8 +24,8 @@ class Terminal_ui(Ui):
             parser.add_argument(
 	        'message',type=str, help=colored('Message to be sended','cyan'))
             parser.add_argument( 
-                '-ch', '--channels',type= str,nargs='+',
-	        choices=chnls,required=True,help=colored('Channel list to send the message','cyan'))
+                '-c', '--channels',type= str,nargs='+',default=chnls,
+	        choices=chnls,help=colored('Channel list to send the message','cyan'))
 	    parser.add_argument(
 	        '-dbug','--debug',action='store_true',
 	        help=colored('give more useful and informative output to understand error..','cyan'))
