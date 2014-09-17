@@ -10,45 +10,41 @@ class Terminal_ui(Ui):
             This constructor  read user input from the terminal.
                      
         """
-	try:
-	    self.reset = False
-	    self.message = False
-	    self.channels = False
-	    self.debug = False
-            parser = argparse.ArgumentParser(
-	        usage=colored(
-		"\n\tEnter 'your message' -ch <channel list> [-dbug]"+'\n \t\t\tor\n'
-		+"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
-		+"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
-	        description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
-            parser.add_argument(
-	        'message',type=str, help=colored('Message to be sended','cyan'))
-            parser.add_argument( 
-                '-c', '--channels',type= str,nargs='+',default=chnls,
-	        choices=chnls,help=colored('Channel list to send the message','cyan'))
-	    parser.add_argument(
-	        '-dbug','--debug',action='store_true',
-	        help=colored('give more useful and informative output to understand error..','cyan'))
+	self.reset = False
+	self.message = False
+	self.channels = False
+	self.debug = False
+        parser = argparse.ArgumentParser(
+	    usage=colored(
+              "\n\tEnter 'your message' -ch <channel list> [-dbug]"+'\n \t\t\tor\n'
+	      +"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
+	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
+	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
+        parser.add_argument(
+	    'message',type=str, help=colored('Message to be sended','cyan'))
+        parser.add_argument( 
+            '-c', '--channels',type= str,nargs='+',default=chnls,
+	    choices=chnls,help=colored('Channel list to send the message','cyan'))
+	parser.add_argument(
+	    '-dbug','--debug',action='store_true',
+	    help=colored('give more useful and informative output to understand error..','cyan'))
 	   
-	    parser_reset = argparse.ArgumentParser(
-	            usage=colored("\n\t -rset or --reset <channel name>\n",'yellow',attrs=['bold']))
-	    parser_reset.add_argument(
-	        '-rset','--reset',type= str,nargs='+',choices=chnls,
-	        help=colored('used to reset user configuration of chanels..','cyan'))
-	    if '-rset' in args or '--reset' in args:
-		
-	        arg= parser_reset.parse_args(args)
-		self.reset = arg.reset
-	    elif '-h' in args or '--help' in args:
-		print ""
-		sys.exit()  	
-	    else:
-            	args= parser.parse_args(args)
-		self.message = args.message
-		self.channels = args.channels
-		self.debug = args.debug	
-	except Exception as e: 
-		print e	
+	parser_reset = argparse.ArgumentParser(
+	    usage=colored("\n\t -rset or --reset <channel name>\n",'yellow',attrs=['bold']))
+	parser_reset.add_argument(
+	    '-rset','--reset',type= str,nargs='+',choices=chnls,
+	    help=colored('used to reset user configuration of chanels..','cyan'))
+	if '-rset' in args or '--reset' in args:
+	    arg= parser_reset.parse_args(args)
+	    self.reset = arg.reset
+	elif '-h' in args or '--help' in args:
+	    print ""
+	    sys.exit()  	
+	else:
+            args= parser.parse_args(args)
+	    self.message = args.message
+	    self.channels = args.channels
+	    self.debug = args.debug
 
     
     def empty_message (self,Message):
