@@ -100,7 +100,8 @@ class mail(Plugin):
 	to = self.engine.prompt_user("To",str,False)
 	self.To_mail = to.split()
 	subject=self.engine.prompt_user("Subject",str,False)
-	contents=self.engine.prompt_user("This is your message '{}' .press enter for continue, else type content".format(self.msg),str,False)
+	contents=self.engine.prompt_user(
+             "This is your message '{}' .press enter for continue, else type content".format(self.msg),str,False)
 	if contents:
 	    message = contents
 	else:
