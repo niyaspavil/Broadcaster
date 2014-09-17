@@ -60,7 +60,7 @@ def broadcast(msg, chnl_list, mode, ui):
     __ui__=ui
     __debug_mode__=mode
     dict={}
-    __all_chnl__=get_chnls()
+    __all_chnl__=get_channels()
     __conf__=get_conf()
     for chnl in chnl_list:
         if has_channel(chnl):
@@ -75,7 +75,7 @@ def broadcast(msg, chnl_list, mode, ui):
     set_conf(__conf__)
     return dict
 
-def get_chnls():
+def get_channels():
     """returns list of available channel/plugins by searching
     plugin directory"""
     plugins = []
@@ -119,7 +119,7 @@ def set_conf(conf):
     except Exception:
         return False
 
-def reset_plugin(chnls):
+def reset_channels(chnls):
     """Provides the facility to reset configuration data of each
     plugins passed"""
     try:

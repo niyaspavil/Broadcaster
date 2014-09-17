@@ -59,4 +59,18 @@ def test_exception():
         tmp_plug.post()
     except PluginError:
         pass
-
+    error=PluginError("no_network")
+    try:
+        tmp_plug.error_handler(error,0)
+    except PluginError:
+        pass
+    error.message=[{"message":"fail", "code":32}]
+    try:
+        tmp_plug.error_handler(error, 0)
+    except PluginError:
+        pass
+    error.message=[{"message":"fail", "code":100}]
+    try:
+        tmp_plug.error_handler(error, 0)
+    except PluginError:
+        pass

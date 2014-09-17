@@ -20,7 +20,7 @@ def test_engine():
     engin.set_attrib("user","999")
     engine.set_conf(engine.__conf__)
     assert engin.get_attrib("user") == "999"
-    assert engine.reset_plugin(["test_section"])=={"test_section":"reset"}
+    assert engine.reset_channels(["test_section"])=={"test_section":"reset"}
     engin.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
@@ -38,4 +38,4 @@ def fail_post(chn, msg):
     pass
 
 def test_get_chnls():
-    engine.get_chnls()
+    engine.get_channels()
