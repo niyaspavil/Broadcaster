@@ -21,10 +21,10 @@ class Terminal_ui(Ui):
 	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
 	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
         parser.add_argument(
-	    'message',type=str, help=colored('Message to be sended','cyan'))
+	    '-c','--message',type=str, help=colored('Message to be sended','cyan'))
         parser.add_argument( 
-            '-c', '--channels',type= str,nargs='+',default=chnls,
-	    choices=chnls,help=colored('Channel list to send the message','cyan'))
+            'channels',type= str,nargs='+',default=chnls,choices=chnls,
+	    help=colored('Channel list to send the message','cyan'))
 	parser.add_argument(
 	    '-dbug','--debug',action='store_true',
 	    help=colored('give more useful and informative output to understand error..','cyan'))
