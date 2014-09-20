@@ -46,7 +46,7 @@ class Engine(object):
         if debug and (not __debug_mode__):
             return None
         else:
-            return self.UI.prompt(msg, type)
+            return self.UI.prompt(self.section+"->\n"+msg, type)
         
 
 def broadcast(msg, sent_via, mode, ui):
