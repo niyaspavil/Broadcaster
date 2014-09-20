@@ -10,7 +10,6 @@ class Terminal_ui(Ui):
             This constructor  read user input from the terminal.
                      
         """
-	print args
 	self.reset = False
 	self.message = False
 	self.channels = False
@@ -21,7 +20,6 @@ class Terminal_ui(Ui):
 	      +"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
 	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
 	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
-        
         parser.add_argument( 
             '-c','--channels',type= str,nargs='+',default=chnls,
 	    help=colored('Channel list to send the message','cyan'))
@@ -66,6 +64,8 @@ class Terminal_ui(Ui):
         channel_list = list(set(self.channels))    # removes duplicate channel names
 	channels=[]
 	for i in channel_list:
+	    if i.find(":")==-1:
+		i=i+":"
 	    channels.append(tuple(i.split(':')))
         print channels
 	message= self.message                         
