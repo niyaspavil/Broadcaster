@@ -67,7 +67,6 @@ class Terminal_ui(Ui):
 	    if i.find(":")==-1:
 		i=i+":"
 	    channels.append(tuple(i.split(':')))
-        print channels
 	message= self.message                         
         if self.empty_message(message):  
 	    self.display_error( "\t\tEnter valid message\t\t")
@@ -104,7 +103,6 @@ def main(args):
 	status = reset_channels(terminal_ui.reset)
     else:  
         tup = terminal_ui.get_mesg_and_chanl()
-	print tup
     	if tup:
             status=broadcast(tup[0],tup[1],tup[2],terminal_ui) #return channel,message,debug-mode and ui object to engine
     if status:
