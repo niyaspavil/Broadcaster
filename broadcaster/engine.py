@@ -117,7 +117,7 @@ def set_conf(conf):
                 os.makedirs(__private_home__)
         conf_file=open(__cfgfile__,"w")
         conf.write(conf_file)
-        conf.close()
+        conf_file.close()
         return True
     except Exception:
         return False
