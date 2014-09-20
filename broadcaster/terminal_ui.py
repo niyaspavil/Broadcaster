@@ -10,6 +10,7 @@ class Terminal_ui(Ui):
             This constructor  read user input from the terminal.
                      
         """
+	print args
 	self.reset = False
 	self.message = False
 	self.channels = False
@@ -20,11 +21,12 @@ class Terminal_ui(Ui):
 	      +"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
 	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
 	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
-        parser.add_argument(
-	    '-c','--message',type=str, help=colored('Message to be sended','cyan'))
+        
         parser.add_argument( 
-            'channels',type= str,nargs='+',default=chnls,choices=chnls,
+            '-c','--channels',type= str,nargs='+',default=chnls,
 	    help=colored('Channel list to send the message','cyan'))
+	parser.add_argument(
+	    'message',type=str, help=colored('Message to be sended','cyan'))
 	parser.add_argument(
 	    '-dbug','--debug',action='store_true',
 	    help=colored('give more useful and informative output to understand error..','cyan'))
@@ -45,8 +47,6 @@ class Terminal_ui(Ui):
 	    self.message = args.message
 	    self.channels = args.channels
 	    self.debug = args.debug
-
-    
     def empty_message (self,Message):
        
         """
@@ -62,13 +62,18 @@ class Terminal_ui(Ui):
         """
                This Function separate message and channel list from user input.
         """
-        channel_list = list(set(self.channels))   # removes duplicate channel names
-        message= self.message                         
+	self.channels = self.channels[0].split(',')
+        channel_list = list(set(self.channels))    # removes duplicate channel names
+	channels=[]
+	for i in channel_list:
+	    channels.append(tuple(i.split(':')))
+        print channels
+	message= self.message                         
         if self.empty_message(message):  
 	    self.display_error( "\t\tEnter valid message\t\t")
             return None
         else:
-            return (message,channel_list,self.debug)  
+            return (message,channels,self.debug)  
     def display_error(self,error):
         
         """
@@ -99,6 +104,7 @@ def main(args):
 	status = reset_channels(terminal_ui.reset)
     else:  
         tup = terminal_ui.get_mesg_and_chanl()
+	print tup
     	if tup:
             status=broadcast(tup[0],tup[1],tup[2],terminal_ui) #return channel,message,debug-mode and ui object to engine
     if status:
