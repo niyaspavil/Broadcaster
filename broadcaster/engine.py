@@ -67,11 +67,11 @@ def broadcast(msg, sent_via, mode, ui):
             plug=load_plugin(chnl, user, msg)
             try:
                 plug.post()
-                dict[chnl]="Successful"
+                dict[chnl+":"+user]="Successful"
             except Exception as x:
-                dict[chnl]="Failed ::-> "+x.message
+                dict[chnl+":"+user]="Failed ::-> "+x.message
         else:
-            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
+            dict[chnl+":"+user]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
     set_conf(__conf__)
     return dict
 

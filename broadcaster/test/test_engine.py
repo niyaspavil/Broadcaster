@@ -29,9 +29,9 @@ def test_load_plugin():
 
 def test_broadcast():
     engine.load_plugin=plugin_mocker
-    assert engine.broadcast("testing", [('twitter','user')], False, UI) == {"twitter":"Successful"}
+    assert engine.broadcast("testing", [('twitter','user')], False, UI) == {"twitter:user":"Successful"}
     engine.load_plugin=fail_post
-    assert engine.broadcast("testing", [('twitter', 'user')], False, UI) == {"twitter":"Failed ::-> 'NoneType' object has no attribute 'post'"}
+    assert engine.broadcast("testing", [('twitter', 'user')], False, UI) == {"twitter:user":"Failed ::-> 'NoneType' object has no attribute 'post'"}
 
 def fail_post(chn, user, msg):
     pass
