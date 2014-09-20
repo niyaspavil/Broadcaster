@@ -49,11 +49,11 @@ class Engine(object):
             return self.UI.prompt(msg, type)
         
 
-def broadcast(msg, chnl_list, mode, ui):
+def broadcast(msg, sent_via, mode, ui):
     """Provides the basic method which enable broadcasting the message
     to requested channels using the plugins.
     msg --> user message to be broadcasted
-    chnl_list --> list of channels to which broadcast is to be made
+    sent_via --> list of channel,user tuples to which broadcast is to be made
     mode --> debug mode(boolean)
     ui --> UI object which is able to handle requests and responses from engine"""
     global __ui__, __all_chnl__, __debug_mode__, __conf__
@@ -62,16 +62,16 @@ def broadcast(msg, chnl_list, mode, ui):
     dict={}
     __all_chnl__=get_channels()
     __conf__=get_conf()
-    for chnl in chnl_list:
+    for chnl, user in sent_via:
         if has_channel(chnl):
-            plug=load_plugin(chnl, msg)
+            plug=load_plugin(chnl, user, msg)
             try:
                 plug.post()
-                dict[chnl]="Successful"
+                dict[chnl+":"+user]="Successful"
             except Exception as x:
-                dict[chnl]="Failed ::-> "+x.message
+                dict[chnl+":"+user]="Failed ::-> "+x.message
         else:
-            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
+            dict[chnl+":"+user]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
     set_conf(__conf__)
     return dict
 
@@ -93,9 +93,12 @@ def has_channel(chnl):
     else:
         return False
 
-def load_plugin(chnl, msg):
+def load_plugin(chnl, user, msg):
     """loads and returns the plugin object"""
-    engine=Engine(chnl)
+    if user.strip()=='':
+        user=get_default_user()
+        return load_plugin(chnl, user, msg)
+    engine=Engine(chnl+':'+user)
     mod=importlib.import_module("."+chnl, __pkg__)
     return getattr(mod,chnl)(engine, msg)
 
@@ -118,6 +121,15 @@ def set_conf(conf):
         return True
     except Exception:
         return False
+
+def get_default_user():
+    """returns default user name from conf if set else requests and returns from user through registered ui object"""
+    engine=Engine("defaults")
+    user=engine.get_attrib("user")
+    if user.strip()=='':
+        user=engine.prompt_user("Enter a default username for sent profile", str)
+        engine.set_attrib("user", user)
+    return user
 
 def reset_channels(chnls):
     """Provides the facility to reset configuration data of each

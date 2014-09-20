@@ -25,16 +25,15 @@ def test_engine():
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
- 
-    engine.load_plugin("twitter","test")
+    engine.load_plugin("twitter", "user", "test")
 
 def test_broadcast():
     engine.load_plugin=plugin_mocker
-    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Successful"}
+    assert engine.broadcast("testing", [('twitter','user')], False, UI) == {"twitter:user":"Successful"}
     engine.load_plugin=fail_post
-    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Failed ::-> 'NoneType' object has no attribute 'post'"}
+    assert engine.broadcast("testing", [('twitter', 'user')], False, UI) == {"twitter:user":"Failed ::-> 'NoneType' object has no attribute 'post'"}
 
-def fail_post(chn, msg):
+def fail_post(chn, user, msg):
     pass
 
 def test_get_chnls():
