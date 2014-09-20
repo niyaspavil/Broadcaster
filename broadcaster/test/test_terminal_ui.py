@@ -8,22 +8,29 @@ terminal_ui.broadcast = broadcast
 terminal_ui.get_chnls = get_chnls
 def test_main():
 
-       terminal_ui.main(["hii","-c","mail"]) 
-       
+       terminal_ui.main(["-c=mail","hii"])       
 def test_main_with_empty_message():
+    try:
+       terminal_ui.main([ "-c=mail"," ",])
+       terminal_ui.main([ "-c=twitter"])
+    except SystemExit:
+	pass
 
-       terminal_ui.main([" ", "-c","mail","twitter"])
 def test_main_with_two_chanels():
 
-       terminal_ui.main(["hello","-c","mail", "twitter"])
+       terminal_ui.main(["-c=mail,twitter",'message'])
+
+def test_main_with_username():
+       terminal_ui.main(["-c=mail:niyas,twitter:gorbin",'message'])
+"""
 def test_prompt():
 	terminal_ui.raw_input = rawinput
-	tmp_ui=terminal_ui.Terminal_ui(["hello","-c","mail", "twitter"],['mail','twitter'])
+	tmp_ui=terminal_ui.Terminal_ui(["-c","hello","mail", "twitter"],['mail','twitter'])
 	tmp_ui.prompt("hello",None)
 	tmp_ui.prompt("hello",str)
 def test_ui_with_debug():
 	
-       terminal_ui.main(["hello","-c","mail", "twitter","-dbug"])
+       terminal_ui.main(["-c","hello","mail", "twitter","-dbug"])
 def test_report_status():
 	terminal_ui.report_status({'mail':'test'})
 
@@ -36,4 +43,4 @@ def test_help():
       except SystemExit:
 	pass
 
-
+"""
