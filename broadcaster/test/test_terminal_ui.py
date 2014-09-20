@@ -22,15 +22,14 @@ def test_main_with_two_chanels():
 
 def test_main_with_username():
        terminal_ui.main(["-c=mail:niyas,twitter:gorbin",'message'])
-"""
 def test_prompt():
 	terminal_ui.raw_input = rawinput
-	tmp_ui=terminal_ui.Terminal_ui(["-c","hello","mail", "twitter"],['mail','twitter'])
+	tmp_ui=terminal_ui.Terminal_ui(["-c=mail,twitter","hello"],['mail','twitter'])
 	tmp_ui.prompt("hello",None)
 	tmp_ui.prompt("hello",str)
 def test_ui_with_debug():
 	
-       terminal_ui.main(["-c","hello","mail", "twitter","-dbug"])
+       terminal_ui.main(["-c=mail,twitter","hello","-dbug"])
 def test_report_status():
 	terminal_ui.report_status({'mail':'test'})
 
@@ -43,4 +42,3 @@ def test_help():
       except SystemExit:
 	pass
 
-"""
