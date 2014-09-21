@@ -1,8 +1,10 @@
 from ui import *
 from engine import broadcast,get_channels,reset_channels
+import engine
 import argparse
 from termcolor import colored
 import sys
+import getpass
 class Terminal_ui(Ui):
     
     def __init__(self,args,chnls):    
@@ -85,11 +87,19 @@ class Terminal_ui(Ui):
 	"""
               Function for prompt some datas to user
 	"""
-	if(type == None):
+	if(type == engine.INPUT_TYPE_NONE):
 	    print colored('\n'+content+"\n",'green')
-	else:
+	elif(type == engine.INPUT_TYPE_NUMBER):
 	    return raw_input(colored('\n'+content+":\n >>>\t",'green'))
-
+	elif(type == engine.INPUT_TYPE_TEXT_ONELINE):
+	    return raw_input(colored('\n'+content+":\n >>>\t",'green'))
+	elif(type == engine.INPUT_TYPE_TEXT_PASSWORD):
+	    return getpass.getpass(colored('\n'+content+":\n >>>\t",'green'))
+	else:
+	    print colored('\n'+content+"\n Enter Ctrl+d for exit\n",'green')
+	    return sys.stdin.read()
+	
+	
 def report_status(status):
     for channel,stats in status.items():
         print colored(channel+">>>"+stats,'green')	
