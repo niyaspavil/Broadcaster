@@ -15,11 +15,11 @@ __ui__=None
 __debug_mode__=False
 
 #some input type standards from engine
-__INPUT_TYPE_NONE__="none"
-__INPUT_TYPE_NUMBER__="number"
-__INPUT_TYPE_TEXT_ONELINE__="text:oneline"
-__INPUT_TYPE_TEXT_MULTILINE__="text:multiline"
-__INPUT_TYPE_TEXT_PASSWORD__="text:password"
+INPUT_TYPE_NONE="none"
+INPUT_TYPE_NUMBER="number"
+INPUT_TYPE_TEXT_ONELINE="text:oneline"
+INPUT_TYPE_TEXT_MULTILINE="text:multiline"
+INPUT_TYPE_TEXT_PASSWORD="text:password"
 
 class Engine(object):
     """Provides the methods required by plugins for persistent storage
