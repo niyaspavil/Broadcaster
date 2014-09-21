@@ -49,6 +49,15 @@ class Engine(object):
             return self.UI.prompt(self.section+"->\n"+msg, type)
         
 
+class InputTypes(object):
+    """Provide standards for custom input types for broadcaster"""
+    none="NONE"
+    number="NUMBER"
+    text_oneline="TEXT:ONELINE"
+    text_multiline="TEXT:MULTILINE"
+    
+
+
 def broadcast(msg, sent_via, mode, ui):
     """Provides the basic method which enable broadcasting the message
     to requested channels using the plugins.
