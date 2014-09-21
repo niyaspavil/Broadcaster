@@ -5,7 +5,7 @@ import glob
 from os.path import basename, splitext, expanduser, sep
 import os
 
-__plugins_dir__ = "./broadcaster/plugins"
+__plugins_dir__=os.path.dirname(os.path.abspath(__file__))+"/plugins"
 __private_home__=expanduser("~")+sep+".Broadcaster"
 __pkg__="broadcaster.plugins"
 __cfgfile__=__private_home__+sep+"conf.ini"
@@ -78,7 +78,7 @@ def broadcast(msg, sent_via, mode, ui):
             except Exception as x:
                 dict[chnl+":"+user]="Failed ::-> "+x.message
         else:
-            dict[chnl+":"+user]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
+            dict[chnl+":"+user]="Failed: Plugin not found..\n To add new plugin, insert plugin file to "+__plugins_dir__
     set_conf(__conf__)
     return dict
 
