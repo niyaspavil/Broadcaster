@@ -144,14 +144,20 @@ def reset_channels(chnls):
     try:
         dict={}
         if os.path.isfile(__cfgfile__):
+            if chnls==[("all","")]:
+                os.remove(__cfgfile__)
+                return {"all-channel":"reset success"}
             conf=ConfigParser.ConfigParser()
             conf.read(__cfgfile__)
-            for chnl in chnls:
-                if conf.has_section(chnl):
-                    conf.remove_section(chnl)
-                    dict[chnl]="reset"
+            for chnl, user in chnls:
+                if user.strip=='':
+                    user=find_default_user(conf)
+                section=chnl+":"+user
+                if conf.has_section(section):
+                    conf.remove_section(section)
+                    dict[section]="reset success"
                 else:
-                    dict[chnl]="no data to reset"
+                    dict[section]="no data to reset"
             conf.write(open(__cfgfile__,"w"))
         else:
             dict["all-channel"]="no data to reset"
@@ -159,3 +165,8 @@ def reset_channels(chnls):
     except Exception:
         return {"all-channel":"reset failed"}
                 
+def find_default_user(conf):
+    if conf.has_option("default", "user"):
+        return conf.has_option("default", "user")
+    else:
+        return ""
