@@ -21,8 +21,7 @@ class twitter(Plugin):
     def post(self):
         """Method to invoke plugin to post message to site"""
 	self.retry=3
-        while self.ret
-ry:
+        while self.retry:
             self.state="authenticating"
             try:
                 api=self.pre_auth()
