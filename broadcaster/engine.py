@@ -14,6 +14,13 @@ __all_chnl__=None
 __ui__=None
 __debug_mode__=False
 
+#some input type standards from engine
+__INPUT_TYPE_NONE__="none"
+__INPUT_TYPE_NUMBER__="number"
+__INPUT_TYPE_TEXT_ONELINE__="text:oneline"
+__INPUT_TYPE_TEXT_MULTILINE__="text:multiline"
+__INPUT_TYPE_TEXT_PASSWORD__="text:password"
+
 class Engine(object):
     """Provides the methods required by plugins for persistent storage
     and retrieval of data and user interactions. An instance of this
@@ -48,15 +55,6 @@ class Engine(object):
         else:
             return self.UI.prompt(self.section+"->\n"+msg, type)
         
-
-class InputTypes(object):
-    """Provide standards for custom input types for broadcaster"""
-    none="NONE"
-    number="NUMBER"
-    text_oneline="TEXT:ONELINE"
-    text_multiline="TEXT:MULTILINE"
-    
-
 
 def broadcast(msg, sent_via, mode, ui):
     """Provides the basic method which enable broadcasting the message
