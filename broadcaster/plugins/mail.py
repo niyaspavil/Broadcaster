@@ -1,4 +1,5 @@
 from ..plugin import Plugin, PluginError
+from ..import engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
@@ -28,13 +29,13 @@ class mail(Plugin):
                 self.pre_authenticate()
             except smtplib.SMTPAuthenticationError as error:
 		self.engine.prompt_user(
-		    "Invalid user name or password else check your security level", None, False)
-	        self.engine.prompt_user(error.__str__(), None, True)
+		    "Invalid user name or password else check your security level", engine.INPUT_TYPE_NONE, False)
+	        self.engine.prompt_user(error.__str__(), engine.INPUT_TYPE_NONE, True)
 		self.retry-=1
                 self.reset_user=True
 		continue
             except Exception as e:
-		self.engine.prompt_user("--Unable to connect to internet--", None, True)
+		self.engine.prompt_user("--Unable to connect to internet--", engine.INPUT_TYPE_NONE, True)
                 raise PluginError(PluginError.NET_ERROR)
         	continue
 
@@ -45,20 +46,20 @@ class mail(Plugin):
 	        try:
                     self.server.sendmail(fromAddr, toAddr,mail)
                     self.state="done"
-		    self.engine.prompt_user("sended mail to  "+ toAddr, None, False)			
+		    self.engine.prompt_user("sended mail to  "+ toAddr, engine.INPUT_TYPE_NONE, False)			
 		    continue
 	        except smtplib.SMTPRecipientsRefused as error:
 		    self.engine.prompt_user(
-                        "Invalid Recipient Address  "+toAddr, None, False)
-	            self.engine.prompt_user(error.__str__(), None, True)
+                        "Invalid Recipient Address  "+toAddr, engine.INPUT_TYPE_NONE, False)
+	            self.engine.prompt_user(error.__str__(), engine.INPUT_TYPE_NONE, True)
                     self.retry-=1
 		    continue
                 except smtplib.SMTPDataError as error:
-		    self.engine.prompt_user(error.__str__(), None, True)
+		    self.engine.prompt_user(error.__str__(), engine.INPUT_TYPE_NONE, True)
                     self.retry-=1
                     continue
                 except smtplib.SMTPConnectError as error:
-		    self.engine.prompt_user("--Unable to connect to internet--", None, True)
+		    self.engine.prompt_user("--Unable to connect to internet--", engine.INPUT_TYPE_NONE, True)
 		    raise PluginError(PluginError.NET_ERROR)
                     continue
 		print toAddr
@@ -87,8 +88,8 @@ class mail(Plugin):
         passwd=self.engine.get_attrib('user_password')
         if usrname == '' or passwd =='' or usrname == None or passwd == None or self.reset_user:
             self.state="waiting for consumer detials"
-            usrname=self.engine.prompt_user("Enter username", str,False)
-       	    passwd=self.engine.prompt_user("Enter password", str,False)
+            usrname=self.engine.prompt_user("Enter username", engine.INPUT_TYPE_TEXT_ONELINE,False)
+       	    passwd=self.engine.prompt_user("Enter password", engine.INPUT_TYPE_TEXT_PASSWORD,False)
             self.engine.set_attrib('user_name', usrname)
        	    self.engine.set_attrib('user_password', passwd)
        	self.state="authenticated"
@@ -97,11 +98,11 @@ class mail(Plugin):
 
     def compose_mail(self):
         """this function composes mail"""
-	to = self.engine.prompt_user("To",str,False)
+	to = self.engine.prompt_user("To",engine.INPUT_TYPE_TEXT_ONELINE,False)
 	self.To_mail = to.split()
-	subject=self.engine.prompt_user("Subject",str,False)
+	subject=self.engine.prompt_user("Subject",engine.INPUT_TYPE_TEXT_ONELINE,False)
 	contents=self.engine.prompt_user(
-             "This is your message '{}' .press enter for continue, else type content".format(self.msg),str,False)
+             "This is your message '{}' .press enter for continue, else type content".format(self.msg),engine.INPUT_TYPE_TEXT_MULTILINE,False)
 	if contents:
 	    message = contents
 	else:
