@@ -1,6 +1,6 @@
 from ..plugin import Plugin, PluginError
 import tweepy
-from ..import engine
+from .. import engine
 __plugin_name__="twitter"
 
 class twitter(Plugin):
