@@ -7,4 +7,4 @@ class Mock_ui(object):
 
     def prompt(self,content,type):
 	
-	pass
+	return "user"
