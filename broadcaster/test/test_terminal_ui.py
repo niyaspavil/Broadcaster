@@ -3,10 +3,9 @@ from .. import terminal_ui
 from .raw_input_mocker import rawinput
 from . getpass_mocker import getpass
 import argparse
-from .engine_mocker import broadcast,get_chnls,reset_channels
+from .engine_mocker import broadcast,reset_channels
 
 terminal_ui.broadcast = broadcast
-terminal_ui.get_chnls = get_chnls
 terminal_ui.reset_channels = reset_channels
 def test_main():
 

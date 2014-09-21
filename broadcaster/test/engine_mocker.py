@@ -26,7 +26,5 @@ class Engine(object):
 def broadcast(msg,chanl,debug,ui):
 	return {"plugin":"test"}
 
-def get_chnls():
-	return ['mail','twitter']
 def reset_channels(args):
 	return{'test':'reseted'}
