@@ -1,6 +1,6 @@
 from ..plugin import Plugin, PluginError
 import tweepy
-from ..import engine
+from .. import engine
 __plugin_name__="twitter"
 
 class twitter(Plugin):
@@ -21,7 +21,8 @@ class twitter(Plugin):
     def post(self):
         """Method to invoke plugin to post message to site"""
 	self.retry=3
-        while self.retry:
+        while self.ret
+ry:
             self.state="authenticating"
             try:
                 api=self.pre_auth()
