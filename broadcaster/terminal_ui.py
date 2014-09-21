@@ -23,7 +23,7 @@ class Terminal_ui(Ui):
 	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
 	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
         parser.add_argument( 
-            '-c','--channels',type= str,nargs='+',default=chnls,
+            '-ch','--channels',type= str,nargs='+',default=chnls,
 	    help=colored('Channel list to send the message','cyan'))
 	parser.add_argument(
 	    'message',type=str, help=colored('Message to be sended','cyan'))
@@ -34,7 +34,7 @@ class Terminal_ui(Ui):
 	parser_reset = argparse.ArgumentParser(
 	    usage=colored("\n\t -rset or --reset <channel name>\n",'yellow',attrs=['bold']))
 	parser_reset.add_argument(
-	    '-rset','--reset',type= str,nargs='+',choices=chnls,
+	    '-rset','--reset',type= str,nargs='+',
 	    help=colored('used to reset user configuration of chanels..','cyan'))
 	if '-rset' in args or '--reset' in args:
 	    arg= parser_reset.parse_args(args)
@@ -107,10 +107,15 @@ def report_status(status):
 
 def main(args):
     status= None
+    reset=[]
     chnls=get_channels()        # recieves plugin names from engine
     terminal_ui = Terminal_ui(args,chnls)
     if terminal_ui.reset:
-	status = reset_channels(terminal_ui.reset)
+	for i in terminal_ui.reset:
+	    if i.find(":")==-1:
+		i=i+":"
+	    reset.append(tuple(i.split(':')))
+	status = reset_channels(reset)
     else:  
         tup = terminal_ui.get_mesg_and_chanl()
     	if tup:
