@@ -3,7 +3,6 @@ from .. import engine
 from email.MIMEText import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 import smtplib
-import socket
 __plugin_name__="mail"
 
 
