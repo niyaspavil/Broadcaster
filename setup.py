@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='python-broadcaster',
-    version='1.0.0',
+    version='1.0.1',
     author='Gorbin, Niyas, Vinayak',
     author_email='broadcaster.thelycaeum@gmail.com',
     packages=find_packages(exclude=[]),
@@ -14,7 +14,6 @@ setup(
         "argparse==1.2.1",
 	"termcolor==1.1.0",
 	"tweepy==2.3.0",
-	"xmlrpclib==1.0.1"
 	
        ],
 )
