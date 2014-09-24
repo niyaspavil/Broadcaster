@@ -1,6 +1,6 @@
 include README.md
 
-recursive-exclude tests *
+recursive-exclude broadcaster/test*
 
 # Patterns to exclude from any directory
 global-exclude *~
