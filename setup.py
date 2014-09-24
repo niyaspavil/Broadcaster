@@ -11,7 +11,6 @@ setup(
     description='Broadcaster helps to post messages to different networking entities',
     long_description=open('README.md').read(),
     install_requires=[
-	"Mail==2.1.0",
         "argparse==1.2.1",
 	"termcolor==1.1.0",
 	"tweepy==2.3.0",

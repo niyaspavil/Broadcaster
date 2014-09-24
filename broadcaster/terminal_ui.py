@@ -38,10 +38,7 @@ class Terminal_ui(Ui):
 	    help=colored('used to reset user configuration of chanels..','cyan'))
 	if '-rset' in args or '--reset' in args:
 	    arg= parser_reset.parse_args(args)
-	    self.reset = arg.reset
-	elif '-h' in args or '--help' in args:
-	    print ""
-	    sys.exit()  	
+	    self.reset = arg.reset 	
 	else:
             args= parser.parse_args(args)
 	    self.message = args.message
