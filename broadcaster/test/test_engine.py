@@ -13,28 +13,27 @@ def test_engine():
     engine.__cfgfile__="/tmp/test/conf.ini"
     engine.__private_home__="/tmp/test"
     tmp_conf=engine.get_conf()
-    engin=engine.Engine("test_section")
+    engin=engine.Engine("test_section:user")
     engin.UI=UI
     engine.__conf__=tmp_conf
-    assert engin.get_attrib("twitter") == ""
+    assert engin.get_attrib("user") == ""
     engin.set_attrib("user","999")
     engine.set_conf(engine.__conf__)
     assert engin.get_attrib("user") == "999"
-    assert engine.reset_channels(["test_section"])=={"test_section":"reset"}
+    assert engine.reset_channels([("test_section","user")])=={"test_section:user":"reset success"}
     engin.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
- 
-    engine.load_plugin("twitter","test")
+    engine.load_plugin("twitter", "user", "test")
 
 def test_broadcast():
     engine.load_plugin=plugin_mocker
-    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Successful"}
+    assert engine.broadcast("testing", [('twitter','user')], False, UI) == {"twitter:user":"Successful"}
     engine.load_plugin=fail_post
-    assert engine.broadcast("testing", ['twitter'], False, UI) == {"twitter":"Failed ::-> 'NoneType' object has no attribute 'post'"}
+    assert engine.broadcast("testing", [('twitter', 'user')], False, UI) == {"twitter:user":"Failed ::-> 'NoneType' object has no attribute 'post'"}
 
-def fail_post(chn, msg):
+def fail_post(chn, user, msg):
     pass
 
 def test_get_chnls():

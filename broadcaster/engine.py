@@ -5,7 +5,7 @@ import glob
 from os.path import basename, splitext, expanduser, sep
 import os
 
-__plugins_dir__ = "./broadcaster/plugins"
+__plugins_dir__=os.path.dirname(os.path.abspath(__file__))+"/plugins"
 __private_home__=expanduser("~")+sep+".Broadcaster"
 __pkg__="broadcaster.plugins"
 __cfgfile__=__private_home__+sep+"conf.ini"
@@ -13,6 +13,13 @@ __conf__=None
 __all_chnl__=None
 __ui__=None
 __debug_mode__=False
+
+#some input type standards from engine
+INPUT_TYPE_NONE="none"
+INPUT_TYPE_NUMBER="number"
+INPUT_TYPE_TEXT_ONELINE="text:oneline"
+INPUT_TYPE_TEXT_MULTILINE="text:multiline"
+INPUT_TYPE_TEXT_PASSWORD="text:password"
 
 class Engine(object):
     """Provides the methods required by plugins for persistent storage
@@ -46,14 +53,14 @@ class Engine(object):
         if debug and (not __debug_mode__):
             return None
         else:
-            return self.UI.prompt(msg, type)
+            return self.UI.prompt(self.section+"->\n"+msg, type)
         
 
-def broadcast(msg, chnl_list, mode, ui):
+def broadcast(msg, sent_via, mode, ui):
     """Provides the basic method which enable broadcasting the message
     to requested channels using the plugins.
     msg --> user message to be broadcasted
-    chnl_list --> list of channels to which broadcast is to be made
+    sent_via --> list of channel,user tuples to which broadcast is to be made
     mode --> debug mode(boolean)
     ui --> UI object which is able to handle requests and responses from engine"""
     global __ui__, __all_chnl__, __debug_mode__, __conf__
@@ -62,16 +69,16 @@ def broadcast(msg, chnl_list, mode, ui):
     dict={}
     __all_chnl__=get_channels()
     __conf__=get_conf()
-    for chnl in chnl_list:
+    for chnl, user in sent_via:
         if has_channel(chnl):
-            plug=load_plugin(chnl, msg)
+            plug=load_plugin(chnl, user, msg)
             try:
                 plug.post()
-                dict[chnl]="Successful"
+                dict[chnl+":"+user]="Successful"
             except Exception as x:
-                dict[chnl]="Failed ::-> "+x.message
+                dict[chnl+":"+user]="Failed ::-> "+x.message
         else:
-            dict[chnl]="Failed: Plugin not found..\n To add new plugin, insert plugin file to broadcaster/plugins"
+            dict[chnl+":"+user]="Failed: Plugin not found..\n To add new plugin, insert plugin file to "+__plugins_dir__
     set_conf(__conf__)
     return dict
 
@@ -93,9 +100,12 @@ def has_channel(chnl):
     else:
         return False
 
-def load_plugin(chnl, msg):
+def load_plugin(chnl, user, msg):
     """loads and returns the plugin object"""
-    engine=Engine(chnl)
+    if user.strip()=='':
+        user=get_default_user()
+        return load_plugin(chnl, user, msg)
+    engine=Engine(chnl+':'+user)
     mod=importlib.import_module("."+chnl, __pkg__)
     return getattr(mod,chnl)(engine, msg)
 
@@ -114,10 +124,19 @@ def set_conf(conf):
                 os.makedirs(__private_home__)
         conf_file=open(__cfgfile__,"w")
         conf.write(conf_file)
-        conf.close()
+        conf_file.close()
         return True
     except Exception:
         return False
+
+def get_default_user():
+    """returns default user name from conf if set else requests and returns from user through registered ui object"""
+    engine=Engine("defaults")
+    user=engine.get_attrib("user")
+    if user.strip()=='':
+        user=engine.prompt_user("Enter a default username for sent profile", str)
+        engine.set_attrib("user", user)
+    return user
 
 def reset_channels(chnls):
     """Provides the facility to reset configuration data of each
@@ -125,14 +144,20 @@ def reset_channels(chnls):
     try:
         dict={}
         if os.path.isfile(__cfgfile__):
+            if chnls==[("all","")]:
+                os.remove(__cfgfile__)
+                return {"all-channel":"reset success"}
             conf=ConfigParser.ConfigParser()
             conf.read(__cfgfile__)
-            for chnl in chnls:
-                if conf.has_section(chnl):
-                    conf.remove_section(chnl)
-                    dict[chnl]="reset"
+            for chnl, user in chnls:
+                if user.strip=='':
+                    user=find_default_user(conf)
+                section=chnl+":"+user
+                if conf.has_section(section):
+                    conf.remove_section(section)
+                    dict[section]="reset success"
                 else:
-                    dict[chnl]="no data to reset"
+                    dict[section]="no data to reset"
             conf.write(open(__cfgfile__,"w"))
         else:
             dict["all-channel"]="no data to reset"
@@ -140,3 +165,8 @@ def reset_channels(chnls):
     except Exception:
         return {"all-channel":"reset failed"}
                 
+def find_default_user(conf):
+    if conf.has_option("default", "user"):
+        return conf.has_option("default", "user")
+    else:
+        return ""

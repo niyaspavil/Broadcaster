@@ -1,0 +1,2 @@
+def rawinput(args):
+    pass

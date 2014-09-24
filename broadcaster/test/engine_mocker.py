@@ -28,3 +28,5 @@ def broadcast(msg,chanl,debug,ui):
 
 def get_chnls():
 	return ['mail','twitter']
+def reset_channels(args):
+	return{'test':'reseted'}
