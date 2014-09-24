@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Broadcaster',
+    name='python-broadcaster',
     version='1.0.0',
     author='Gorbin, Niyas, Vinayak',
     author_email='broadcaster.thelycaeum@gmail.com',
