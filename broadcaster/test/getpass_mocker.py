@@ -1,2 +1,0 @@
-def getpass(args):
-    pass    
