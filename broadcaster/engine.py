@@ -102,7 +102,7 @@ def has_channel(chnl):
 
 def load_plugin(chnl, user, msg):
     """loads and returns the plugin object"""
-    if user.strip()=='':
+    if user==None or user.strip()=='':
         user=get_default_user()
         return load_plugin(chnl, user, msg)
     engine=Engine(chnl+':'+user)
@@ -133,7 +133,7 @@ def get_default_user():
     """returns default user name from conf if set else requests and returns from user through registered ui object"""
     engine=Engine("defaults")
     user=engine.get_attrib("user")
-    if user.strip()=='':
+    if user==None or user.strip()=='':
         user=engine.prompt_user("Enter a default username for sent profile", str)
         engine.set_attrib("user", user)
     return user
@@ -150,8 +150,6 @@ def reset_channels(chnls):
             conf=ConfigParser.ConfigParser()
             conf.read(__cfgfile__)
             for chnl, user in chnls:
-                if user.strip=='':
-                    user=find_default_user(conf)
                 section=chnl+":"+user
                 if conf.has_section(section):
                     conf.remove_section(section)
@@ -164,9 +162,4 @@ def reset_channels(chnls):
         return dict
     except Exception:
         return {"all-channel":"reset failed"}
-                
-def find_default_user(conf):
-    if conf.has_option("default", "user"):
-        return conf.has_option("default", "user")
-    else:
-        return ""
+

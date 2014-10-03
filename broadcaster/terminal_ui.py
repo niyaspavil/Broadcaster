@@ -18,9 +18,9 @@ class Terminal_ui(Ui):
 	self.debug = False
         parser = argparse.ArgumentParser(
 	    usage=colored(
-              "\n\tEnter 'your message' -ch <channel list> [-dbug]"+'\n \t\t\tor\n'
-	      +"\tEnter -rset or --reset <channel list>"+'\n \t\t\tor\n'
-	      +"\tEnter -h or --help for more help",'yellow',attrs=[ 'bold']),
+              "\n\tbroadcaster.py -ch=channel:user,.. MESSAGE"+'\n'
+	      +"\tbroadcaster.py -rset channel:user..."+'\n'
+	      +"\tbroadcaster.py -h or --help for more help",'yellow',attrs=[ 'bold']),
 	      description=colored('A way for Broadcast your messages','magenta',attrs=[ 'bold']))
         parser.add_argument( 
             '-ch','--channels',type= str,nargs='+',default=chnls,

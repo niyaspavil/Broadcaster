@@ -54,7 +54,9 @@ def test_exception():
         tmp_plug.post()
     except PluginError:
         pass
-    tmp_plug.engine.conf={"consumer_key":"consumer999", "consumer_secret":"consumer999","user_token":"kjkl","user_token_secret":"fg"}
+    new_engine=Engine("twitter")
+    plug=twitter.twitter(new_engine, msg)
+    plug.engine.conf={"consumer_key":"consumer999", "consumer_secret":"consumer999","user_token":"kjkl","user_token_secret":"fg"}
     try:
         tmp_plug.post()
     except PluginError:
@@ -65,10 +67,7 @@ def test_exception():
     except PluginError:
         pass
     error.message=[{"message":"fail", "code":32}]
-    try:
-        tmp_plug.error_handler(error, 0)
-    except PluginError:
-        pass
+    tmp_plug.error_handler(error, 0)
     error.message=[{"message":"fail", "code":100}]
     try:
         tmp_plug.error_handler(error, 0)

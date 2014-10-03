@@ -5,7 +5,7 @@ import os
 import shutil
 import ConfigParser
 
-UI=Mock_ui()
+UI=engine.__ui__=Mock_ui()
 engine.__cfgfile__="/tmp/test/conf.ini"
 engine.__plugins_dir__="./broadcaster/plugins"
 
@@ -13,19 +13,19 @@ def test_engine():
     engine.__cfgfile__="/tmp/test/conf.ini"
     engine.__private_home__="/tmp/test"
     tmp_conf=engine.get_conf()
-    engin=engine.Engine("test_section:user")
-    engin.UI=UI
+    temp_engine=engine.Engine("test_section:user")
     engine.__conf__=tmp_conf
-    assert engin.get_attrib("user") == ""
-    engin.set_attrib("user","999")
+    assert temp_engine.get_attrib("user") == ""
+    temp_engine.set_attrib("user","999")
     engine.set_conf(engine.__conf__)
-    assert engin.get_attrib("user") == "999"
+    assert temp_engine.get_attrib("user") == "999"
     assert engine.reset_channels([("test_section","user")])=={"test_section:user":"reset success"}
-    engin.prompt_user("hello",str)
+    temp_engine.prompt_user("hello",str)
     shutil.rmtree("/tmp/test")
 
 def test_load_plugin():
     engine.load_plugin("twitter", "user", "test")
+    engine.load_plugin("twitter", "", "test")
 
 def test_broadcast():
     engine.load_plugin=plugin_mocker
