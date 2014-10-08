@@ -1,5 +1,28 @@
 #module engine
 
+class User(object):
+    """user abstraction which includes username, list of authenticated plugins and associated methods to modify it"""
+    def __init__(self, name):
+        pass
+
+    def get_plugins(self):
+        pass
+
+    def add_plugin(self, plugin, input_fields):
+        pass
+
+    def remove_plugin(self, plugin):
+        pass
+
+    def get_input_fields(self, plugin):
+        pass
+
+
+class Field(object):
+    """Class to specify input parameters or fields."""
+    def __init__(self, **kwargs):
+        pass
+
 def add_user(name):
     """creates a new user with username name(type str) and throws UserException on failure"""
     pass
