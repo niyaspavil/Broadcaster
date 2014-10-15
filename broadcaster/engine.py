@@ -8,19 +8,37 @@ class User(object):
     def get_plugins(self):
         pass
 
-    def add_plugin(self, plugin, input_fields):
+    def add_plugin(self, plugin, data):
         pass
 
     def remove_plugin(self, plugin):
         pass
 
-    def get_input_fields(self, plugin):
+    def get_fields(self, plugin):
         pass
 
 
 class Field(object):
     """Class to specify input parameters or fields."""
     def __init__(self, **kwargs):
+        pass
+
+
+class Data(object):
+    """class to represent data object with getters and setters for keys"""
+    def __init__(self):
+        pass
+
+    def get(self, key):
+        pass
+
+    def set(self, key, value):
+        pass
+
+
+class Status(object):
+    """"""
+    def __init__(self):
         pass
 
 def add_user(name):
@@ -41,4 +59,8 @@ def get_all_users():
 
 def delete_user(name):
     """removes the existing user and associated data for username name. Throws UserException on failure"""
+    pass
+
+def get_all_plugins():
+    """returns an array of installed plugin names"""
     pass
