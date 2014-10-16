@@ -4,7 +4,7 @@ ds=None
 
 def test_init():
     global ds
-    ds=DataStore()
+    ds=DataStore("mydata")
 
 def test_pull():
     data=ds.pull()

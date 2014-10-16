@@ -1,5 +1,7 @@
+
 class Plugin(object):
     """abstract class providing necessary methods needed for proper implementation on plugins"""
+
     def __init__(self, data):
         """data recieves the data object containing persistant data associated to the initialised plugin for the current use"""
         raise NotImplementedError()
