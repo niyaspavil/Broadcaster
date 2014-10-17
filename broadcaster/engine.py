@@ -75,9 +75,9 @@ def get_all_plugins():
     """returns an array of installed plugin names"""
     pass
 
-def broadcast(**tuples):
+def broadcast(sent_data):
     """this method does the broadcasting of message via plugins. The
-    arguments should be 3-tuple like (user, plugin, data), where user
+    argument sent_data should be a list of 3-tuples like (user, plugin, data), where user
     and plugin stands for names of type str and data is the object of
     class Data and must contain keys and values for fields of
     corresponding plugin """
