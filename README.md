@@ -30,8 +30,6 @@ The broadcaster allows developers to bind new plugins and user interfaces by imp
         
 ::::::::::::::::::work in progress             
 
-    In addition UI must support user prompt and message display by implementing 
-    the abstract method **_prompt(msg)_** of base class ui.
 
   * ###**Plugin-development**:
       
