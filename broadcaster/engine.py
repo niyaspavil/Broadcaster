@@ -75,7 +75,7 @@ def get_all_plugins():
 def get_plugin_fields(plugin, auth_field=False):
     """returns an array of field objects specifying input data required for plugin. If auth flag is set, data fields for authourizing plugin is returned and fields for posting data on the other case."""
 
-def broadcast(send_data):
+def broadcast(user, send_data):
     """this method does the broadcasting of message via plugins. The
     argument send_data should be a list of 3-tuples like (user, plugin, data), where user
     and plugin stands for names of type str and data is the object of
