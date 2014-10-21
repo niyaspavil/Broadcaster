@@ -1,13 +1,15 @@
 from ..datastore import DataStore
 
 ds=None
+data=None
 
 def test_init():
     global ds
-    ds=DataStore("mydata")
+    ds=DataStore("user")
 
 def test_pull():
+    global data
     data=ds.pull()
 
 def test_push():
-    ds.push()
+    ds.push(data)
