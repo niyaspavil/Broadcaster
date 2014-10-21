@@ -1,4 +1,4 @@
-from ..datastore import DataStore
+from ..datastore_connector import DataStore
 
 ds=None
 data=None
