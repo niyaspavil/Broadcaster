@@ -15,9 +15,6 @@ class User(object):
     def remove_plugin(self, plugin):
         pass
 
-    def get_fields(self, plugin):
-        pass
-
 
 class Field(object):
     """Class to specify input parameters or fields."""
@@ -75,9 +72,12 @@ def get_all_plugins():
     """returns an array of installed plugin names"""
     pass
 
-def broadcast(sent_data):
+def get_plugin_fields(plugin, auth_field=False):
+    """returns an array of field objects specifying input data required for plugin. If auth flag is set, data fields for authourizing plugin is returned and fields for posting data on the other case."""
+
+def broadcast(send_data):
     """this method does the broadcasting of message via plugins. The
-    argument sent_data should be a list of 3-tuples like (user, plugin, data), where user
+    argument send_data should be a list of 3-tuples like (user, plugin, data), where user
     and plugin stands for names of type str and data is the object of
     class Data and must contain keys and values for fields of
     corresponding plugin """
