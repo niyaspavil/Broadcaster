@@ -1,8 +1,10 @@
 from .. import file_store_connector as fsc
+from .. import engine
 import shutil, os, ConfigParser
 
 ds=None
 data=None
+r_data=None
 
 def test_init():
     global ds
@@ -21,7 +23,14 @@ def test_check_file():
     shutil.rmtree("/tmp/test")
 
 def test_get_data_from_file():
-    data_r=fsc.get_data_from_file(os.path.dirname(__file__)+os.path.sep+"test_data"+os.path.sep+"data.ini")
-    assert isinstance(data_r, ConfigParser.ConfigParser)==True
-    assert data_r.get("neo","user")=="neo"
-    assert data_r.get("neo","timestamp")=="999"
+    global r_data
+    r_data=fsc.get_data_from_file(os.path.dirname(__file__)+os.path.sep+"test_data"+os.path.sep+"data.ini")
+    assert isinstance(r_data, ConfigParser.ConfigParser)==True
+    assert r_data.get("neo","user")=="neo"
+    assert r_data.get("neo","timestamp")=="999"
+
+def test_build_data():
+    global r_data
+    data=fsc.build_data(r_data, "neo")
+    assert isinstance(data, engine.Data)==True
+    assert data.get("user")=="neo"
