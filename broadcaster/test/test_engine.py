@@ -31,3 +31,11 @@ def test_delete_user():
     engine.delete_user("test_user")
     engine.add_user("test_user")
     engine.delete_user("test_user")
+
+#Data
+
+def test_data():
+    data=engine.Data()
+    data.set("test_key","test_value")
+    val=data.get("test_key")
+    assert val=="test_value"

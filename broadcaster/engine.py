@@ -28,13 +28,13 @@ class Data(object):
     keys"""
 
     def __init__(self):
-        pass
+        self.dict={}
 
     def get(self, key):
-        pass
+        return self.dict.get(key)
 
     def set(self, key, value):
-        pass
+        self.dict[key]=value
 
 
 class Status(object):
