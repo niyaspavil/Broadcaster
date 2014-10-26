@@ -39,13 +39,15 @@ def check_file(file):
     except Exception:
         return False
 
+
+__data_raw__=get_data_from_file(__data_file__)
+
+
 def pull(user):
     """returns the data object associated datastore"""
-    pass
+    return build_data(__data_raw__, user)
 
 def push(data):
     """saves the data object passed to the datastore. this will replace the old data. returns True if succeeded"""
     pass
 
-
-__data_raw__=get_data_from_file(__data_file__)
