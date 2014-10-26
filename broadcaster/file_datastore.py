@@ -1,4 +1,3 @@
-from .datastore_connector import DataStore as ds
 from .engine import Data
 
 import ConfigParser
@@ -40,19 +39,13 @@ def check_file(file):
     except Exception:
         return False
 
-class DataStore(ds):
-    """provides the persistent data storage on a single local file"""
-    def __init__(self, user):
-        """initialises the file store with the corresponding user"""
-        pass
+def pull(user):
+    """returns the data object associated datastore"""
+    pass
 
-    def pull(self):
-        """returns the data object associated datastore"""
-        pass
-
-    def push(self, data):
-        """saves the data object passed to the datastore. this will replace the old data. returns True if succeeded"""
-        pass
+def push(data):
+    """saves the data object passed to the datastore. this will replace the old data. returns True if succeeded"""
+    pass
 
 
 __data_raw__=get_data_from_file(__data_file__)

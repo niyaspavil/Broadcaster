@@ -1,21 +1,16 @@
-from .. import file_store_connector as fsc
+from .. import file_datastore as fsc
 from .. import engine
 import shutil, os, ConfigParser
 
-ds=None
 data=None
 r_data=None
 
-def test_init():
-    global ds
-    ds=fsc.DataStore("user")
-
 def test_pull():
     global data
-    data=ds.pull()
+    pass
 
 def test_push():
-    ds.push(data)
+    pass
 
 def test_check_file():
     assert fsc.check_file("/tmp/test/test_file")==True
@@ -24,7 +19,16 @@ def test_check_file():
 
 def test_get_data_from_file():
     global r_data
-    r_data=fsc.get_data_from_file(os.path.dirname(__file__)+os.path.sep+"test_data"+os.path.sep+"data.ini")
+    data_file=os.path.dirname(__file__)+os.path.sep+"test_data"+os.path.sep+"data.ini"
+    conf=ConfigParser.ConfigParser()
+    conf.add_section("neo")
+    conf.set("neo","user","neo")
+    conf.set("neo","timestamp","999")
+    fsc.check_file(data_file)
+    file=open(data_file, "w")
+    conf.write(file)
+    file.close()
+    r_data=fsc.get_data_from_file(data_file)
     assert isinstance(r_data, ConfigParser.ConfigParser)==True
     assert r_data.get("neo","user")=="neo"
     assert r_data.get("neo","timestamp")=="999"
